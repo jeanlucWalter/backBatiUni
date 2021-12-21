@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://*.127.0.0.1', '*.fantasiapp:5001', 'https://*.fantasiapp:5002', 'https://*.fantasiapp:5003', 'https://*.fantasiapp:5004', 'https://*.fantasiapp:5005']
+CSRF_TRUSTED_ORIGINS = ['https://*.127.0.0.1', 'https://*.fantasiapp:5001', 'https://*.fantasiapp:5002', 'https://*.fantasiapp:5003', 'https://*.fantasiapp:5004', 'https://*.fantasiapp:5005']
 
 ROOT_URLCONF = 'backBatiUni.urls'
 

@@ -7,16 +7,16 @@ address = 'http://localhost:8000'
 query = "token"
 
 arguments = sys.argv
-if len(arguments) > 0:
-    host = arguments[0]
+if len(arguments) > 1:
+    host = arguments[1]
     if host == "local": address = 'http://localhost:8000'
     elif host == "temp": address = 'https://batiuni.fantasiapp.tech:5004'
     elif host == "work": address = 'https://batiuni.fantasiapp.tech:5001'
     elif host == "current": address = 'https://visio.fantasiapp.tech:3439'
     elif host == "distrib": address = 'https://visio.fantasiapp.tech:3440'
     elif host == "distrib2": address = 'https://visio.fantasiapp.tech:3442'
-if len(arguments) > 1:
-  query = arguments[1]
+if len(arguments) > 2:
+  query = arguments[2]
 
 def queryForToken(userName, password):
   tokenUrl = f'{address}/api-token-auth/'
@@ -29,6 +29,14 @@ def queryForToken(userName, password):
   return dictResponse['token']
 
 def executeQuery():
+  if query == "register":
+    url = f'{address}/register/'
+    print(url)
+    headers = {}
+    response = requests.post(url, headers=headers, json={"action":"register"})
+    data = json.loads(response.text)
+    print("data", data)
+    return
   token = queryForToken(userName, password)
   print("query", query)
   if query == "token":
@@ -37,14 +45,15 @@ def executeQuery():
   headers = {'Authorization': f'Token {token}'}
   if query == "get":
     response = requests.get(url, headers=headers, params={"action":"test"})
-    print(response.headers)
     data = json.loads(response.text)
     print("data", data)
+    return
   if query == "post":
     post = {"post":"test"}
     response = requests.post(url, headers=headers, json=post)
     data = json.loads(response.text)
     print(data)
+    return
 
 executeQuery()
 

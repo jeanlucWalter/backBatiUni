@@ -29,9 +29,10 @@ def queryForToken(userName, password):
   return dictResponse['token']
 
 def executeQuery():
+  print("query", query)
   if query == "register":
     url = f'{address}/register/'
-    print(url)
+    print("url", url)
     headers = {}
     post = {"company":"BatiUni", "email":"augustin@batiuni.fr", "password":"pwd", "firstName":"Augustin", "lastName":"Alleaume", "jobs":[1, 3, 5, 7], "proposer":"", "role":2}
     response = requests.post(url, headers=headers, json=post)
@@ -39,22 +40,23 @@ def executeQuery():
     print("data", data)
     return
   token = queryForToken(userName, password)
-  print("query", query)
   if query == "token":
     print("token", token)
   url = f'{address}/data/'
   headers = {'Authorization': f'Token {token}'}
+  data, response = None, None
   if query == "get":
     response = requests.get(url, headers=headers, params={"action":"test"})
-    data = json.loads(response.text)
-    print("data", data)
-    return
-  if query == "post":
+  elif query == "post":
     post = {"post":"test"}
     response = requests.post(url, headers=headers, json=post)
+  elif query == "buildDB":
+    url = f'{address}/initialize/'
+    print("url", url)
+    response = requests.get(url, headers=headers, params={"action":"empty"})
+  if response:
     data = json.loads(response.text)
-    print(data)
-    return
+    print("data", data)
 
 executeQuery()
 

@@ -3,7 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .models import *
-from .buildDataBase import CreateNewDataBase
+from .modelData.buildDataBase import CreateNewDataBase
+from .modelData.dataAccessor import DataAccessor
 
 class DefaultView(APIView):
   permission_classes = (IsAuthenticated,)
@@ -11,12 +12,14 @@ class DefaultView(APIView):
 
 class Data(DefaultView):
   def get(self, request):
+    if 'action' in request.GET:
+      action = request.GET["action"]
+      if action == "initialize":
+        return Response(DataAccessor.getInitialData())
     return Response({"test GET":"OK"})
-
 
   def post(self, request):
     return Response({"test POST":"OK"})
-
 
 class Register(APIView):
   permission_classes = (AllowAny,)
@@ -36,13 +39,6 @@ class Initialize(DefaultView):
     if 'action' in request.GET:
       action = request.GET["action"]
       print("action", action)
-      if action == "empty":
-        return Response(self.emptyDb())
+      if action == "reload":
+        return Response(CreateNewDataBase().reloadDataBase())
     return Response({"Initialize GET":"OK"})
-
-
-  def emptyDb(self):
-    print("empty in views")
-    creation = CreateNewDataBase()
-    return creation.emptyDataBase()
-

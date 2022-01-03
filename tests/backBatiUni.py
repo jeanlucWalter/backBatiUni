@@ -52,8 +52,10 @@ def executeQuery():
     response = requests.post(url, headers=headers, json=post)
   elif query == "buildDB":
     url = f'{address}/initialize/'
-    print("url", url)
-    response = requests.get(url, headers=headers, params={"action":"empty"})
+    response = requests.get(url, headers=headers, params={"action":"reload"})
+  elif query == "data":
+    url = f'{address}/data/'
+    response = requests.get(url, headers=headers, params={"action":"initialize"})
   if response:
     data = json.loads(response.text)
     print("data", data)

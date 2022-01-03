@@ -5,8 +5,20 @@ class Company(models.Model):
   name = models.CharField('Nom de la société', unique=True, max_length=128, null=False, default=False, blank=False)
   siret = models.CharField('Numéro de Siret', max_length=32, unique=True)
 
+class CommonModel(models.Model):
+  class Meta:
+    abstract = True
 
-class Job(models.Model):
+  @classmethod
+  def listFields(cls):
+    return [field.name for field in cls._meta.fields][1:]
+
+  @classmethod
+  def dictValues(cls):
+    listFields = cls.listFields()
+    return {instance.id:[getattr(instance, field) for field in listFields] if len(listFields) > 1 else getattr(instance, listFields[0]) for instance in cls.objects.all()}
+
+class Job(CommonModel):
   name = models.CharField('Nom du métier', unique=True, max_length=128)
 
 class userProfile(models.Model):

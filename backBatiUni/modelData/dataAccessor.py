@@ -1,4 +1,5 @@
 from ..models import *
+import json
 
 class DataAccessor():
   tablesInitial = {"job":Job}
@@ -7,6 +8,14 @@ class DataAccessor():
   def getInitialData(cls):
     dictAnswer = {}
     for tableName, table in cls.tablesInitial.items():
-      dictAnswer[tableName + "Fields"] = table.listFields() if len(table.listFields()) > 1 else table.listFields()[0]
+      if len(table.listFields()) > 1:
+        dictAnswer[tableName + "Fields"] = table.listFields()
       dictAnswer[tableName + "Values"] = table.dictValues()
     return dictAnswer
+
+
+  def register(cls, jsonString):
+    data = json.loads(jsonString)
+    print("register", data)
+    return {"register":"OK"}
+

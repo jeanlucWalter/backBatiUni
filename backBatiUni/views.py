@@ -30,8 +30,7 @@ class Register(APIView):
   def post(self, request):
     jsonBin = request.body
     jsonString = jsonBin.decode("utf8")
-    print(jsonString)
-    return Response({"register POST":"OK"})
+    return Response(CreateNewDataBase().register(jsonString))
 
 class Initialize(DefaultView):
   def get(self, request):

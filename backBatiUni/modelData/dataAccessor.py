@@ -13,7 +13,7 @@ class DataAccessor():
       dictAnswer[tableName + "Values"] = table.dictValues()
     return dictAnswer
 
-
+  @classmethod  
   def register(cls, jsonString):
     print("string", jsonString)
     data = json.loads(jsonString)

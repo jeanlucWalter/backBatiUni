@@ -15,6 +15,7 @@ class DataAccessor():
 
 
   def register(cls, jsonString):
+    print("string", jsonString)
     data = json.loads(jsonString)
     print("register", data)
     return {"register":"OK"}

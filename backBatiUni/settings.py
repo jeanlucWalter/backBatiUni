@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [os.getenv('URL'), '127.0.0.1', '.pythonanywhere.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'backBatiUni.apps.BatiUniConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -2,6 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from .models import *
 
 class DefaultView(APIView):
   permission_classes = (IsAuthenticated,)
@@ -23,4 +24,7 @@ class Register(APIView):
     return Response({"register GET":"OK"})
 
   def post(self, request):
+    jsonBin = request.body
+    jsonString = jsonBin.decode("utf8")
+    print(jsonString)
     return Response({"register POST":"OK"})

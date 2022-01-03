@@ -33,7 +33,8 @@ def executeQuery():
     url = f'{address}/register/'
     print(url)
     headers = {}
-    response = requests.post(url, headers=headers, json={"action":"register"})
+    post = {"company":"BatiUni", "email":"augustin@batiuni.fr", "password":"pwd", "firstName":"Augustin", "lastName":"Alleaume", "jobs":[1, 3, 5, 7], "proposer":"", "role":2}
+    response = requests.post(url, headers=headers, json=post)
     data = json.loads(response.text)
     print("data", data)
     return

@@ -1,5 +1,6 @@
 from ..models import *
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password, make_password
 import json
 
 class DataAccessor():
@@ -16,7 +17,7 @@ class DataAccessor():
 
   @classmethod  
   def register(cls, jsonString):
-    print("string", jsonString)
+    print("register", jsonString)
     data = json.loads(jsonString)
     message = cls.__registerCheck(data)
     if message:
@@ -60,7 +61,25 @@ class DataAccessor():
     userProfile.save()
     return False
 
-    
+
+  @classmethod
+  def dataPost(cls, jsonString, currentUser):
+    data = json.loads(jsonString)
+    if "action" in data:
+      print("datapost", data)
+      if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
+    return {"dataPost":"Error", "message":"no action in post"}
+
+  @classmethod
+  def __modifyPwd(cls, data, currentUser):
+    if data['oldPwd'] == data['newPwd']:
+      return {"modifyPwd":"Warning", "message":"L'ancien et le nouveau mot de passe sont identiques"}
+    # checkPassword = check_password(data['oldPwd'], data['oldPwd'])
+    currentUser.set_password(data['newPwd'])
+    currentUser.save()
+    return {"modifyPwd":"OK"}
+
+  
     
     
     

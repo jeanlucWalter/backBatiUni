@@ -19,7 +19,10 @@ class Data(DefaultView):
     return Response({"test GET":"OK"})
 
   def post(self, request):
-    return Response({"test POST":"OK"})
+    currentUser = request.user
+    jsonBin = request.body
+    jsonString = jsonBin.decode("utf8")
+    return Response(DataAccessor().dataPost(jsonString, currentUser))
 
 class Register(APIView):
   permission_classes = (AllowAny,)

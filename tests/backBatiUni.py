@@ -34,7 +34,7 @@ def executeQuery():
     url = f'{address}/register/'
     print("url", url)
     headers = {}
-    post = {"company":"BatiUni", "email":"augustin@batiuni.fr", "password":"pwd", "firstName":"Augustin", "lastName":"Alleaume", "jobs":[1, 3, 5, 7], "proposer":"", "role":2}
+    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
     data = json.loads(response.text)
     print("data", data)
@@ -53,9 +53,6 @@ def executeQuery():
   elif query == "buildDB":
     url = f'{address}/initialize/'
     response = requests.get(url, headers=headers, params={"action":"reload"})
-  elif query == "data":
-    url = f'{address}/data/'
-    response = requests.get(url, headers=headers, params={"action":"initialize"})
   if response:
     data = json.loads(response.text)
     print("data", data)

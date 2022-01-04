@@ -34,10 +34,8 @@ class Register(APIView):
 
 class Initialize(DefaultView):
   def get(self, request):
-    print("initialize get")
     if 'action' in request.GET:
       action = request.GET["action"]
-      print("action", action)
       if action == "reload":
         return Response(CreateNewDataBase().reloadDataBase())
     return Response({"Initialize GET":"OK"})

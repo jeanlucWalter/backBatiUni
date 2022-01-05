@@ -19,36 +19,37 @@ class DataAccessor():
   def register(cls, jsonString):
     print("register", jsonString)
     data = json.loads(jsonString)
-    message = cls.__registerCheck(data)
+    message = cls.__registerCheck(data, {})
+    cls.__registerAction(data, message)
     if message:
       return {"register":"Warning", "message":message}
-    message = cls.__registerAction(data)
-    if message:
-      return {"register":"Warning", "message":message}
-    print("register", data)
     return {"register":"OK"}
 
   @classmethod
-  def __registerCheck(cls, data):
+  def __registerCheck(cls, data, message):
     if not data["firstname"]:
-      return "Le prénom est un champ obligatoire."
+      message["firstname"] = "Le prénom est un champ obligatoire."
     if not data["lastname"]:
-      return "Le nom est un champ obligatoire."
+      message["lastname"] = "Le nom est un champ obligatoire."
     if not data["email"]:
-      return "L'adresse e-mail est un champ obligatoire."
+      message["email"] = "L'adresse e-mail est un champ obligatoire."
     if not data["password"]:
-      return "Le mot de passe est un champ obligatoire."
+      message["password"] = "Le mot de passe est un champ obligatoire."
     if not data["company"]:
-      return "Le nom de l'entreprise est un champ obligatoire."
-    return False
+      message["company"] = "Le nom de l'entreprise est un champ obligatoire."
+    return message
 
   @classmethod
-  def __registerAction(cls, data):
+  def __registerAction(cls, data, message):
+    
     company = Company.objects.filter(name=data['company'])
     company = Company.objects.create(name=data['company']) if not company else company[0]
     user = User.objects.filter(username=data['email'])
+    print(user, data['email'])
     if user:
-      return f"L'email est déjà utilisé dans la base de données."
+      message["email"] = "L'email est déjà utilisé dans la base de données."
+    if message:
+      return message
     user = User.objects.create_user(username=data['email'], email=data['email'], password=data['password'])
     role = Role.objects.get(id=data['role'])
     proposer = None
@@ -59,7 +60,7 @@ class DataAccessor():
       job = Job.objects.get(id=idJob)
       userProfile.jobs.add(job)
     userProfile.save()
-    return False
+    return message
 
 
   @classmethod
@@ -74,7 +75,6 @@ class DataAccessor():
   def __modifyPwd(cls, data, currentUser):
     if data['oldPwd'] == data['newPwd']:
       return {"modifyPwd":"Warning", "message":"L'ancien et le nouveau mot de passe sont identiques"}
-    # checkPassword = check_password(data['oldPwd'], data['oldPwd'])
     currentUser.set_password(data['newPwd'])
     currentUser.save()
     return {"modifyPwd":"OK"}

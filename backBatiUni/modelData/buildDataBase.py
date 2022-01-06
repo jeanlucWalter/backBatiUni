@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 class CreateNewDataBase:
-  listTable = {"UserProfile":UserProfile, "Job":Job, "Role":Role}
+  listTable = {"UserProfile":UserProfile, "Job":Job, "Role":Role, "Label":Label}
 
   def __init__(self):
     load_dotenv()
@@ -22,12 +22,14 @@ class CreateNewDataBase:
     return self.fillupDataBase(answer)
 
   def emptyDataBase (self):
-    print("CreateNewDataBase, emptyDataBase")
     for table in CreateNewDataBase.listTable.values():
       table.objects.all().delete()
       tableName = table.objects.model._meta.db_table
-      print("tableName", tableName)
       self.cursor.execute(f"ALTER TABLE {tableName} AUTO_INCREMENT=1;")
+    for user in User.objects.all():
+      if user.username != "jlw":
+        user.delete()
+    self.cursor.execute("ALTER TABLE auth_user AUTO_INCREMENT=1;")
     return {"emptyDataBase":"OK"}
 
   def fillupDataBase (self, response= {}):
@@ -51,6 +53,12 @@ class CreateNewDataBase:
     for role in listRole:
       table.objects.create(name=role)
     return {"fillupRole":"OK"}
+
+  def fillupLabel(self, table):
+    listLabel = ['Qualibat', 'RGE', 'RGE Eco Artisan', 'NF', 'Effinergie', 'Handibat', 'Qualifelec', 'Qualit’EnR', 'Quali’Sol', 'Quali’Bois', 'Quali’PV', 'Quali’Pac', 'Certibat', 'CERQUAL Qualitel Certification', 'Autres...']
+    for label in listLabel:
+      table.objects.create(name=label)
+    return {"fillupLabel":"OK"}
 
 
 

@@ -2,7 +2,7 @@ import requests
 import json
 import sys
 
-userName, password = "jlw", "pwd"
+userName, password = "jlw@gmail.com", "pwd"
 address = 'http://localhost:8000'
 query = "token"
 
@@ -35,15 +35,15 @@ def executeQuery():
     url = f'{address}/register/'
     print("url", url)
     headers = {}
-    post = {"firstname":"Jean-Luc","lastname":"","email":"jlw@gmail.com","password":"pwd","company":"","role":1,"proposer":"","jobs":[1,2,3]}
+    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
   token = queryForToken(userName, password)
   if query == "token":
     print("token", token)
   url = f'{address}/data/'
   headers = {'Authorization': f'Token {token}'}
-  if query == "get":
-    response = requests.get(url, headers=headers, params={"action":"test"})
+  if query == "getUserData":
+    response = requests.get(url, headers=headers, params={"action":"getUserData"})
   elif query == "postModifyPwd":
     print("postModifyPwd")
     post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}

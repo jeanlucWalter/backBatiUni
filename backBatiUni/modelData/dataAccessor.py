@@ -4,15 +4,15 @@ from django.contrib.auth.hashers import check_password, make_password
 import json
 
 class DataAccessor():
-  tablesInitial = {"job":Job, "role":Role}
+  tablesInitial = [Job, Role, Label, UserProfile, Company]
 
   @classmethod
-  def getInitialData(cls):
+  def getUserData(cls, user):
     dictAnswer = {}
-    for tableName, table in cls.tablesInitial.items():
-      if len(table.listFields()) > 1:
-        dictAnswer[tableName + "Fields"] = table.listFields()
-      dictAnswer[tableName + "Values"] = table.dictValues()
+    for table in cls.tablesInitial:
+      dictAnswer.update(table.dumpStructure(user))
+    with open("./backBatiUni/modelData/data.json", 'w') as jsonFile:
+        json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer
 
   @classmethod  
@@ -22,7 +22,7 @@ class DataAccessor():
     message = cls.__registerCheck(data, {})
     cls.__registerAction(data, message)
     if message:
-      return {"register":"Warning", "message":message}
+      return {"register":"Warning", "messages":message}
     return {"register":"OK"}
 
   @classmethod
@@ -41,11 +41,9 @@ class DataAccessor():
 
   @classmethod
   def __registerAction(cls, data, message):
-    
     company = Company.objects.filter(name=data['company'])
     company = Company.objects.create(name=data['company']) if not company else company[0]
     user = User.objects.filter(username=data['email'])
-    print(user, data['email'])
     if user:
       message["email"] = "L'email est déjà utilisé dans la base de données."
     if message:
@@ -55,7 +53,7 @@ class DataAccessor():
     proposer = None
     if data['proposer'] and User.objects.get(id=data['proposer']):
       proposer = User.objects.get(id=data['proposer'])
-    userProfile = UserProfile.objects.create(user=user, company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
+    userProfile = UserProfile.objects.create(userInternal=user, company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
     for idJob in data['jobs']:
       job = Job.objects.get(id=idJob)
       userProfile.jobs.add(job)
@@ -69,12 +67,12 @@ class DataAccessor():
     if "action" in data:
       print("datapost", data)
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
-    return {"dataPost":"Error", "message":"no action in post"}
+    return {"dataPost":"Error", "messages":"no action in post"}
 
   @classmethod
   def __modifyPwd(cls, data, currentUser):
     if data['oldPwd'] == data['newPwd']:
-      return {"modifyPwd":"Warning", "message":"L'ancien et le nouveau mot de passe sont identiques"}
+      return {"modifyPwd":"Warning", "messages":{"oldPwd", "L'ancien et le nouveau mot de passe sont identiques"}}
     currentUser.set_password(data['newPwd'])
     currentUser.save()
     return {"modifyPwd":"OK"}

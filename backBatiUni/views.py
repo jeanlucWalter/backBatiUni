@@ -13,10 +13,11 @@ class DefaultView(APIView):
 class Data(DefaultView):
   def get(self, request):
     if 'action' in request.GET:
+      currentUser = request.user
       action = request.GET["action"]
-      if action == "initialize":
-        return Response(DataAccessor.getInitialData())
-    return Response({"test GET":"OK"})
+      if action == "getUserData":
+        return Response(DataAccessor.getUserData(currentUser))
+    return Response({"data GET":"Error"})
 
   def post(self, request):
     currentUser = request.user

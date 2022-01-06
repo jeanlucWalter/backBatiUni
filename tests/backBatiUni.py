@@ -31,8 +31,8 @@ def queryForToken(userName, password):
 def executeQuery():
   print("query", query)
   data, response = None, None
-  if query == "register":
-    url = f'{address}/register/'
+  if query == "initialize":
+    url = f'{address}/initialize/'
     print("url", url)
     headers = {}
     post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
@@ -50,10 +50,11 @@ def executeQuery():
       post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":
-      url = f'{address}/initialize/'
+      url = f'{address}/register/'
       response = requests.get(url, headers=headers, params={"action":"reload"})
     elif query == "getGeneralData":
       url = f'{address}/initialize/'
+      headers = {"content-type":"Application/Json"}
       response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
   if response:
     data = json.loads(response.text)

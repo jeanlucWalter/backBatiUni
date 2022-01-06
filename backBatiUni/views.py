@@ -25,10 +25,14 @@ class Data(DefaultView):
     jsonString = jsonBin.decode("utf8")
     return Response(DataAccessor().dataPost(jsonString, currentUser))
 
-class Register(APIView):
+class Initialize(APIView):
   permission_classes = (AllowAny,)
 
   def get(self, request):
+    if 'action' in request.GET:
+      action = request.GET["action"]
+      if action == "getGeneralData":
+        return Response(DataAccessor().getData("general", False))
     return Response({"register GET":"OK"})
 
   def post(self, request):
@@ -36,12 +40,10 @@ class Register(APIView):
     jsonString = jsonBin.decode("utf8")
     return Response(DataAccessor().register(jsonString))
 
-class Initialize(DefaultView):
+class Register(DefaultView):
   def get(self, request):
     if 'action' in request.GET:
       action = request.GET["action"]
       if action == "reload":
         return Response(CreateNewDataBase().reloadDataBase())
-      if action == "getGeneralData":
-        return Response(DataAccessor().getData("general", False))
     return Response({"Initialize GET":"OK"})

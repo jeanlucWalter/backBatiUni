@@ -1,0 +1,49 @@
+{
+   "UserprofileFields": [
+      "user",
+      "company",
+      "firstName",
+      "lastName",
+      "proposer",
+      "role",
+      "jobs"
+   ],
+   "UserprofileIndices": [
+      1,
+      5,
+      6
+   ],
+   "UserprofileValues": {
+      "1": [
+         "jlw@gmail.com",
+         1,
+         "Jean-Luc",
+         "Walter",
+         null,
+         1,
+         [
+            1,
+            2,
+            3
+         ]
+      ]
+   },
+   "CompanyFields": [
+      "name",
+      "siret",
+      "capital",
+      "logo",
+      "webSite",
+      "stars"
+   ],
+   "CompanyValues": {
+      "1": [
+         "Fantasiapp",
+         null,
+         null,
+         null,
+         null,
+         null
+      ]
+   }
+}

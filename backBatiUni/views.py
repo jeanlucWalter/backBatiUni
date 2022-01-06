@@ -16,7 +16,7 @@ class Data(DefaultView):
       currentUser = request.user
       action = request.GET["action"]
       if action == "getUserData":
-        return Response(DataAccessor.getUserData(currentUser))
+        return Response(DataAccessor.getData("user", currentUser))
     return Response({"data GET":"Error"})
 
   def post(self, request):
@@ -42,4 +42,6 @@ class Initialize(DefaultView):
       action = request.GET["action"]
       if action == "reload":
         return Response(CreateNewDataBase().reloadDataBase())
+      if action == "getGeneralData":
+        return Response(DataAccessor().getData("general", False))
     return Response({"Initialize GET":"OK"})

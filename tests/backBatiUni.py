@@ -52,6 +52,9 @@ def executeQuery():
     elif query == "buildDB":
       url = f'{address}/initialize/'
       response = requests.get(url, headers=headers, params={"action":"reload"})
+    elif query == "getGeneralData":
+      url = f'{address}/initialize/'
+      response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
   if response:
     data = json.loads(response.text)
     print("data", data)

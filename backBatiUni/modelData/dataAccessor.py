@@ -4,14 +4,14 @@ from django.contrib.auth.hashers import check_password, make_password
 import json
 
 class DataAccessor():
-  tablesInitial = [Job, Role, Label, UserProfile, Company]
+  tables = {"user":[UserProfile, Company], "general":[Job, Role, Label]}
 
   @classmethod
-  def getUserData(cls, user):
+  def getData(cls, profile, user):
     dictAnswer = {}
-    for table in cls.tablesInitial:
+    for table in cls.tables[profile]:
       dictAnswer.update(table.dumpStructure(user))
-    with open("./backBatiUni/modelData/data.json", 'w') as jsonFile:
+    with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer
 

@@ -67,6 +67,7 @@ class Company(CommonModel):
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
   labels = models.ManyToManyField(Label)
   stars = models.IntegerField("Notation sous forme d'étoile", null=True, default=None)
+  companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
 
   @classmethod
   def filter(cls, user):
@@ -87,6 +88,7 @@ class UserProfile(CommonModel):
   jobs = models.ManyToManyField(Job)
   proposer = models.IntegerField(blank=False, null=True, default=None)
   role = models.ForeignKey(Role, on_delete=models.PROTECT, blank=False, null=False)
+  cellPhone = models.CharField("Téléphone mobile", max_length=128, blank=False, null=True, default=None)
 
   @classmethod
   def listFields(cls):

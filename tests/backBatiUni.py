@@ -12,9 +12,9 @@ if len(arguments) > 1:
     if host == "local": address = 'http://localhost:8000'
     elif host == "temp": address = 'https://batiuni.fantasiapp.tech:5004'
     elif host == "work": address = 'https://batiuni.fantasiapp.tech:5001'
-    elif host == "current": address = 'https://visio.fantasiapp.tech:3439'
-    elif host == "distrib": address = 'https://visio.fantasiapp.tech:3440'
-    elif host == "distrib2": address = 'https://visio.fantasiapp.tech:3442'
+    elif host == "current": address = 'https://visio.fantasiapp.tech:5002'
+    elif host == "distrib": address = 'https://visio.fantasiapp.tech:5003'
+    elif host == "distrib2": address = 'https://visio.fantasiapp.tech:5005'
 if len(arguments) > 2:
   query = arguments[2]
 
@@ -30,13 +30,13 @@ def queryForToken(userName, password):
 
 def executeQuery():
   print("query", query)
-  data, response = None, None
-  if query == "initialize":
-    url = f'{address}/initialize/'
-    print("url", url)
+  data, response, url , headers = None, None, f'{address}/initialize/', {"content-type":"Application/Json"}
+  if query == "register":
     headers = {}
     post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
+  elif query == "getGeneralData":
+    response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
   else:
     token = queryForToken("jlw", "pwd") if query == "buildDB" else queryForToken(userName, password)
     if query == "token":
@@ -50,12 +50,8 @@ def executeQuery():
       post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":
-      url = f'{address}/register/'
+      url = f'{address}/createBase/'
       response = requests.get(url, headers=headers, params={"action":"reload"})
-    elif query == "getGeneralData":
-      url = f'{address}/initialize/'
-      headers = {"content-type":"Application/Json"}
-      response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
   if response:
     data = json.loads(response.text)
     print("data", data)

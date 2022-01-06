@@ -40,10 +40,10 @@ class Initialize(APIView):
     jsonString = jsonBin.decode("utf8")
     return Response(DataAccessor().register(jsonString))
 
-class Register(DefaultView):
+class CreateBase(DefaultView):
   def get(self, request):
     if 'action' in request.GET:
       action = request.GET["action"]
       if action == "reload":
         return Response(CreateNewDataBase().reloadDataBase())
-    return Response({"Initialize GET":"OK"})
+    return Response({"CreateBase GET":"Error"})

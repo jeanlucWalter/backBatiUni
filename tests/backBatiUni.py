@@ -37,20 +37,21 @@ def executeQuery():
     headers = {}
     post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
-  token = queryForToken(userName, password)
-  if query == "token":
-    print("token", token)
-  url = f'{address}/data/'
-  headers = {'Authorization': f'Token {token}'}
-  if query == "getUserData":
-    response = requests.get(url, headers=headers, params={"action":"getUserData"})
-  elif query == "postModifyPwd":
-    print("postModifyPwd")
-    post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}
-    response = requests.post(url, headers=headers, json=post)
-  elif query == "buildDB":
-    url = f'{address}/initialize/'
-    response = requests.get(url, headers=headers, params={"action":"reload"})
+  else:
+    token = queryForToken("jlw", "pwd") if query == "buildDB" else queryForToken(userName, password)
+    if query == "token":
+      print("token", token)
+    url = f'{address}/data/'
+    headers = {'Authorization': f'Token {token}'}
+    if query == "getUserData":
+      response = requests.get(url, headers=headers, params={"action":"getUserData"})
+    elif query == "postModifyPwd":
+      print("postModifyPwd")
+      post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}
+      response = requests.post(url, headers=headers, json=post)
+    elif query == "buildDB":
+      url = f'{address}/initialize/'
+      response = requests.get(url, headers=headers, params={"action":"reload"})
   if response:
     data = json.loads(response.text)
     print("data", data)

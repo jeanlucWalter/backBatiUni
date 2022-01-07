@@ -4,6 +4,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.apps import apps
 import sys
 sys.path.append("../../middle/temp/")
+sys.path.append("../../middle/")
 from profileScraping import searchUnitesLegalesByDenomination
 
 import json

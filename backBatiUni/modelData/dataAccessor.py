@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.apps import apps
 import sys
 sys.path.append("../../middle/temp/")
-sys.path.append("../../middle/")
+# sys.path.append("../../middle/")
 from profileScraping import searchUnitesLegalesByDenomination
 
 import json
@@ -51,6 +51,7 @@ class DataAccessor():
     company = Company.objects.filter(name=data['company'])
     if not company:
       searchSiren = searchUnitesLegalesByDenomination(data['company'])
+      print("searchSiren", searchSiren)
       if searchSiren["status"] == "ok":
         company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
       else:

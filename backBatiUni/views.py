@@ -27,13 +27,12 @@ class Data(DefaultView):
 
 class Initialize(APIView):
   permission_classes = (AllowAny,)
-
   def get(self, request):
     if 'action' in request.GET:
       action = request.GET["action"]
       if action == "getGeneralData":
         return Response(DataAccessor().getData("general", False))
-    return Response({"register GET":"OK"})
+    return Response({"Initialize GET":"OK"})
 
   def post(self, request):
     jsonBin = request.body

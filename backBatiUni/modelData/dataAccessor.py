@@ -1,15 +1,21 @@
 from ..models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password, make_password
+from django.apps import apps
+import sys
+sys.path.append("../../middle/temp/")
+from profileScraping import searchUnitesLegalesByDenomination
+
 import json
 
 class DataAccessor():
-  tables = {"user":[UserProfile, Company], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company], "general":[Job, Role, Label]}
+  dictTable = {}
 
   @classmethod
   def getData(cls, profile, user):
     dictAnswer = {}
-    for table in cls.tables[profile]:
+    for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)
@@ -42,7 +48,15 @@ class DataAccessor():
   @classmethod
   def __registerAction(cls, data, message):
     company = Company.objects.filter(name=data['company'])
-    company = Company.objects.create(name=data['company']) if not company else company[0]
+    if not company:
+      searchSiren = searchUnitesLegalesByDenomination(data['company'])
+      if searchSiren["status"] == "ok":
+        company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
+      else:
+        message = {"searchSiren":"did not work"}
+        company = Company.objects.create(name=data['company'])
+    else:
+      company[0]
     user = User.objects.filter(username=data['email'])
     if user:
       message["email"] = "L'email est déjà utilisé dans la base de données."
@@ -65,8 +79,9 @@ class DataAccessor():
   def dataPost(cls, jsonString, currentUser):
     data = json.loads(jsonString)
     if "action" in data:
-      print("datapost", data)
+      print("datapost", data["action"])
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
+      if data["action"] == "updateUserInfo": return cls.__updateUserInfo(data, currentUser)
     return {"dataPost":"Error", "messages":"no action in post"}
 
   @classmethod
@@ -76,6 +91,45 @@ class DataAccessor():
     currentUser.set_password(data['newPwd'])
     currentUser.save()
     return {"modifyPwd":"OK"}
+
+  @classmethod
+  def __updateUserInfo(cls, data, user):
+    message = {}
+    for key, dictValue in data.items():
+      if key != "action":
+        cls.__setValues(key, dictValue, user, message)
+    if message:
+      return {"updateUserInfo":"Error", "messages":message}
+    return {"updateUserInfo":"OK"}
+
+
+  @classmethod
+  def __setValues(cls, key, dictValue, user, message):
+    modelName = key.replace("Values", "")
+    if modelName == key:
+      message[key] = "is not an object"
+    else:
+      modelValue = apps.get_model('backBatiUni', modelName)
+      objectValue = modelValue.objects.get(id=id) if id in dictValue else None
+      if not objectValue:
+        objectValue = modelValue.filter(user)
+        objectValue = objectValue[0] if len(objectValue) == 1 else None
+      if objectValue:
+        for fieldName, value in dictValue.items():
+          messageFlag = True
+          if getattr(objectValue, fieldName, "does not exist") != "does not exist":
+            if getattr(objectValue, fieldName) != value:
+              print("setAttr", fieldName, objectValue.setAttr(fieldName, value))
+              messageFlag = False
+          else:
+            message[fieldName] = "is not an field"
+        if messageFlag:
+          message[modelName] = "Aucun champ n'a été modifié"
+        else:
+          objectValue.save()
+      else:
+        message[modelName] = "can not find associated object"
+    
 
   
     

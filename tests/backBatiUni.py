@@ -12,9 +12,9 @@ if len(arguments) > 1:
     if host == "local": address = 'http://localhost:8000'
     elif host == "temp": address = 'https://batiuni.fantasiapp.tech:5004'
     elif host == "work": address = 'https://batiuni.fantasiapp.tech:5001'
-    elif host == "current": address = 'https://visio.fantasiapp.tech:5002'
-    elif host == "distrib": address = 'https://visio.fantasiapp.tech:5003'
-    elif host == "distrib2": address = 'https://visio.fantasiapp.tech:5005'
+    elif host == "current": address = 'https://batiuni.fantasiapp.tech:5002'
+    elif host == "distrib": address = 'https://batiuni.fantasiapp.tech:5003'
+    elif host == "distrib2": address = 'https://batiuni.fantasiapp.tech:5005'
 if len(arguments) > 2:
   query = arguments[2]
 
@@ -48,6 +48,11 @@ def executeQuery():
     elif query == "postModifyPwd":
       print("postModifyPwd")
       post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}
+      response = requests.post(url, headers=headers, json=post)
+    elif query == "updateUserInfo":
+      print("updateUserInfo")
+      post = {"action":"updateUserInfo", "UserprofileValues":{"firstName":"Anass", "company":1}, "CompanyValues":{"capital":100, "labels":[1,4,5,6]}}
+      # post = {"action":"updateUserInfo", "UserprofileValues":{"firstName":"Jean-Luc"}, "CompanyValues":{"capital":200}}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":
       url = f'{address}/createBase/'

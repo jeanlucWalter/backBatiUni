@@ -56,6 +56,25 @@ class CommonModel(models.Model):
   def filter(cls, user):
     return cls.objects.all()
 
+  def setAttr(self, fieldName, value):
+    listMetaFields = [field.name for field in self._meta.fields]
+    if fieldName + "Internal" in listMetaFields:
+      self.setAttr(fieldName, value)
+    elif isinstance(self._meta.get_field(fieldName), models.ForeignKey):
+      foreign = self._meta.get_field(fieldName).remote_field.model
+      newValue = foreign.objects.get(id=value)
+      setattr(self, fieldName, newValue)
+    elif isinstance(self._meta.get_field(fieldName), models.ManyToManyField):
+      foreign = self._meta.get_field(fieldName).remote_field.model
+      print(foreign)
+      for index in value:
+        newValue = foreign.objects.get(id=index)
+        print(newValue.id, newValue in getattr(self, fieldName).objects.all())
+      print(fieldName, value)
+    else:
+      setattr(self, fieldName, value)
+
+
 class Label(CommonModel):
   name = models.CharField('Nom du label', unique=True, max_length=128, null=False, default=False, blank=False)
 
@@ -99,6 +118,13 @@ class UserProfile(CommonModel):
   @property
   def user(self):
     return self.userInternal.username
+
+  def setAttr(self, fieldName, value):
+    if fieldName == "userInternal":
+      user = self.userInternal
+      user.username = value
+      user.save()
+    super().setAttr(fieldName, value)
 
   class Meta:
     verbose_name = "UserProfile"

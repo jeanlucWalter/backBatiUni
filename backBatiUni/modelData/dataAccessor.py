@@ -51,8 +51,9 @@ class DataAccessor():
     company = Company.objects.filter(name=data['company'])
     if not company:
       searchSiren = searchUnitesLegalesByDenomination(data['company'])
-      print("searchSiren", searchSiren)
+      print("searchSiren", searchSiren, searchSiren["status"] == "ok")
       if searchSiren["status"] == "ok":
+        print("ok")
         company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
       else:
         message = {"searchSiren":"did not work"}

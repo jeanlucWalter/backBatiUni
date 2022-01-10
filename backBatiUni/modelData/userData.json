@@ -1,26 +1,28 @@
 {
    "UserprofileFields": [
-      "user",
+      "userName",
       "company",
       "firstName",
       "lastName",
       "proposer",
       "role",
+      "cellPhone",
       "jobs"
    ],
    "UserprofileIndices": [
       1,
       5,
-      6
+      7
    ],
    "UserprofileValues": {
       "1": [
          "jlw@gmail.com",
          1,
-         "Jean-Luc",
+         "Anass",
          "Walter",
          null,
          1,
+         null,
          [
             1,
             2,
@@ -34,12 +36,14 @@
       "capital",
       "logo",
       "webSite",
-      "stars"
+      "stars",
+      "companyPhone"
    ],
    "CompanyValues": {
       "1": [
          "Fantasiapp",
          null,
+         100,
          null,
          null,
          null,

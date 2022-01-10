@@ -51,8 +51,7 @@ def executeQuery():
       response = requests.post(url, headers=headers, json=post)
     elif query == "updateUserInfo":
       print("updateUserInfo")
-      post = {"action":"updateUserInfo", "UserprofileValues":{"firstName":"Anass", "company":1}, "CompanyValues":{"capital":100, "labels":[1,4,5,6]}}
-      # post = {"action":"updateUserInfo", "UserprofileValues":{"firstName":"Jean-Luc"}, "CompanyValues":{"capital":200}}
+      post = {"action":"updateUserInfo", "UserprofileValues":{"firstName":"Anass", "jobs":[1,4,5,6]}, "CompanyValues":{"capital":100, "labels":[1,4,5,6]}}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":
       url = f'{address}/createBase/'

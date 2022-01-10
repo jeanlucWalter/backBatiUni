@@ -57,6 +57,7 @@ class CommonModel(models.Model):
     return cls.objects.all()
 
   def setAttr(self, fieldName, value):
+    print("self", self)
     listMetaFields = [field.name for field in self._meta.fields]
     if fieldName + "Internal" in listMetaFields:
       self.setAttr(fieldName, value)
@@ -69,7 +70,8 @@ class CommonModel(models.Model):
       print(foreign)
       for index in value:
         newValue = foreign.objects.get(id=index)
-        print(newValue.id, newValue in getattr(self, fieldName).objects.all())
+        print("array Many", [instance.id for instance in getattr(self, fieldName).all()])
+        print(newValue.id, newValue.id in [instance.id for instance in getattr(self, fieldName).all()])
       print(fieldName, value)
     else:
       setattr(self, fieldName, value)
@@ -77,6 +79,12 @@ class CommonModel(models.Model):
 
 class Label(CommonModel):
   name = models.CharField('Nom du label', unique=True, max_length=128, null=False, default=False, blank=False)
+
+class Role(CommonModel):
+  name = models.CharField('Profil du compte', unique=True, max_length=128)
+
+class Job(CommonModel):
+  name = models.CharField('Nom du métier', unique=True, max_length=128)
 
 class Company(CommonModel):
   name = models.CharField('Nom de la société', unique=True, max_length=128, null=False, blank=False)
@@ -90,17 +98,11 @@ class Company(CommonModel):
 
   @classmethod
   def filter(cls, user):
-    userProfile = UserProfile.objects.get(userInternal=user)
+    userProfile = UserProfile.objects.get(userNameInternal=user)
     return [userProfile.company]
 
-class Role(CommonModel):
-  name = models.CharField('Profil du compte', unique=True, max_length=128)
-
-class Job(CommonModel):
-  name = models.CharField('Nom du métier', unique=True, max_length=128)
-
 class UserProfile(CommonModel):
-  userInternal = models.OneToOneField(User, on_delete=models.PROTECT)
+  userNameInternal = models.OneToOneField(User, on_delete=models.PROTECT)
   company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
   firstName = models.CharField("Prénom", max_length=128, blank=False, default="Inconnu")
   lastName = models.CharField("Nom de famille", max_length=128, blank=False, default="Inconnu")
@@ -111,17 +113,17 @@ class UserProfile(CommonModel):
 
   @classmethod
   def listFields(cls):
-    base = super().listFields()
-    base.append("jobs")
-    return base
+    listF = super().listFields()
+    listF.append("jobs")
+    return listF
 
   @property
-  def user(self):
-    return self.userInternal.username
+  def userName(self):
+    return self.userNameInternal.username
 
   def setAttr(self, fieldName, value):
-    if fieldName == "userInternal":
-      user = self.userInternal
+    if fieldName == "userNameInternal":
+      user = self.userNameInternal
       user.username = value
       user.save()
     super().setAttr(fieldName, value)
@@ -131,7 +133,7 @@ class UserProfile(CommonModel):
   
   @classmethod
   def filter(cls, user):
-    return [UserProfile.objects.get(userInternal=user)]
+    return [UserProfile.objects.get(userNameInternal=user)]
 
   @property
   def getRole(self):

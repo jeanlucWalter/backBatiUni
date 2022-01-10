@@ -3,9 +3,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password, make_password
 from django.apps import apps
 import sys
-sys.path.append("../../middle/temp/")
-# sys.path.append("../../middle/")
-from profileScraping import searchUnitesLegalesByDenomination
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+if os.getenv('PATH_MIDDLE'):
+  sys.path.append(os.getenv('PATH_MIDDLE'))
+  from profileScraping import searchUnitesLegalesByDenomination
 
 import json
 
@@ -50,13 +55,14 @@ class DataAccessor():
   def __registerAction(cls, data, message):
     company = Company.objects.filter(name=data['company'])
     if not company:
-      searchSiren = searchUnitesLegalesByDenomination(data['company'])
-      print("searchSiren", searchSiren, searchSiren["status"] == "ok")
-      if searchSiren["status"] == "ok":
-        print("ok")
-        company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
+      if os.getenv('PATH_MIDDLE'):
+        searchSiren = searchUnitesLegalesByDenomination(data['company'])
+        if searchSiren["status"] == "OK":
+          company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
+        else:
+          message = {"searchSiren":"did not work"}
+          company = Company.objects.create(name=data['company'])
       else:
-        message = {"searchSiren":"did not work"}
         company = Company.objects.create(name=data['company'])
     else:
       company[0]

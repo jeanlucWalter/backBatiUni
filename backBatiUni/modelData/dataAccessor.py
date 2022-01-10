@@ -76,7 +76,7 @@ class DataAccessor():
     proposer = None
     if data['proposer'] and User.objects.get(id=data['proposer']):
       proposer = User.objects.get(id=data['proposer'])
-    userProfile = UserProfile.objects.create(userInternal=user, company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
+    userProfile = UserProfile.objects.create(userNameInternal=user, company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
     for idJob in data['jobs']:
       job = Job.objects.get(id=idJob)
       userProfile.jobs.add(job)

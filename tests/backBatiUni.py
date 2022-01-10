@@ -32,6 +32,7 @@ def executeQuery():
   print("query", query)
   data, response, url , headers = None, None, f'{address}/initialize/', {"content-type":"Application/Json"}
   if query == "register":
+    print("query", query, url)
     headers = {}
     post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)

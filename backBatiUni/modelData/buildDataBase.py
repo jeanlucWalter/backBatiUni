@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 class CreateNewDataBase:
-  listTable = {"UserProfile":UserProfile, "Job":Job, "Role":Role, "Label":Label}
+  listTable = {"UserProfile":UserProfile, "Job":Job, "Role":Role, "Label":Label, "Company":Company}
 
   def __init__(self):
     load_dotenv()
@@ -40,6 +40,9 @@ class CreateNewDataBase:
     return response
 
   def fillupUserProfile(self, table):
+    return {}
+  
+  def fillupCompany(self, table):
     return {}
 
   def fillupJob(self, table):

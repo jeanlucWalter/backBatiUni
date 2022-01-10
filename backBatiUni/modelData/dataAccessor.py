@@ -91,7 +91,8 @@ class DataAccessor():
     if "action" in data:
       print("datapost", data["action"])
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
-      if data["action"] == "updateUserInfo": return cls.__updateUserInfo(data, currentUser)
+      if data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
+      return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 
   @classmethod

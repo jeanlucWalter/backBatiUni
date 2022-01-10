@@ -72,6 +72,7 @@ class DataAccessor():
     if message:
       return message
     user = User.objects.create_user(username=data['email'], email=data['email'], password=data['password'])
+    print("__registerAction role", data['role'], type(data['role']))
     role = Role.objects.get(id=data['role'])
     proposer = None
     if data['proposer'] and User.objects.get(id=data['proposer']):

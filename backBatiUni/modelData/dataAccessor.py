@@ -16,7 +16,7 @@ if os.getenv('PATH_MIDDLE'):
 import json
 
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company, JobForCompany], "general":[Job, Role, Label]}
   dictTable = {}
 
   @classmethod
@@ -58,7 +58,6 @@ class DataAccessor():
     if not company:
       if os.getenv('PATH_MIDDLE'):
         searchSiren = searchUnitesLegalesByDenomination(data['company'])
-        print("__registerAction", searchSiren)
         if searchSiren["status"] == "OK":
           print('siren')
           company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
@@ -71,7 +70,6 @@ class DataAccessor():
     else:
       company[0]
     user = User.objects.filter(username=data['email'])
-    print(user, data['email'])
     if user:
       message["email"] = "L'email est déjà utilisé dans la base de données."
     if message:
@@ -84,7 +82,9 @@ class DataAccessor():
     userProfile = UserProfile.objects.create(userNameInternal=user, company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
     for idJob in data['jobs']:
       job = Job.objects.get(id=idJob)
-      userProfile.jobs.add(job)
+      jobCompany = JobForCompany.objects.filter(job=job, company=company)
+      if not jobCompany:
+        JobForCompany.objects.create(job=job, company=company, number=1)
     userProfile.save()
     return message
 

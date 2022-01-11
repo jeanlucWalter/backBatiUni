@@ -8,7 +8,7 @@ class CommonModel(models.Model):
   @classmethod
   def dumpStructure(cls, user):
     dictAnswer = {}
-    tableName = cls._meta.verbose_name.title()
+    tableName = cls._meta.verbose_name.title().replace(" ", "")
     if len(cls.listFields()) > 1:
       dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) > 1:
@@ -92,6 +92,7 @@ class Company(CommonModel):
   name = models.CharField('Nom de la société', unique=True, max_length=128, null=False, blank=False)
   siret = models.CharField('Numéro de Siret', unique=True, max_length=32, null=True, default=None)
   capital = models.IntegerField("Capital de l'entreprise", null=True, default=None)
+  revenue = models.FloatField("Capital de l'entreprise", null=True, default=None)
   logo = models.CharField("Path du logo de l'entreprise", max_length=256, null=True, default=None)
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
   labels = models.ManyToManyField(Label)
@@ -103,21 +104,29 @@ class Company(CommonModel):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     return [userProfile.company]
 
+
+class JobForCompany(CommonModel):
+  job = models.ForeignKey(Job, on_delete=models.PROTECT, blank=False, null=False)
+  number = models.IntegerField("Nombre de profils ayant ce metier", null=False, default=1)
+  company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
+
+  class Meta:
+    unique_together = ('job', 'company')
+
+  @classmethod
+  def filter(cls, user):
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    company = userProfile.company
+    return cls.objects.filter(company=company)
+
 class UserProfile(CommonModel):
   userNameInternal = models.OneToOneField(User, on_delete=models.PROTECT)
   company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
   firstName = models.CharField("Prénom", max_length=128, blank=False, default="Inconnu")
   lastName = models.CharField("Nom de famille", max_length=128, blank=False, default="Inconnu")
-  jobs = models.ManyToManyField(Job)
   proposer = models.IntegerField(blank=False, null=True, default=None)
   role = models.ForeignKey(Role, on_delete=models.PROTECT, blank=False, null=False)
   cellPhone = models.CharField("Téléphone mobile", max_length=128, blank=False, null=True, default=None)
-
-  @classmethod
-  def listFields(cls):
-    listF = super().listFields()
-    listF.append("jobs")
-    return listF
 
   @property
   def userName(self):

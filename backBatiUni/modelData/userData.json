@@ -6,34 +6,28 @@
       "lastName",
       "proposer",
       "role",
-      "cellPhone",
-      "jobs"
+      "cellPhone"
    ],
    "UserprofileIndices": [
       1,
-      5,
-      7
+      5
    ],
    "UserprofileValues": {
       "1": [
          "jlw@gmail.com",
          1,
-         "Anass",
+         "Jean-Luc",
          "Walter",
          null,
          1,
-         null,
-         [
-            1,
-            2,
-            3
-         ]
+         null
       ]
    },
    "CompanyFields": [
       "name",
       "siret",
       "capital",
+      "revenue",
       "logo",
       "webSite",
       "stars",
@@ -43,11 +37,38 @@
       "1": [
          "Fantasiapp",
          null,
-         100,
+         null,
+         null,
          null,
          null,
          null,
          null
+      ]
+   },
+   "JobForCompanyFields": [
+      "job",
+      "number",
+      "company"
+   ],
+   "JobForCompanyIndices": [
+      0,
+      2
+   ],
+   "JobForCompanyValues": {
+      "1": [
+         1,
+         1,
+         1
+      ],
+      "2": [
+         2,
+         1,
+         1
+      ],
+      "3": [
+         3,
+         1,
+         1
       ]
    }
 }

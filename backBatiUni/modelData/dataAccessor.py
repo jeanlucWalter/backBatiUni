@@ -2,6 +2,7 @@ from ..models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password, make_password
 from django.apps import apps
+from operator import attrgetter
 import sys
 import os
 
@@ -106,21 +107,20 @@ class DataAccessor():
 
   @classmethod
   def __updateUserInfo(cls, data, user):
-    message = {}
+    message, valueModified = {}, None
     for key, dictValue in data.items():
       if key != "action":
-        cls.__setValues(key, dictValue, user, message)
+        valueModified = cls.__setValues(key, dictValue, user, message)
     if message:
-      return {"updateUserInfo":"Error", "messages":message}
-    return {"updateUserInfo":"OK"}
+      return {"modifyUser":"Error", "messages":message, "valueModified": valueModified}
+    return {"modifyUser":"OK", "valueModified": valueModified}
 
 
   @classmethod
-  def __setValues(cls, key, dictValue, user, message):
-    modelName = key.replace("Values", "")
-    if modelName == key:
-      message[key] = "is not an object"
-    else:
+  def __setValues(cls, modelName, dictValue, user, message):
+    listModelName = [value.lower() for value in map(attrgetter('__name__'), apps.get_models())]
+    valueModified = {}
+    if modelName.lower() in listModelName:
       modelValue = apps.get_model('backBatiUni', modelName)
       objectValue = modelValue.objects.get(id=id) if id in dictValue else None
       if not objectValue:
@@ -128,19 +128,26 @@ class DataAccessor():
         objectValue = objectValue[0] if len(objectValue) == 1 else None
       if objectValue:
         for fieldName, value in dictValue.items():
-          messageFlag = True
-          if getattr(objectValue, fieldName, "does not exist") != "does not exist":
-            if getattr(objectValue, fieldName) != value:
-              print("setAttr", fieldName, objectValue.setAttr(fieldName, value))
-              messageFlag = False
-          else:
-            message[fieldName] = "is not an field"
+          print("loop", fieldName, value)
+          if fieldName != "id":
+            messageFlag = True
+            if objectValue.getAttr(fieldName, "does not exist") != "does not exist":
+              if objectValue.getAttr(fieldName) != value:
+                objectValue.setAttr(fieldName, value)
+                if not modelName in valueModified:
+                  valueModified[modelName] = {}
+                valueModified[modelName][fieldName] = value
+                messageFlag = False
+            else:
+              message[fieldName] = "is not an field"
         if messageFlag:
           message[modelName] = "Aucun champ n'a été modifié"
         else:
           objectValue.save()
-      else:
-        message[modelName] = "can not find associated object"
+          return valueModified
+    else:
+      message[modelName] = "can not find associated object"
+      return None
     
 
   

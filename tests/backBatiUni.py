@@ -50,9 +50,9 @@ def executeQuery():
       print("postModifyPwd")
       post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}
       response = requests.post(url, headers=headers, json=post)
-    elif query == "updateUserInfo":
-      print("updateUserInfo")
-      post = {"action":"updateUserInfo", "UserprofileValues":{"firstName":"Anass", "jobs":[1,4,5,6]}, "CompanyValues":{"capital":100, "labels":[1,4,5,6]}}
+    elif query == "modifyUser":
+      print("modifyUser")
+      post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":
       url = f'{address}/createBase/'

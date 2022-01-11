@@ -76,6 +76,8 @@ class CommonModel(models.Model):
     else:
       setattr(self, fieldName, value)
 
+  def getAttr(self, fieldName, answer=False):
+    return getattr(self, fieldName, answer)
 
 class Label(CommonModel):
   name = models.CharField('Nom du label', unique=True, max_length=128, null=False, default=False, blank=False)
@@ -121,8 +123,14 @@ class UserProfile(CommonModel):
   def userName(self):
     return self.userNameInternal.username
 
+  def getAttr(self, fieldName, answer=False):
+    if fieldName == "userName":
+      user = self.userNameInternal
+      return user.username
+    return getattr(self, fieldName, answer)
+
   def setAttr(self, fieldName, value):
-    if fieldName == "userNameInternal":
+    if fieldName == "userName":
       user = self.userNameInternal
       user.username = value
       user.save()

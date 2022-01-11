@@ -73,7 +73,6 @@ class DataAccessor():
     if message:
       return message
     user = User.objects.create_user(username=data['email'], email=data['email'], password=data['password'])
-    print("__registerAction role", data['role'], type(data['role']))
     role = Role.objects.get(id=data['role'])
     proposer = None
     if data['proposer'] and User.objects.get(id=data['proposer']):
@@ -91,7 +90,6 @@ class DataAccessor():
     data = json.loads(jsonString)
     print("dataPost", data)
     if "action" in data:
-      print("datapost", data["action"])
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       if data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
@@ -107,17 +105,19 @@ class DataAccessor():
 
   @classmethod
   def __updateUserInfo(cls, data, user):
-    message, valueModified = {}, None
+    message, valueModified = {}, {}
     for key, dictValue in data.items():
       if key != "action":
-        valueModified = cls.__setValues(key, dictValue, user, message)
+        print("__updateUserInfo", key, dictValue)
+        cls.__setValues(key, dictValue, user, message, valueModified)
     if message:
       return {"modifyUser":"Error", "messages":message, "valueModified": valueModified}
     return {"modifyUser":"OK", "valueModified": valueModified}
 
 
   @classmethod
-  def __setValues(cls, modelName, dictValue, user, message):
+  def __setValues(cls, modelName, dictValue, user, message, valueModified):
+    print("setValues", dictValue)
     listModelName = [value.lower() for value in map(attrgetter('__name__'), apps.get_models())]
     valueModified = {}
     if modelName.lower() in listModelName:
@@ -128,7 +128,6 @@ class DataAccessor():
         objectValue = objectValue[0] if len(objectValue) == 1 else None
       if objectValue:
         for fieldName, value in dictValue.items():
-          print("loop", fieldName, value)
           if fieldName != "id":
             messageFlag = True
             if objectValue.getAttr(fieldName, "does not exist") != "does not exist":
@@ -144,10 +143,8 @@ class DataAccessor():
           message[modelName] = "Aucun champ n'a été modifié"
         else:
           objectValue.save()
-          return valueModified
     else:
       message[modelName] = "can not find associated object"
-      return None
     
 
   

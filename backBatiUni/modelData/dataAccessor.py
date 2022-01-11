@@ -58,9 +58,12 @@ class DataAccessor():
     if not company:
       if os.getenv('PATH_MIDDLE'):
         searchSiren = searchUnitesLegalesByDenomination(data['company'])
+        print("__registerAction", searchSiren)
         if searchSiren["status"] == "OK":
+          print('siren')
           company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
         else:
+          print('no siren')
           message = {"searchSiren":"did not work"}
           company = Company.objects.create(name=data['company'])
       else:
@@ -108,7 +111,6 @@ class DataAccessor():
     message, valueModified = {}, {}
     for key, dictValue in data.items():
       if key != "action":
-        print("__updateUserInfo", key, dictValue)
         cls.__setValues(key, dictValue, user, message, valueModified)
     if message:
       return {"modifyUser":"Error", "messages":message, "valueModified": valueModified}
@@ -117,7 +119,7 @@ class DataAccessor():
 
   @classmethod
   def __setValues(cls, modelName, dictValue, user, message, valueModified):
-    print("setValues", dictValue)
+    print("setValues", modelName, dictValue)
     listModelName = [value.lower() for value in map(attrgetter('__name__'), apps.get_models())]
     valueModified = {}
     if modelName.lower() in listModelName:

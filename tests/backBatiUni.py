@@ -34,7 +34,8 @@ def executeQuery():
   if query == "register":
     print("query", query, url)
     headers = {}
-    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
+    # post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
+    post = {"firstname":"Anass","lastname":"Chatoui","email":"ac@gmail.com","password":"123456Aa","company":"Wgarden","role":2,"proposer":"","jobs":[2,3]}
     response = requests.post(url, headers=headers, json=post)
   elif query == "getGeneralData":
     response = requests.get(url, headers=headers, params={"action":"getGeneralData"})

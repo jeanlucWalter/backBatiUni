@@ -75,7 +75,7 @@ class DataAccessor():
     if user:
       message["email"] = "L'email est déjà utilisé dans la base de données."
     if message:
-      return message
+      print("message", message)
     user = User.objects.create_user(username=data['email'], email=data['email'], password=data['password'])
     role = Role.objects.get(id=data['role'])
     proposer = None

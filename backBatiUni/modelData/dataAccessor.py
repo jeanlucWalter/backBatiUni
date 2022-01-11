@@ -71,6 +71,7 @@ class DataAccessor():
     else:
       company[0]
     user = User.objects.filter(username=data['email'])
+    print(user, data['email'])
     if user:
       message["email"] = "L'email est déjà utilisé dans la base de données."
     if message:

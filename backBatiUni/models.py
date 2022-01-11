@@ -95,7 +95,6 @@ class Company(CommonModel):
   revenue = models.FloatField("Capital de l'entreprise", null=True, default=None)
   logo = models.CharField("Path du logo de l'entreprise", max_length=256, null=True, default=None)
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
-  labels = models.ManyToManyField(Label)
   stars = models.IntegerField("Notation sous forme d'étoile", null=True, default=None)
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
 
@@ -112,6 +111,20 @@ class JobForCompany(CommonModel):
 
   class Meta:
     unique_together = ('job', 'company')
+
+  @classmethod
+  def filter(cls, user):
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    company = userProfile.company
+    return cls.objects.filter(company=company)
+
+class LabelForCompany(CommonModel):
+  label = models.ForeignKey(Label, on_delete=models.PROTECT, blank=False, null=False)
+  date = models.DateField(verbose_name="Date de péremption", null=True, default=None)
+  company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
+
+  class Meta:
+    unique_together = ('label', 'company')
 
   @classmethod
   def filter(cls, user):

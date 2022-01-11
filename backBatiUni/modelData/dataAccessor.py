@@ -16,7 +16,7 @@ if os.getenv('PATH_MIDDLE'):
 import json
 
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company, JobForCompany], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany], "general":[Job, Role, Label]}
   dictTable = {}
 
   @classmethod
@@ -113,6 +113,13 @@ class DataAccessor():
     for key, dictValue in data.items():
       if key != "action":
         cls.__setValues(key, dictValue, user, message, valueModified)
+    if message and valueModified:
+      keys = []
+      for key, value in message.items():
+        if value == "Aucun champ n'a été modifié":
+          keys.append(key)
+      for key in keys:
+        del message[key]
     if message:
       return {"modifyUser":"Error", "messages":message, "valueModified": valueModified}
     return {"modifyUser":"OK", "valueModified": valueModified}
@@ -120,10 +127,10 @@ class DataAccessor():
 
   @classmethod
   def __setValues(cls, modelName, dictValue, user, message, valueModified):
-    print("setValues", modelName, dictValue)
     listModelName = [value.lower() for value in map(attrgetter('__name__'), apps.get_models())]
-    valueModified = {}
-    if modelName.lower() in listModelName:
+    if modelName in ["JobForCompany", "LabelForCompany"]:
+        cls.__setValuesLabelJob(modelName, dictValue, valueModified)
+    elif modelName.lower() in listModelName:
       modelValue = apps.get_model('backBatiUni', modelName)
       objectValue = modelValue.objects.get(id=id) if id in dictValue else None
       if not objectValue:
@@ -143,14 +150,35 @@ class DataAccessor():
             else:
               message[fieldName] = "is not an field"
         if messageFlag:
-          message[modelName] = "Aucun champ n'a été modifié"
+          if not valueModified:
+            message[modelName] = "Aucun champ n'a été modifié"
         else:
           objectValue.save()
     else:
       message[modelName] = "can not find associated object"
-    
 
-  
+  @classmethod
+  def __setValuesLabelJob(cls, modelName, dictValue, valueModified):
+    modelValue = apps.get_model('backBatiUni', modelName)
+    modelInside = Job if modelName == "JobForCompany" else Label
+    company = None
+    for listValue in dictValue:
+      objectInside = modelInside.objects.get(id=listValue[0])
+      company = Company.objects.get(id=listValue[2])
+      objectLabelJob = modelValue.objects.filter(job=objectInside, company=company) if modelName == "JobForCompany" else modelValue.objects.filter(label=objectInside, company=company)
+      if objectLabelJob:
+        objectLabelJob = objectLabelJob[0]
+        if modelName == "JobForCompany" and objectLabelJob.number != listValue[1]:
+          objectLabelJob.number = listValue[1]
+          objectLabelJob.save()
+          if not "JobForCompany" in valueModified:
+            valueModified["JobForCompany"] = []
+          valueModified["JobForCompany"].append([objectLabelJob.job.id, objectLabelJob.number, objectLabelJob.company.id])
+      elif modelName == "JobForCompany":
+        objectLabelJob = modelValue.objects.create(job=objectInside, number=listValue[1], company=company)
+        if not "JobForCompany" in valueModified:
+          valueModified["JobForCompany"] = []
+        valueModified["JobForCompany"].append([objectLabelJob.job.id, objectLabelJob.number, objectLabelJob.company.id])
     
     
     

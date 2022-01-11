@@ -70,5 +70,15 @@
          1,
          1
       ]
-   }
+   },
+   "LabelForCompanyFields": [
+      "label",
+      "date",
+      "company"
+   ],
+   "LabelForCompanyIndices": [
+      0,
+      2
+   ],
+   "LabelForCompanyValues": {}
 }

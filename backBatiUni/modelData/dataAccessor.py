@@ -7,7 +7,7 @@ import sys
 import os
 from datetime import datetime
 import base64
-from PIL import Image
+from Pillow import Image
 from io import BytesIO
 
 from dotenv import load_dotenv
@@ -106,7 +106,7 @@ class DataAccessor():
     file = request.data.get('imageBase64')
     image = Image.open(BytesIO(base64.b64decode(file)))
     image.save('./image.png', 'PNG')
-    print("__changeUserImage", type(file))
+    print("__changeUserImage", type(image))
     return {"changeUserImage":"work in progress"}
 
 

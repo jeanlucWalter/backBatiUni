@@ -1,6 +1,7 @@
 import requests
 import json
 import sys
+from django.utils import timezone
 
 userName, password = "jlw@gmail.com", "pwd"
 address = 'http://localhost:8000'
@@ -53,6 +54,8 @@ def executeQuery():
       response = requests.post(url, headers=headers, json=post)
     elif query == "modifyUser":
       print("modifyUser")
+      # now = timezone.now()
+      # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2,1], [5,3,1]], 'JobForCompany':[[1,now,1], [2,now,1]]}
       post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2,1], [5,3,1]]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":

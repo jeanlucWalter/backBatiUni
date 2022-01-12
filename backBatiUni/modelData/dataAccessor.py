@@ -7,7 +7,7 @@ import sys
 import os
 from datetime import datetime
 import base64
-from Pillow import Image
+from PIL import Image
 from io import BytesIO
 
 from dotenv import load_dotenv

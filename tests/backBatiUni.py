@@ -34,8 +34,18 @@ def executeQuery():
   if query == "register":
     print("query", query, url)
     headers = {}
-    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
-    # post = {"firstname":"Anass","lastname":"Chatoui","email":"ac@gmail.com","password":"123456Aa","company":"Wgarden","role":2,"proposer":"","jobs":[2,3]}
+    # post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
+    post = {
+      "lastname": 'Eric',
+      "firstname": 'Walter',
+      "email": 'e@g.com',
+      "emailVerification": 'e@g.com',
+      "password": '123456Aa',
+      "company": "Fantasiapp",
+      "jobs": [2],
+      "proposer": "",
+      "role": "2"
+      }
     response = requests.post(url, headers=headers, json=post)
   elif query == "getGeneralData":
     response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
@@ -55,8 +65,8 @@ def executeQuery():
       print("modifyUser")
       now = "2022-01-12 08:33:05"
       now = "2022-01-12"
-      post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2,1], [5,3,1]], 'LabelForCompany':[[1,now,1], [2,now,1]]}
-      # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2,1], [5,3,1]]}
+      # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2,1], [5,3,1]], 'LabelForCompany':[[1,now,1], [2,now,1]]}
+      post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2,1], [5,3,1]]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":
       url = f'{address}/createBase/'

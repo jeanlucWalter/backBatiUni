@@ -71,24 +71,23 @@ class DataAccessor():
       else:
         company = Company.objects.create(name=data['company'])
     else:
-      company[0]
+      company = company[0]
     user = User.objects.filter(username=data['email'])
     if user:
       message["email"] = "L'email est déjà utilisé dans la base de données."
-    if message:
-      print("message", message)
-    user = User.objects.create_user(username=data['email'], email=data['email'], password=data['password'])
-    role = Role.objects.get(id=data['role'])
-    proposer = None
-    if data['proposer'] and User.objects.get(id=data['proposer']):
-      proposer = User.objects.get(id=data['proposer'])
-    userProfile = UserProfile.objects.create(userNameInternal=user, company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
-    for idJob in data['jobs']:
-      job = Job.objects.get(id=idJob)
-      jobCompany = JobForCompany.objects.filter(job=job, company=company)
-      if not jobCompany:
-        JobForCompany.objects.create(job=job, company=company, number=1)
-    userProfile.save()
+    else:
+      user = User.objects.create_user(username=data['email'], email=data['email'], password=data['password'])
+      role = Role.objects.get(id=data['role'])
+      proposer = None
+      if data['proposer'] and User.objects.get(id=data['proposer']):
+        proposer = User.objects.get(id=data['proposer'])
+      userProfile = UserProfile.objects.create(userNameInternal=user, company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
+      for idJob in data['jobs']:
+        job = Job.objects.get(id=idJob)
+        jobCompany = JobForCompany.objects.filter(job=job, company=company)
+        if not jobCompany:
+          JobForCompany.objects.create(job=job, company=company, number=1)
+      userProfile.save()
     return message
 
 

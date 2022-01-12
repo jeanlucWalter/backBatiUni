@@ -62,10 +62,8 @@ class DataAccessor():
       if os.getenv('PATH_MIDDLE'):
         searchSiren = searchUnitesLegalesByDenomination(data['company'])
         if searchSiren["status"] == "OK":
-          print('siren')
           company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
         else:
-          print('no siren')
           message = {"searchSiren":"did not work"}
           company = Company.objects.create(name=data['company'])
       else:
@@ -92,14 +90,22 @@ class DataAccessor():
 
 
   @classmethod
-  def dataPost(cls, jsonString, currentUser):
+  def dataPost(cls, jsonString, currentUser, request):
     data = json.loads(jsonString)
     print("dataPost", data)
     if "action" in data:
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       if data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
+      if data["action"] == "changeUserImage": return cls.__changeUserImage(request, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
+
+  @classmethod
+  def __changeUserImage(cls, request, currentUser):
+    file = request.data.get('imageBase64')
+    print("__changeUserImage", file)
+    return {"changeUserImage":"work in progress"}
+
 
   @classmethod
   def __modifyPwd(cls, data, currentUser):

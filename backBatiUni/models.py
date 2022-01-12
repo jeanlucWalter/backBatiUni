@@ -59,7 +59,6 @@ class CommonModel(models.Model):
     return cls.objects.all()
 
   def setAttr(self, fieldName, value):
-    print("self", self)
     listMetaFields = [field.name for field in self._meta.fields]
     if fieldName + "Internal" in listMetaFields:
       self.setAttr(fieldName, value)
@@ -69,12 +68,8 @@ class CommonModel(models.Model):
       setattr(self, fieldName, newValue)
     elif isinstance(self._meta.get_field(fieldName), models.ManyToManyField):
       foreign = self._meta.get_field(fieldName).remote_field.model
-      print(foreign)
       for index in value:
         newValue = foreign.objects.get(id=index)
-        print("array Many", [instance.id for instance in getattr(self, fieldName).all()])
-        print(newValue.id, newValue.id in [instance.id for instance in getattr(self, fieldName).all()])
-      print(fieldName, value)
     else:
       setattr(self, fieldName, value)
 

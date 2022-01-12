@@ -108,7 +108,6 @@ class DataAccessor():
     format, imgstr = data.split(';base64,') 
     ext = format.split('/')[-1] 
     data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-    data.save()
     print("__changeUserImage", type(data), ext)
     return {"changeUserImage":"work in progress"}
 

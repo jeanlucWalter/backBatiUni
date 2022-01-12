@@ -5,9 +5,10 @@ from django.apps import apps
 from operator import attrgetter
 import sys
 import os
-from django.utils import timezone
 from datetime import datetime
-from django.utils.timezone import make_aware
+import base64
+from PIL import Image
+from io import BytesIO
 
 from dotenv import load_dotenv
 
@@ -103,6 +104,8 @@ class DataAccessor():
   @classmethod
   def __changeUserImage(cls, request, currentUser):
     file = request.data.get('imageBase64')
+    image = Image.open(BytesIO(base64.b64decode(file)))
+    image.save('./image.png', 'PNG')
     print("__changeUserImage", type(file))
     return {"changeUserImage":"work in progress"}
 

@@ -92,7 +92,7 @@ class DataAccessor():
   @classmethod
   def dataPost(cls, jsonString, currentUser, request):
     data = json.loads(jsonString)
-    print("dataPost", data)
+    # print("dataPost", data)
     if "action" in data:
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       if data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
@@ -103,7 +103,7 @@ class DataAccessor():
   @classmethod
   def __changeUserImage(cls, request, currentUser):
     file = request.data.get('imageBase64')
-    print("__changeUserImage", file)
+    print("__changeUserImage", type(file))
     return {"changeUserImage":"work in progress"}
 
 

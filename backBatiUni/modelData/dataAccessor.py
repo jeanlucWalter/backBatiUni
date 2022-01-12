@@ -9,6 +9,7 @@ from datetime import datetime
 import base64
 from PIL import Image
 from io import BytesIO
+import re
 
 from dotenv import load_dotenv
 
@@ -104,7 +105,13 @@ class DataAccessor():
   @classmethod
   def __changeUserImage(cls, request, currentUser):
     file = request.data.get('imageBase64')
-    image = Image.open(BytesIO(base64.b64decode(file)))
+    altchars=b'+/'
+    data = re.sub(rb'[^a-zA-Z0-9%s]+' % altchars, b'', file)  # normalize
+    missing_padding = len(data) % 4
+    if missing_padding:
+        data += b'='* (4 - missing_padding)
+    image = base64.b64decode(data, altchars)
+    # image = Image.open(BytesIO(base64.b64decode(file)))
     image.save('./image.png', 'PNG')
     print("__changeUserImage", type(image))
     return {"changeUserImage":"work in progress"}

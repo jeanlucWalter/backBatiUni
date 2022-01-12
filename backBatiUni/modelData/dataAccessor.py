@@ -180,45 +180,13 @@ class DataAccessor():
         valueModified["JobForCompany"].append([jobForCompany.job.id, jobForCompany.number, jobForCompany.company.id])
 
   @classmethod
-  def __setValuesLabel(cls, modelValue, dictValue, valueModified):
-    pass
-
-    # modelInside = Job if modelName == "JobForCompany" else Label
-    # company = None
-    # for listValue in dictValue:
-    #   objectInside = modelInside.objects.get(id=listValue[0])
-    #   company = Company.objects.get(id=listValue[2])
-    #   objectLabelJob = modelValue.objects.filter(job=objectInside, company=company) if modelName == "JobForCompany" else modelValue.objects.filter(label=objectInside, company=company)
-    #   if objectLabelJob:
-    #     objectLabelJob = objectLabelJob[0]
-    #     if modelName == "JobForCompany":
-    #       if objectLabelJob.number != listValue[1]:
-    #         objectLabelJob.number = listValue[1]
-    #         objectLabelJob.save()
-    #         if not "JobForCompany" in valueModified:
-    #           valueModified["JobForCompany"] = []
-    #         valueModified["JobForCompany"].append([objectLabelJob.job.id, objectLabelJob.number, objectLabelJob.company.id])
-    #     else:
-    #       date = datetime.strptime(listValue[1], "%Y-%m-%d")
-    #       if objectLabelJob.date != date:
-    #         objectLabelJob.date = date
-    #         objectLabelJob.save()
-    #       if not "LabelForCompany" in valueModified:
-    #         valueModified["LabelForCompany"] = []
-    #       valueModified["LabelForCompany"].append([objectLabelJob.label.id, objectLabelJob.date, objectLabelJob.company.id])
-    #   elif modelName == "JobForCompany":
-    #     objectLabelJob = modelValue.objects.create(job=objectInside, number=listValue[1], company=company)
-    #     if not "JobForCompany" in valueModified:
-    #       valueModified["JobForCompany"] = []
-    #     valueModified["JobForCompany"].append([objectLabelJob.job.id, objectLabelJob.number, objectLabelJob.company.id])
-    #   else:
-    #     date = datetime.strptime(listValue[1], "%Y-%m-%d")
-    #     objectLabelJob = modelValue.objects.create(label=objectInside, date=date, company=company)
-    #     if not "LabelForCompany" in valueModified:
-    #       valueModified["LabelForCompany"] = []
-    #     valueModified["LabelForCompany"].append([objectLabelJob.label.id, objectLabelJob.date, objectLabelJob.company.id])
-    
-    
-    
-
-
+  def __setValuesLabel(cls, dictValue, valueModified):
+    LabelForCompany.objects.all().delete()
+    for listValue in dictValue:
+      label = Label.objects.get(id=listValue[0])
+      date = datetime.strptime(listValue[1], "%Y/%m/%d")
+      company = Company.objects.get(id=listValue[2])
+      labelForCompany = LabelForCompany.objects.create(label=label, date=date, company=company)
+      if not "LabelForCompany" in valueModified:
+        valueModified["LabelForCompany"] = []
+      valueModified["LabelForCompany"].append([labelForCompany.label.id, labelForCompany.date.strftime("%Y/%m/%d"), labelForCompany.company.id])

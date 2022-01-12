@@ -20,7 +20,7 @@
          "Walter",
          null,
          1,
-         null
+         "0634090695"
       ]
    },
    "CompanyFields": [
@@ -40,9 +40,9 @@
          null,
          null,
          null,
+         "https://fantasiapp.com",
          null,
-         null,
-         null
+         "01 23 45 67 89"
       ]
    },
    "JobForCompanyFields": [
@@ -55,19 +55,14 @@
       2
    ],
    "JobForCompanyValues": {
-      "1": [
-         1,
-         1,
-         1
-      ],
-      "2": [
+      "13": [
+         4,
          2,
-         1,
          1
       ],
-      "3": [
+      "14": [
+         5,
          3,
-         1,
          1
       ]
    },
@@ -80,5 +75,16 @@
       0,
       2
    ],
-   "LabelForCompanyValues": {}
+   "LabelForCompanyValues": {
+      "1": [
+         1,
+         "2022/01/12",
+         1
+      ],
+      "2": [
+         2,
+         "2022/01/12",
+         1
+      ]
+   }
 }

@@ -48,6 +48,8 @@ class CommonModel(models.Model):
         values.append(getattr(instance, field).id)
       elif index in listIndices and isinstance(cls._meta.get_field(field), models.ManyToManyField):
         values.append([element.id for element in getattr(instance, field).all()])
+      elif field == "date":
+        values.append(instance.date.strftime("%Y/%m/%d"))
       else:
         values.append(getattr(instance, field))
     return values

@@ -7,9 +7,9 @@ import sys
 import os
 from datetime import datetime
 import base64
+from django.core.files.base import ContentFile
 from PIL import Image
 from io import BytesIO
-import re
 
 from dotenv import load_dotenv
 
@@ -104,16 +104,11 @@ class DataAccessor():
 
   @classmethod
   def __changeUserImage(cls, request, currentUser):
-    file = request.data.get('imageBase64')
-    altchars=b'+/'
-    data = re.sub(rb'[^a-zA-Z0-9%s]+' % altchars, b'', file)  # normalize
-    missing_padding = len(data) % 4
-    if missing_padding:
-        data += b'='* (4 - missing_padding)
-    image = base64.b64decode(data, altchars)
-    # image = Image.open(BytesIO(base64.b64decode(file)))
-    image.save('./image.png', 'PNG')
-    print("__changeUserImage", type(image))
+    data = request.data.get('imageBase64')
+    format, imgstr = data.split(';base64,') 
+    ext = format.split('/')[-1] 
+    data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+    print("__changeUserImage", type(data))
     return {"changeUserImage":"work in progress"}
 
 

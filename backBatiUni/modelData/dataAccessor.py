@@ -5,6 +5,9 @@ from django.apps import apps
 from operator import attrgetter
 import sys
 import os
+from django.utils import timezone
+from datetime import datetime
+from django.utils.timezone import make_aware
 
 from dotenv import load_dotenv
 
@@ -168,17 +171,32 @@ class DataAccessor():
       objectLabelJob = modelValue.objects.filter(job=objectInside, company=company) if modelName == "JobForCompany" else modelValue.objects.filter(label=objectInside, company=company)
       if objectLabelJob:
         objectLabelJob = objectLabelJob[0]
-        if modelName == "JobForCompany" and objectLabelJob.number != listValue[1]:
-          objectLabelJob.number = listValue[1]
-          objectLabelJob.save()
-          if not "JobForCompany" in valueModified:
-            valueModified["JobForCompany"] = []
-          valueModified["JobForCompany"].append([objectLabelJob.job.id, objectLabelJob.number, objectLabelJob.company.id])
+        if modelName == "JobForCompany":
+          if objectLabelJob.number != listValue[1]:
+            objectLabelJob.number = listValue[1]
+            objectLabelJob.save()
+            if not "JobForCompany" in valueModified:
+              valueModified["JobForCompany"] = []
+            valueModified["JobForCompany"].append([objectLabelJob.job.id, objectLabelJob.number, objectLabelJob.company.id])
+        else:
+          date = datetime.strptime(listValue[1], "%Y-%m-%d")
+          if objectLabelJob.date != date:
+            objectLabelJob.date = date
+            objectLabelJob.save()
+          if not "LabelForCompany" in valueModified:
+            valueModified["LabelForCompany"] = []
+          valueModified["LabelForCompany"].append([objectLabelJob.label.id, objectLabelJob.date, objectLabelJob.company.id])
       elif modelName == "JobForCompany":
         objectLabelJob = modelValue.objects.create(job=objectInside, number=listValue[1], company=company)
         if not "JobForCompany" in valueModified:
           valueModified["JobForCompany"] = []
         valueModified["JobForCompany"].append([objectLabelJob.job.id, objectLabelJob.number, objectLabelJob.company.id])
+      else:
+        date = datetime.strptime(listValue[1], "%Y-%m-%d")
+        objectLabelJob = modelValue.objects.create(label=objectInside, date=date, company=company)
+        if not "LabelForCompany" in valueModified:
+          valueModified["LabelForCompany"] = []
+        valueModified["LabelForCompany"].append([objectLabelJob.label.id, objectLabelJob.date, objectLabelJob.company.id])
     
     
     

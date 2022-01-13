@@ -210,7 +210,7 @@ class Files(CommonModel):
     path = None
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.firstName + '_' + userProfile.lastName + '_' + str(user.id) + '.' + ext
-    if not Files.objects.filter(nature=nature, name=name, user=userProfile):
+    if not Files.objects.filter(nature=nature, name=name, userProfile=userProfile):
       cls.objects.create(nature=nature, name=name, path=path, ext=ext, userProfile=userProfile)
     return path
 

@@ -4,6 +4,7 @@ from PIL import Image
 import os
 import base64
 from io import BytesIO
+import datetime
 
 class CommonModel(models.Model):
   class Meta:
@@ -52,7 +53,7 @@ class CommonModel(models.Model):
         values.append(getattr(instance, field).id)
       elif index in listIndices and isinstance(cls._meta.get_field(field), models.ManyToManyField):
         values.append([element.id for element in getattr(instance, field).all()])
-      elif field == "date":
+      elif isinstance(cls._meta.get_field(field), models.DateField):
         values.append(instance.date.strftime("%Y/%m/%d"))
       else:
         values.append(getattr(instance, field))
@@ -180,11 +181,13 @@ class Files(CommonModel):
   name = models.CharField('Nom du fichier pour le front', unique=True, max_length=128, null=False, default=False, blank=False)
   path = models.CharField('path', max_length=256, null=False, default=False, blank=False)
   ext = models.CharField('extension', unique=True, max_length=8, null=False, default=False, blank=False)
-  userProfile = models.ForeignKey(UserProfile, on_delete=models.PROTECT, blank=False, null=False)
+  company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, default=None)
+  expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
+  timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
   dictPath = {"userImage":"./files/avatars/"}
 
   class Meta:
-    unique_together = ('nature', 'name', 'userProfile')
+    unique_together = ('nature', 'name', 'company')
     verbose_name = "Files"
 
   def getAttr(self, fieldName, answer=False):
@@ -210,8 +213,9 @@ class Files(CommonModel):
     path = None
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.firstName + '_' + userProfile.lastName + '_' + str(user.id) + '.' + ext
-    if not Files.objects.filter(nature=nature, name=name, userProfile=userProfile):
-      cls.objects.create(nature=nature, name=name, path=path, ext=ext, userProfile=userProfile)
+    if not Files.objects.filter(nature=nature, name=name, company=userProfile.company):
+      cls.objects.create(nature=nature, name=name, path=path, ext=ext, company=userProfile.company)
+      print("datetime", datetime.datetime.now())
     return path
 
     

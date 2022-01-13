@@ -107,7 +107,6 @@ class DataAccessor():
     ext = format.split('/')[-1]
     name = dictData["name"] if dictData["name"] else "test"
     filePath = Files.createFile("userImage", name, ext, currentUser)
-    print("__changeUserImage", dictData["action"], dictData["name"], type(dictData["name"]))
     image = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
     with open(filePath, "wb") as outfile:
         outfile.write(image.file.getbuffer())

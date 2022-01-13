@@ -177,7 +177,7 @@ class Files(models.Model):
   path = models.CharField('path', max_length=256, null=False, default=False, blank=False)
   ext = models.CharField('extension', unique=True, max_length=8, null=False, default=False, blank=False)
   user = models.ForeignKey(UserProfile, on_delete=models.PROTECT, blank=False, null=False)
-  dictPath = {"userImage":"./files/avatars"}
+  dictPath = {"userImage":"./files/avatars/"}
 
   class Meta:
     unique_together = ('nature', 'name', 'user')

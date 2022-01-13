@@ -217,7 +217,7 @@ class Files(CommonModel):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     path = None
     if nature == "userImage":
-      path = cls.dictPath[nature] + userProfile.firstName + '_' + userProfile.lastName + '_' + str(user.id) + '.' + ext
+      path = cls.dictPath[nature] + userProfile.firstName + '_' + userProfile.lastName + '_' + str(userProfile.company.id) + '.' + ext
     if not Files.objects.filter(nature=nature, name=name, company=userProfile.company):
       cls.objects.create(nature=nature, name=name, path=path, ext=ext, company=userProfile.company)
       print("datetime", datetime.datetime.now())

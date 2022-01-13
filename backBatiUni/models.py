@@ -185,11 +185,12 @@ class Files(models.Model):
 
   @classmethod
   def createFile(cls, nature, name, ext, user):
+    userProfile = user.userNameInternal
     path = None
     if nature == "userImage":
       path = cls.dictPath[nature] + user.firstName + '_' + user.lastName + '_' + str(user.id) + '.' + ext
-    if not Files.objects.filter(nature=nature, name=name, user=user):
-      cls.objects.create(nature=nature, name=name, path=path, ext=ext, user=user)
+    if not Files.objects.filter(nature=nature, name=name, user=userProfile):
+      cls.objects.create(nature=nature, name=name, path=path, ext=ext, user=userProfile)
     return path
 
     

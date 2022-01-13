@@ -110,7 +110,7 @@ class DataAccessor():
     data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
     print(data)
     print(data.file)
-    with data.file.open('w') as file:
+    with open(data.file, 'w') as file:
       file.write('./temp' + ext)
     print("__changeUserImage", type(data), ext)
     return {"changeUserImage":"work in progress"}

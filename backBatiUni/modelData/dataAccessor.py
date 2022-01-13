@@ -98,24 +98,20 @@ class DataAccessor():
     if "action" in data:
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       if data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
-      if data["action"] == "changeUserImage": return cls.__changeUserImage(request, currentUser)
+      if data["action"] == "changeUserImage": return cls.__changeUserImage(request, data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 
   @classmethod
-  def __changeUserImage(cls, request, currentUser):
-    data = request.data.get('imageBase64')
-    format, imgstr = data.split(';base64,') 
+  def __changeUserImage(cls, request, dictData, currentUser):
+    image = request.dictData.get('imageBase64')
+    format, imgstr = image.split(';base64,') 
     ext = format.split('/')[-1] 
-    data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-    print(data)
-    print(data.file)
-    with open('./temp' + ext, "wb") as outfile:
+    print("__changeUserImage", dictData["action"], dictData["name"])
+    image = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+    with open('./temp.' + ext, "wb") as outfile:
         # Copy the BytesIO stream to the output file
-        outfile.write(data.file.getbuffer())
-    # with open(data.file, 'w') as file:
-    #   file.write('./temp' + ext)
-    print("__changeUserImage", type(data), ext)
+        outfile.write(image.file.getbuffer())
     return {"changeUserImage":"work in progress"}
 
 

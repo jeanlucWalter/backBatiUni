@@ -206,7 +206,7 @@ class Files(CommonModel):
   @classmethod
   def findAvatar(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    file = cls.objects.filter(nature="userImage", userProfile=userProfile)
+    file = cls.objects.filter(nature="userImage", company=userProfile.company)
     if file:
       return file[0].getAttr("file")
     return {}

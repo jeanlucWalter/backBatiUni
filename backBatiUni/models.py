@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from PIL import Image
+import os
+import base64
+from io import BytesIO
 
 class CommonModel(models.Model):
   class Meta:
@@ -171,16 +175,33 @@ class UserProfile(CommonModel):
     if self.role == 3:
       return "Sous-traitant et entreprise"
 
-class Files(models.Model):
+class Files(CommonModel):
   nature = models.CharField('nature du fichier', unique=True, max_length=128, null=False, default=False, blank=False)
   name = models.CharField('Nom du fichier pour le front', unique=True, max_length=128, null=False, default=False, blank=False)
   path = models.CharField('path', max_length=256, null=False, default=False, blank=False)
   ext = models.CharField('extension', unique=True, max_length=8, null=False, default=False, blank=False)
-  user = models.ForeignKey(UserProfile, on_delete=models.PROTECT, blank=False, null=False)
+  userProfile = models.ForeignKey(UserProfile, on_delete=models.PROTECT, blank=False, null=False)
   dictPath = {"userImage":"./files/avatars/"}
 
   class Meta:
-    unique_together = ('nature', 'name', 'user')
+    unique_together = ('nature', 'name', 'userProfile')
+    verbose_name = "Files"
+
+  def getAttr(self, fieldName, answer=False):
+    if fieldName == "file":
+      image = Image.open(self.path)
+      buffered = BytesIO()
+      image.save(buffered, format=self.ext)
+      return {"name":self.name, "ext":self.ext, "content":base64.b64encode(buffered.getvalue()).decode("utf-8")}
+    return getattr(self, fieldName, answer)
+
+  @classmethod
+  def findAvatar(cls, user):
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    file = cls.objects.filter(nature="userImage", userProfile=userProfile)
+    if file:
+      return file[0].getAttr("file")
+    return {}
 
 
   @classmethod
@@ -190,7 +211,7 @@ class Files(models.Model):
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.firstName + '_' + userProfile.lastName + '_' + str(user.id) + '.' + ext
     if not Files.objects.filter(nature=nature, name=name, user=userProfile):
-      cls.objects.create(nature=nature, name=name, path=path, ext=ext, user=userProfile)
+      cls.objects.create(nature=nature, name=name, path=path, ext=ext, userProfile=userProfile)
     return path
 
     

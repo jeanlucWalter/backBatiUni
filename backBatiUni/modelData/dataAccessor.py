@@ -27,6 +27,7 @@ class DataAccessor():
     dictAnswer = {}
     for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
+    dictAnswer["avatar"] = Files.findAvatar(user)
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer
@@ -92,7 +93,6 @@ class DataAccessor():
   @classmethod
   def dataPost(cls, jsonString, currentUser, request):
     data = json.loads(jsonString)
-    # print("dataPost", data)
     if "action" in data:
       print("dataPost", data["action"])
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
@@ -106,7 +106,8 @@ class DataAccessor():
     image = request.data.get('imageBase64')
     format, imgstr = image.split(';base64,') 
     ext = format.split('/')[-1]
-    name = dictData["name"] if dictData["name"] else "test"
+    if not dictData["name"]:
+      return {"changeUserImage":"Error", "messages":"field name is empty"}
     filePath = Files.createFile("userImage", name, ext, currentUser)
     image = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
     with open(filePath, "wb") as outfile:

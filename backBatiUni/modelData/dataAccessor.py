@@ -104,7 +104,7 @@ class DataAccessor():
 
   @classmethod
   def __changeUserImage(cls, request, dictData, currentUser):
-    image = request.dictData.get('imageBase64')
+    image = request.data.get('imageBase64')
     format, imgstr = image.split(';base64,') 
     ext = format.split('/')[-1] 
     print("__changeUserImage", dictData["action"], dictData["name"])

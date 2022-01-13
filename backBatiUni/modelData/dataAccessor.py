@@ -107,7 +107,7 @@ class DataAccessor():
     image = request.data.get('imageBase64')
     format, imgstr = image.split(';base64,') 
     ext = format.split('/')[-1] 
-    print("__changeUserImage", dictData["action"], dictData["name"])
+    print("__changeUserImage", dictData["action"], dictData["name"], type(dictData["name"]))
     image = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
     with open('./temp.' + ext, "wb") as outfile:
         # Copy the BytesIO stream to the output file

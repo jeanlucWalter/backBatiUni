@@ -170,6 +170,28 @@ class UserProfile(CommonModel):
       return "Sous-traitant"
     if self.role == 3:
       return "Sous-traitant et entreprise"
+
+class Files(models.Model):
+  nature = models.CharField('nature du fichier', unique=True, max_length=128, null=False, default=False, blank=False)
+  name = models.CharField('Nom du fichier pour le front', unique=True, max_length=128, null=False, default=False, blank=False)
+  path = models.CharField('path', max_length=256, null=False, default=False, blank=False)
+  ext = models.CharField('extension', unique=True, max_length=8, null=False, default=False, blank=False)
+  user = models.ForeignKey(UserProfile, on_delete=models.PROTECT, blank=False, null=False)
+  dictPath = {"userImage":"./files/avatars"}
+
+  class Meta:
+    unique_together = ('nature', 'name', 'user')
+
+
+  @classmethod
+  def createFile(cls, nature, name, ext, user):
+    path = None
+    if nature == "userImage":
+      path = cls.dictPath[nature] + user.firstName + '_' + user.lastName + '_' + str(user.id) + '.' + ext
+    if not Files.objects.filter(nature=nature, name=name, user=user):
+      cls.objects.create(nature=nature, name=name, path=path, ext=ext, user=user)
+    return path
+
     
 
 

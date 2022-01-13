@@ -8,8 +8,6 @@ import os
 from datetime import datetime
 import base64
 from django.core.files.base import ContentFile
-from PIL import Image
-from io import BytesIO
 
 from dotenv import load_dotenv
 
@@ -106,13 +104,14 @@ class DataAccessor():
   def __changeUserImage(cls, request, dictData, currentUser):
     image = request.data.get('imageBase64')
     format, imgstr = image.split(';base64,') 
-    ext = format.split('/')[-1] 
+    ext = format.split('/')[-1]
+    name = dictData["name"] if dictData["name"] else "test"
+    filePath = Files.createFile("userImage", name, ext, currentUser)
     print("__changeUserImage", dictData["action"], dictData["name"], type(dictData["name"]))
     image = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-    with open('./temp.' + ext, "wb") as outfile:
-        # Copy the BytesIO stream to the output file
+    with open(filePath, "wb") as outfile:
         outfile.write(image.file.getbuffer())
-    return {"changeUserImage":"work in progress"}
+    return {"changeUserImage":"OK"}
 
 
   @classmethod

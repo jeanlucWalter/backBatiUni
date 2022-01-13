@@ -1,6 +1,10 @@
 import requests
 import json
 import sys
+from PIL import Image
+import os
+import base64
+from io import BytesIO
 
 userName, password = "jlw@gmail.com", "pwd"
 address = 'http://localhost:8000'
@@ -28,24 +32,20 @@ def queryForToken(userName, password):
   dictResponse = json.loads(response.text)
   return dictResponse['token']
 
+def getDocStr():
+  image = Image.open("./files/documents/Fantasiapp JLW QR code copie.png")
+  buffered = BytesIO()
+  image.save(buffered, format="PNG")
+  imageStr = base64.b64encode(buffered.getvalue()).decode("utf-8")
+  return imageStr
+
 def executeQuery():
   print("query", query)
-  data, response, url , headers = None, None, f'{address}/initialize/', {"content-type":"Application/Json"}
+  now, data, response, url , headers = "2022/01/12", None, None, f'{address}/initialize/', {"content-type":"Application/Json"}
   if query == "register":
     print("query", query, url)
     headers = {}
     post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
-    # post = {
-    #   "lastname": 'Eric',
-    #   "firstname": 'Walter',
-    #   "email": 'e@g.com',
-    #   "emailVerification": 'e@g.com',
-    #   "password": '123456Aa',
-    #   "company": "Fantasiapp",
-    #   "jobs": [2],
-    #   "proposer": "",
-    #   "role": "2"
-    #   }
     response = requests.post(url, headers=headers, json=post)
   elif query == "getGeneralData":
     response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
@@ -66,6 +66,9 @@ def executeQuery():
       now = "2022/01/12"
       post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2,1], [5,3,1]], 'LabelForCompany':[[1,now,1], [2,now,1]]}
       # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,0,1], [5,3,1]]}
+      response = requests.post(url, headers=headers, json=post)
+    elif query == "loadDocument":
+      post = {'action':"loadDocument", "ext":"png", "name":"fichierTest", "imageBase64":getDocStr(), "expirationDate":now}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":
       url = f'{address}/createBase/'

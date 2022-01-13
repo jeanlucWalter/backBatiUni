@@ -27,7 +27,7 @@ class DataAccessor():
     dictAnswer = {}
     for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
-    dictAnswer["avatar"] = Files.findAvatar(user)
+    dictAnswer["Avatar"] = Files.findAvatar(user)
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer
@@ -98,21 +98,29 @@ class DataAccessor():
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       if data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       if data["action"] == "changeUserImage": return cls.__changeUserImage(request, data, currentUser)
+      if data["action"] == "loadDocument": return cls.__loadDocument(request, data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 
   @classmethod
   def __changeUserImage(cls, request, dictData, currentUser):
+    print(dictData["imageBase64"])
     image = request.data.get('imageBase64')
-    format, imgstr = image.split(';base64,') 
+    format, imgstr = image.split(';base64,')
     ext = format.split('/')[-1]
     if not dictData["name"]:
       return {"changeUserImage":"Error", "messages":"field name is empty"}
     filePath = Files.createFile("userImage", dictData["name"], ext, currentUser)
-    image = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+    image = ContentFile(base64.b64decode(imgstr), name=filePath + ext)
     with open(filePath, "wb") as outfile:
         outfile.write(image.file.getbuffer())
     return {"changeUserImage":"OK"}
+
+  @classmethod
+  def __loadDocument(cls, request, data, currentUser):
+    # print(request.data.get["imageBase64"])
+    print(list(data.keys()))
+    return {"loadDocument":"work in progress"}
 
 
   @classmethod

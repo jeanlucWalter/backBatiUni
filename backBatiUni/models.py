@@ -49,11 +49,16 @@ class CommonModel(models.Model):
     values, listIndices = [], cls.listIndices()
     for index in range(len(listFields)):
       field = listFields[index]
-      if index in listIndices and isinstance(cls._meta.get_field(field), models.ForeignKey):
+      fieldObject = None
+      try:
+        fieldObject = cls._meta.get_field(field)
+      except:
+        pass
+      if index in listIndices and isinstance(fieldObject, models.ForeignKey):
         values.append(getattr(instance, field).id)
       elif index in listIndices and isinstance(cls._meta.get_field(field), models.ManyToManyField):
         values.append([element.id for element in getattr(instance, field).all()])
-      elif isinstance(cls._meta.get_field(field), models.DateField):
+      elif isinstance(fieldObject, models.DateField):
         values.append(instance.date.strftime("%Y/%m/%d"))
       else:
         values.append(getattr(instance, field))

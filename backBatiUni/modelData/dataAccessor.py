@@ -40,7 +40,7 @@ class DataAccessor():
     if not message:
       smtpConnector = SmtpConnector(6004)
       print(smtpConnector.register(data["firstname"], data["lastname"], data["email"]))
-    return {"register":"work in progress"}
+    # return {"register":"work in progress"}
     cls.__registerAction(data, message)
     if message:
       return {"register":"Warning", "messages":message}

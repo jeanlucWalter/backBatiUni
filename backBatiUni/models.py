@@ -5,8 +5,11 @@ import os
 import base64
 from io import BytesIO
 import datetime
+from django.apps import apps
 
 class CommonModel(models.Model):
+  manyToManyObject = []
+
   class Meta:
     abstract = True
 
@@ -16,14 +19,22 @@ class CommonModel(models.Model):
     tableName = cls._meta.verbose_name.title().replace(" ", "")
     if len(cls.listFields()) > 1:
       dictAnswer[tableName + "Fields"] = cls.listFields()
-      if len(cls.listIndices()) > 1:
+      if len(cls.listIndices()) >= 1:
         dictAnswer[tableName + "Indices"] = cls.listIndices()
-    dictAnswer[tableName + "Values"] = cls.dictValues(user)
+    subModels, values = cls.dictValues(user)
+    dictAnswer[tableName + "Values"] = values
+    if subModels:
+      for subM in subModels:
+        tableName = subM._meta.verbose_name.title().replace(" ", "")
+        if len(subM.listFields()) > 1:
+          dictAnswer[tableName + "Fields"] = subM.listFields()
+          if len(subM.listIndices()) >= 1:
+            dictAnswer[tableName + "Indices"] = subM.listIndices()
     return dictAnswer
 
   @classmethod
   def listFields(cls):
-    return [field.name.replace("Internal", "") for field in cls._meta.fields][1:]
+    return [field.name.replace("Internal", "") for field in cls._meta.fields][1:] + cls.manyToManyObject
 
   @classmethod
   def listIndices(cls):
@@ -35,18 +46,26 @@ class CommonModel(models.Model):
   @classmethod
   def testListIndices(cls, name, listMetaFields):
     if name + "Internal" in listMetaFields: return False
+    if name in cls.manyToManyObject: return True
     if isinstance(cls._meta.get_field(name), models.ForeignKey): return True
     if isinstance(cls._meta.get_field(name), models.ManyToManyField): return True
     return False
 
   @classmethod
   def dictValues(cls, user):
-    listFields = cls.listFields()
-    return {instance.id:cls.computeValues(instance, listFields) if len(listFields) > 1 else getattr(instance, listFields[0]) for instance in cls.filter(user)}
+    listFields, dictResult, subModels = cls.listFields(), {}, []
+    for instance in cls.filter(user):
+      if len(listFields) > 1:
+        subM, values = cls.computeValues(instance, listFields, user)
+        subModels += subM
+        dictResult[instance.id] = values
+      else:
+        dictResult[instance.id] = getattr(instance, listFields[0])
+    return subModels, dictResult
 
   @classmethod
-  def computeValues(cls, instance, listFields):
-    values, listIndices = [], cls.listIndices()
+  def computeValues(cls, instance, listFields, user):
+    values, subModel, listIndices = [], [], cls.listIndices()
     for index in range(len(listFields)):
       field = listFields[index]
       fieldObject = None
@@ -56,13 +75,17 @@ class CommonModel(models.Model):
         pass
       if index in listIndices and isinstance(fieldObject, models.ForeignKey):
         values.append(getattr(instance, field).id)
-      elif index in listIndices and isinstance(cls._meta.get_field(field), models.ManyToManyField):
+      elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
         values.append([element.id for element in getattr(instance, field).all()])
       elif isinstance(fieldObject, models.DateField):
         values.append(instance.date.strftime("%Y/%m/%d"))
+      elif field in cls.manyToManyObject:
+        model = apps.get_model(app_label='backBatiUni', model_name=field)
+        subModel.append(model)
+        values.append(model.dictValues(user))
       else:
         values.append(getattr(instance, field))
-    return values
+    return subModel, values
 
   @classmethod
   def filter(cls, user):
@@ -104,6 +127,7 @@ class Company(CommonModel):
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
   stars = models.IntegerField("Notation sous forme d'étoile", null=True, default=None)
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
+  manyToManyObject = ["JobForCompany", "LabelForCompany"]
 
   @classmethod
   def filter(cls, user):
@@ -120,6 +144,10 @@ class JobForCompany(CommonModel):
     unique_together = ('job', 'company')
 
   @classmethod
+  def listFields(cls):
+    return super().listFields()[:-1]
+
+  @classmethod
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     company = userProfile.company
@@ -129,9 +157,12 @@ class LabelForCompany(CommonModel):
   label = models.ForeignKey(Label, on_delete=models.PROTECT, blank=False, null=False)
   date = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
-
   class Meta:
     unique_together = ('label', 'company')
+
+  @classmethod
+  def listFields(cls):
+    return super().listFields()[:-1]
 
   @classmethod
   def filter(cls, user):

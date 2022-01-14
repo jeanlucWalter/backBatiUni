@@ -19,7 +19,7 @@ if os.getenv('PATH_MIDDLE'):
 import json
 
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company], "general":[Job, Role, Label]}
   dictTable = {}
 
   @classmethod
@@ -27,7 +27,7 @@ class DataAccessor():
     dictAnswer = {}
     for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
-    dictAnswer["Avatar"] = Files.findAvatar(user)
+    # dictAnswer["Avatar"] = Files.findAvatar(user)
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer

@@ -209,7 +209,6 @@ class DataAccessor():
     for listValue in dictValue:
       if listValue[1]:
         job = Job.objects.get(id=listValue[0])
-        # company = Company.objects.get(id=listValue[2])
         company = UserProfile.objects.get(userNameInternal=user).Company
         jobForCompany = JobForCompany.objects.create(Job=job, number=listValue[1], Company=company)
         if not "JobForCompany" in valueModified:
@@ -222,7 +221,6 @@ class DataAccessor():
     for listValue in dictValue:
       label = Label.objects.get(id=listValue[0])
       date = datetime.strptime(listValue[1], "%Y/%m/%d")
-      # company = Company.objects.get(id=listValue[2])
       company = UserProfile.objects.get(userNameInternal=user).Company
       labelForCompany = LabelForCompany.objects.create(Label=label, date=date, Company=company)
       if not "LabelForCompany" in valueModified:

@@ -21,15 +21,7 @@ class CommonModel(models.Model):
       dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
         dictAnswer[tableName + "Indices"] = cls.listIndices()
-    subModels, values = cls.dictValues(user)
-    dictAnswer[tableName + "Values"] = values
-    if subModels:
-      for subM in subModels:
-        tableName = subM._meta.verbose_name.title().replace(" ", "")
-        if len(subM.listFields()) > 1:
-          dictAnswer[tableName + "Fields"] = subM.listFields()
-          if len(subM.listIndices()) >= 1:
-            dictAnswer[tableName + "Indices"] = subM.listIndices()
+    dictAnswer[tableName + "Values"] = cls.dictValues(user)
     return dictAnswer
 
   @classmethod
@@ -53,18 +45,16 @@ class CommonModel(models.Model):
 
   @classmethod
   def dictValues(cls, user):
-    listFields, dictResult, subModels = cls.listFields(), {}, []
+    listFields, dictResult = cls.listFields(), {}
     for instance in cls.filter(user):
       if len(listFields) > 1:
-        subM, values = instance.computeValues(listFields, user)
-        subModels += subM
-        dictResult[instance.id] = values
+        dictResult[instance.id] = instance.computeValues(listFields, user)
       else:
         dictResult[instance.id] = getattr(instance, listFields[0])
-    return subModels, dictResult
+    return dictResult
 
   def computeValues(self, listFields, user):
-    values, subModel, listIndices = [], [], self.listIndices()
+    values, listIndices = [], self.listIndices()
     for index in range(len(listFields)):
       field = listFields[index]
       fieldObject = None
@@ -80,11 +70,10 @@ class CommonModel(models.Model):
         values.append(getattr(self, field).strftime("%Y/%m/%d") if getattr(self, field) else None)
       elif field in self.manyToManyObject:
         model = apps.get_model(app_label='backBatiUni', model_name=field)
-        subModel.append(model)
-        values.append(model.dictValues(user))
+        values.append(list(model.dictValues(user).keys()))
       else:
         values.append(getattr(self, field, None))
-    return subModel, values
+    return values
 
   @classmethod
   def filter(cls, user):

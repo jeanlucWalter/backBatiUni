@@ -1,7 +1,7 @@
 {
    "UserprofileFields": [
       "userName",
-      "company",
+      "Company",
       "firstName",
       "lastName",
       "proposer",
@@ -51,40 +51,9 @@
          null,
          null,
          null,
-         [
-            [],
-            {
-               "1": [
-                  1,
-                  1
-               ],
-               "2": [
-                  2,
-                  1
-               ],
-               "3": [
-                  3,
-                  1
-               ]
-            }
-         ],
-         [
-            [],
-            {}
-         ],
-         [
-            [],
-            {
-               "1": [
-                  "userImage",
-                  "Fantasiapp_1",
-                  "png",
-                  null,
-                  1642151434.835659,
-                  null
-               ]
-            }
-         ]
+         [1,2,3],
+         [],
+         [1]
       ]
    },
    "JobForCompanyFields": [
@@ -94,6 +63,20 @@
    "JobForCompanyIndices": [
       0
    ],
+   "JobForCompanyValues": {
+      "1": [
+         1,
+         1
+      ],
+      "2": [
+         2,
+         1
+      ],
+      "3": [
+         3,
+         1
+      ]
+   },
    "LabelForCompanyFields": [
       "label",
       "date"
@@ -101,6 +84,7 @@
    "LabelForCompanyIndices": [
       0
    ],
+   "LabelForCompanyValues": {},
    "FilesFields": [
       "nature",
       "name",
@@ -108,5 +92,15 @@
       "expirationDate",
       "timestamp",
       "content"
-   ]
+   ],
+   "FilesValues": {
+      "1": [
+         "userImage",
+         "Fantasiapp_1",
+         "png",
+         null,
+         1642151434.835659,
+         null
+      ]
+   }
 }

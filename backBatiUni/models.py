@@ -131,16 +131,16 @@ class Company(CommonModel):
   @classmethod
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    return [userProfile.company]
+    return [userProfile.Company]
 
 
 class JobForCompany(CommonModel):
   job = models.ForeignKey(Job, on_delete=models.PROTECT, blank=False, null=False)
   number = models.IntegerField("Nombre de profils ayant ce metier", null=False, default=1)
-  company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
+  Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
 
   class Meta:
-    unique_together = ('job', 'company')
+    unique_together = ('job', 'Company')
 
   @classmethod
   def listFields(cls):
@@ -149,15 +149,15 @@ class JobForCompany(CommonModel):
   @classmethod
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    company = userProfile.company
-    return cls.objects.filter(company=company)
+    Company = userProfile.Company
+    return cls.objects.filter(Company=Company)
 
 class LabelForCompany(CommonModel):
   label = models.ForeignKey(Label, on_delete=models.PROTECT, blank=False, null=False)
   date = models.DateField(verbose_name="Date de péremption", null=True, default=None)
-  company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
+  Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
   class Meta:
-    unique_together = ('label', 'company')
+    unique_together = ('label', 'Company')
 
   @classmethod
   def listFields(cls):
@@ -166,12 +166,12 @@ class LabelForCompany(CommonModel):
   @classmethod
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    company = userProfile.company
-    return cls.objects.filter(company=company)
+    Company = userProfile.Company
+    return cls.objects.filter(Company=Company)
 
 class UserProfile(CommonModel):
   userNameInternal = models.OneToOneField(User, on_delete=models.PROTECT)
-  company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
+  Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
   firstName = models.CharField("Prénom", max_length=128, blank=False, default="Inconnu")
   lastName = models.CharField("Nom de famille", max_length=128, blank=False, default="Inconnu")
   proposer = models.IntegerField(blank=False, null=True, default=None)
@@ -216,19 +216,19 @@ class Files(CommonModel):
   name = models.CharField('Nom du fichier pour le front', max_length=128, null=False, default=False, blank=False)
   path = models.CharField('path', max_length=256, null=False, default=False, blank=False)
   ext = models.CharField('extension', max_length=8, null=False, default=False, blank=False)
-  company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, default=None)
+  Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, default=None)
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
   dictPath = {"userImage":"./files/avatars/"}
 
   class Meta:
-    unique_together = ('nature', 'name', 'company')
+    unique_together = ('nature', 'name', 'Company')
     verbose_name = "Files"
 
   @classmethod
   def listFields(cls):
     superList = super().listFields()
-    for fieldName in ["path", "company"]:
+    for fieldName in ["path", "Company"]:
       index = superList.index(fieldName)
       del superList[index]
     superList.append("content")
@@ -245,7 +245,7 @@ class Files(CommonModel):
   @classmethod
   def findAvatar(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    file = cls.objects.filter(nature="userImage", company=userProfile.company)
+    file = cls.objects.filter(nature="userImage", Company=userProfile.Company)
     if file:
       return file[0].getAttr("file")
     return {}
@@ -255,8 +255,8 @@ class Files(CommonModel):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     objectFile = None
     if nature == "userImage":
-      path = cls.dictPath[nature] + userProfile.company.name + '_' + str(userProfile.company.id) + '.' + ext
-      objectFile = Files.objects.filter(nature=nature, name=name, company=userProfile.company)
+      path = cls.dictPath[nature] + userProfile.Company.name + '_' + str(userProfile.Company.id) + '.' + ext
+      objectFile = Files.objects.filter(nature=nature, name=name, Company=userProfile.Company)
     if objectFile:
       objectFile = objectFile[0]
       oldPath = objectFile.path
@@ -267,7 +267,7 @@ class Files(CommonModel):
       objectFile.ext = ext
       objectFile.save()
     else:
-      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, company=userProfile.company)
+      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company)
     return objectFile
 
     

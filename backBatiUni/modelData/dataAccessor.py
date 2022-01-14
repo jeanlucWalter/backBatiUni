@@ -19,7 +19,7 @@ if os.getenv('PATH_MIDDLE'):
 import json
 
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files], "general":[Job, Role, Label]}
   dictTable = {}
 
   @classmethod

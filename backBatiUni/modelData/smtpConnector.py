@@ -6,7 +6,7 @@ class SmtpConnector:
   port = None
   url = None
   dir = "/send_mail/"
-  header = {"content-type":"Application/Json"}
+  headers = {"content-type":"Application/Json"}
 
   def __init__(self, port):
     SmtpConnector.port = port
@@ -15,7 +15,7 @@ class SmtpConnector:
   def register(self, firstName, lastName, email):
     params = {"action":"mailConfirmation", "firstName":firstName, "lastName":lastName, "mail":email}
     print(params)
-    response = requests.get(url=self.url, header=self.header, params=params)
+    response = requests.get(url=self.url, headers=self.headers, params=params)
     data = json.loads(response.text)
     print(data)
 

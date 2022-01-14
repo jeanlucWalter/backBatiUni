@@ -167,7 +167,7 @@ class DataAccessor():
   def __setValues(cls, modelName, dictValue, user, message, valueModified):
     listModelName = [value.lower() for value in map(attrgetter('__name__'), apps.get_models())]
     if modelName in ["JobForCompany", "LabelForCompany"]:
-        cls.__setValuesLabelJob(modelName, dictValue, valueModified)
+        cls.__setValuesLabelJob(modelName, dictValue, valueModified, user)
     elif modelName.lower() in listModelName:
       modelValue = apps.get_model('backBatiUni', modelName)
       objectValue = modelValue.objects.get(id=id) if id in dictValue else None
@@ -196,32 +196,34 @@ class DataAccessor():
       message[modelName] = "can not find associated object"
 
   @classmethod
-  def __setValuesLabelJob(cls, modelName, dictValue, valueModified):
+  def __setValuesLabelJob(cls, modelName, dictValue, valueModified, user):
     if modelName == "JobForCompany":
-      cls.__setValuesJob(dictValue, valueModified)
+      cls.__setValuesJob(dictValue, valueModified, user)
     else:
-      cls.__setValuesLabel(dictValue, valueModified)
+      cls.__setValuesLabel(dictValue, valueModified, user)
 
 
   @classmethod
-  def __setValuesJob(cls, dictValue, valueModified):
+  def __setValuesJob(cls, dictValue, valueModified, user):
     JobForCompany.objects.all().delete()
     for listValue in dictValue:
       if listValue[1]:
         job = Job.objects.get(id=listValue[0])
-        company = Company.objects.get(id=listValue[2])
+        # company = Company.objects.get(id=listValue[2])
+        company = UserProfile.objects.get(userNameInternal=user).Company
         jobForCompany = JobForCompany.objects.create(Job=job, number=listValue[1], Company=company)
         if not "JobForCompany" in valueModified:
           valueModified["JobForCompany"] = []
         valueModified["JobForCompany"].append([jobForCompany.Job.id, jobForCompany.number, jobForCompany.Company.id])
 
   @classmethod
-  def __setValuesLabel(cls, dictValue, valueModified):
+  def __setValuesLabel(cls, dictValue, valueModified, user):
     LabelForCompany.objects.all().delete()
     for listValue in dictValue:
       label = Label.objects.get(id=listValue[0])
       date = datetime.strptime(listValue[1], "%Y/%m/%d")
-      company = Company.objects.get(id=listValue[2])
+      # company = Company.objects.get(id=listValue[2])
+      company = UserProfile.objects.get(userNameInternal=user).Company
       labelForCompany = LabelForCompany.objects.create(Label=label, date=date, Company=company)
       if not "LabelForCompany" in valueModified:
         valueModified["LabelForCompany"] = []

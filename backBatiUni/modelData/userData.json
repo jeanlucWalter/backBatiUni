@@ -20,7 +20,7 @@
          "Walter",
          null,
          1,
-         null
+         "0634090695"
       ]
    },
    "CompanyFields": [
@@ -48,11 +48,17 @@
          null,
          null,
          null,
+         "https://fantasiapp.com",
          null,
-         null,
-         null,
-         [],
-         [],
+         "01 23 45 67 89",
+         [
+            4,
+            5
+         ],
+         [
+            1,
+            2
+         ],
          [
             1
          ]
@@ -65,7 +71,16 @@
    "JobForCompanyIndices": [
       0
    ],
-   "JobForCompanyValues": {},
+   "JobForCompanyValues": {
+      "4": [
+         4,
+         2
+      ],
+      "5": [
+         5,
+         3
+      ]
+   },
    "LabelForCompanyFields": [
       "Label",
       "date"
@@ -73,7 +88,16 @@
    "LabelForCompanyIndices": [
       0
    ],
-   "LabelForCompanyValues": {},
+   "LabelForCompanyValues": {
+      "1": [
+         1,
+         "2022/01/12"
+      ],
+      "2": [
+         2,
+         "2022/01/12"
+      ]
+   },
    "FilesFields": [
       "nature",
       "name",
@@ -88,7 +112,7 @@
          "Fantasiapp_1",
          "png",
          null,
-         1642156928.214362,
+         1642157320.826551,
          null
       ]
    }

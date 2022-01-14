@@ -40,12 +40,12 @@ def getDocStr():
   return imageStr
 
 def executeQuery():
-  print("query", query)
+  print("execute", query)
   now, data, response, url , headers = "2022/01/12", None, None, f'{address}/initialize/', {"content-type":"Application/Json"}
   if query == "register":
     print("query", query, url)
     headers = {}
-    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":""}
+    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"jlw@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
   elif query == "getGeneralData":
     response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
@@ -77,5 +77,10 @@ def executeQuery():
     data = json.loads(response.text)
     print("data", data)
 
-executeQuery()
+if query == "all":
+    for key in ["buildDB", "register", "modifyUser", "changeUserImage", "getUserData"]:
+      query = key
+      executeQuery()
+else:
+  executeQuery()
 

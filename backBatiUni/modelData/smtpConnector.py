@@ -8,18 +8,17 @@ class SmtpConnector:
   dir = "/send_mail/"
   header = {"content-type":"Application/Json"}
 
-  def __init__(self, port, userProfile):
+  def __init__(self, port):
     SmtpConnector.port = port
     SmtpConnector.url = f'127.0.0.1:{port}{SmtpConnector.dir}'
 
-  @classmethod
-  def register(cls, userProfile):
-    params = {"action":"register", "firstName":userProfile.firstName, "lastName":userProfile.lastName, "mail":userProfile.userNameInternal.username}
+  def register(self, firstName, lastName, email):
+    params = {"action":"mailConfirmation", "firstName":firstName, "lastName":lastName, "mail":email}
     print(params)
-    response = requests.get(url=cls.url, header=cls.header, params=params)
+    response = requests.get(url=self.url, header=self.header, params=params)
     data = json.loads(response.text)
     print(data)
-    
+
 
     
 

@@ -81,11 +81,12 @@ class DataAccessor():
       if data['proposer'] and User.objects.get(id=data['proposer']):
         proposer = User.objects.get(id=data['proposer'])
       userProfile = UserProfile.objects.create(userNameInternal=user, Company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
-      for idJob in data['jobs']:
-        job = Job.objects.get(id=idJob)
-        jobCompany = JobForCompany.objects.filter(job=job, Company=company)
-        if not jobCompany:
-          JobForCompany.objects.create(job=job, Company=company, number=1)
+      if 'jobs' in data:
+        for idJob in data['jobs']:
+          job = Job.objects.get(id=idJob)
+          jobCompany = JobForCompany.objects.filter(Job=job, Company=company)
+          if not jobCompany:
+            JobForCompany.objects.create(Job=job, Company=company, number=1)
       userProfile.save()
     return message
 
@@ -209,10 +210,10 @@ class DataAccessor():
       if listValue[1]:
         job = Job.objects.get(id=listValue[0])
         company = Company.objects.get(id=listValue[2])
-        jobForCompany = JobForCompany.objects.create(job=job, number=listValue[1], company=company)
+        jobForCompany = JobForCompany.objects.create(Job=job, number=listValue[1], Company=company)
         if not "JobForCompany" in valueModified:
           valueModified["JobForCompany"] = []
-        valueModified["JobForCompany"].append([jobForCompany.job.id, jobForCompany.number, jobForCompany.company.id])
+        valueModified["JobForCompany"].append([jobForCompany.Job.id, jobForCompany.number, jobForCompany.Company.id])
 
   @classmethod
   def __setValuesLabel(cls, dictValue, valueModified):
@@ -221,7 +222,7 @@ class DataAccessor():
       label = Label.objects.get(id=listValue[0])
       date = datetime.strptime(listValue[1], "%Y/%m/%d")
       company = Company.objects.get(id=listValue[2])
-      labelForCompany = LabelForCompany.objects.create(label=label, date=date, company=company)
+      labelForCompany = LabelForCompany.objects.create(Label=label, date=date, Company=company)
       if not "LabelForCompany" in valueModified:
         valueModified["LabelForCompany"] = []
-      valueModified["LabelForCompany"].append([labelForCompany.label.id, labelForCompany.date.strftime("%Y/%m/%d"), labelForCompany.company.id])
+      valueModified["LabelForCompany"].append([labelForCompany.Label.id, labelForCompany.date.strftime("%Y/%m/%d"), labelForCompany.Company.id])

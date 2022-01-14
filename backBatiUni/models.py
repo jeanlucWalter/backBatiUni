@@ -124,12 +124,12 @@ class Company(CommonModel):
 
 
 class JobForCompany(CommonModel):
-  job = models.ForeignKey(Job, on_delete=models.PROTECT, blank=False, null=False)
+  Job = models.ForeignKey(Job, on_delete=models.PROTECT, blank=False, null=False)
   number = models.IntegerField("Nombre de profils ayant ce metier", null=False, default=1)
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
 
   class Meta:
-    unique_together = ('job', 'Company')
+    unique_together = ('Job', 'Company')
 
   @classmethod
   def listFields(cls):
@@ -142,11 +142,11 @@ class JobForCompany(CommonModel):
     return cls.objects.filter(Company=Company)
 
 class LabelForCompany(CommonModel):
-  label = models.ForeignKey(Label, on_delete=models.PROTECT, blank=False, null=False)
+  Label = models.ForeignKey(Label, on_delete=models.PROTECT, blank=False, null=False)
   date = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
   class Meta:
-    unique_together = ('label', 'Company')
+    unique_together = ('Label', 'Company')
 
   @classmethod
   def listFields(cls):

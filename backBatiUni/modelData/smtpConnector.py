@@ -10,7 +10,7 @@ class SmtpConnector:
 
   def __init__(self, port):
     SmtpConnector.port = port
-    SmtpConnector.url = f'127.0.0.1:{port}{SmtpConnector.dir}'
+    SmtpConnector.url = f'http://127.0.0.1:{port}{SmtpConnector.dir}'
 
   def register(self, firstName, lastName, email):
     params = {"action":"mailConfirmation", "firstName":firstName, "lastName":lastName, "mail":email}
@@ -20,7 +20,7 @@ class SmtpConnector:
       data = json.loads(response.text)
     except:
       data = {"register smtp":"work in progress"}
-    print(exec("echo | curl '127.0.0.1:6004/send_mail/'"))
+    # print(exec("echo | curl '127.0.0.1:6004/send_mail/'"))
     return data
 
 

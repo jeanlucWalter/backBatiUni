@@ -15,8 +15,11 @@ class SmtpConnector:
   def register(self, firstName, lastName, email):
     params = {"action":"mailConfirmation", "firstName":firstName, "lastName":lastName, "mail":email}
     print(params)
-    response = requests.get(url=self.url, headers=self.headers, params=params)
-    data = json.loads(response.text)
+    try:
+      response = requests.get(url=self.url, headers=self.headers, params=params)
+      data = json.loads(response.text)
+    except:
+      data = {"register smtp":"work in progress"}
     print(data)
 
 

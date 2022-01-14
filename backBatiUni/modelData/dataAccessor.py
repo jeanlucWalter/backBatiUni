@@ -8,6 +8,7 @@ import os
 from datetime import datetime
 import base64
 from django.core.files.base import ContentFile
+from .smtpConnector import SmtpConnector
 
 from dotenv import load_dotenv
 
@@ -27,16 +28,17 @@ class DataAccessor():
     dictAnswer = {}
     for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
-    # dictAnswer["Avatar"] = Files.findAvatar(user)
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer
 
-  @classmethod  
+  @classmethod
   def register(cls, jsonString):
     print("register", jsonString)
     data = json.loads(jsonString)
     message = cls.__registerCheck(data, {})
+    if not message:
+      print(SmtpConnector.register(data["firstname"], data["lastname"], data["email"]))
     cls.__registerAction(data, message)
     if message:
       return {"register":"Warning", "messages":message}
@@ -90,7 +92,6 @@ class DataAccessor():
       userProfile.save()
     return message
 
-
   @classmethod
   def dataPost(cls, jsonString, currentUser):
     data = json.loads(jsonString)
@@ -120,22 +121,29 @@ class DataAccessor():
 
   @classmethod
   def __changeUserImage(cls, dictData, currentUser):
-    imgstr = dictData["imageBase64"]
+    fileStr = dictData["imageBase64"]
     if not dictData["name"]:
       return {"changeUserImage":"Error", "messages":"field name is empty"}
     objectFile = Files.createFile("userImage", dictData["name"], dictData['ext'], currentUser)
-    image = ContentFile(base64.b64decode(imgstr), name=objectFile.path + dictData['ext'])
+    file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + dictData['ext'])
     with open(objectFile.path, "wb") as outfile:
-        outfile.write(image.file.getbuffer())
+        outfile.write(file.file.getbuffer())
     return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[1]}
 
+  @classmethod
+  def loadImage(cls, id, currentUser):
+    file = Files.objects.get(id=id)
+    content = file.getAttr("file")
+    listFields = file.listFields()
+    fileList = file.computeValues(listFields, currentUser)
+    indexContent = listFields.index("content")
+    fileList[indexContent] = content
+    return {"loadImage":"OK", id:fileList}
 
   @classmethod
   def __loadDocument(cls, request, data, currentUser):
-    # print(request.data.get["imageBase64"])
     print(list(data.keys()))
     return {"loadDocument":"work in progress"}
-
 
   @classmethod
   def __modifyPwd(cls, data, currentUser):

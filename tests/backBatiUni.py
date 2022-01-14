@@ -33,11 +33,10 @@ def queryForToken(userName, password):
   return dictResponse['token']
 
 def getDocStr():
-  image = Image.open("./files/documents/Fantasiapp JLW QR.png")
-  buffered = BytesIO()
-  image.save(buffered, format="PNG")
-  imageStr = base64.b64encode(buffered.getvalue()).decode("utf-8")
-  return imageStr
+  file = "./files/documents/test.png"
+  with open(file, "rb") as fileData:
+    encoded_string = base64.b64encode(fileData.read())
+  return encoded_string.decode("utf-8")
 
 def executeQuery():
   print("execute", query)
@@ -57,6 +56,8 @@ def executeQuery():
     headers = {'Authorization': f'Token {token}'}
     if query == "getUserData":
       response = requests.get(url, headers=headers, params={"action":"getUserData"})
+    elif query == "loadImage":
+      response = requests.get(url, headers=headers, params={"action":"loadImage", "id":1})
     elif query == "postModifyPwd":
       print("postModifyPwd")
       post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}

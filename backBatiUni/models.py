@@ -226,10 +226,13 @@ class Files(CommonModel):
 
   def getAttr(self, fieldName, answer=False):
     if fieldName == "file":
-      image = Image.open(self.path)
-      buffered = BytesIO()
-      image.save(buffered, format=self.ext)
-      return base64.b64encode(buffered.getvalue()).decode("utf-8")
+      # image = Image.open(self.path)
+      # buffered = BytesIO()
+      # image.save(buffered, format=self.ext)
+      # return base64.b64encode(buffered.getvalue()).decode("utf-8")
+      with open(self.path, "rb") as fileData:
+        encoded_string = base64.b64encode(fileData.read())
+        return encoded_string.decode("utf-8")
     return getattr(self, fieldName, answer)
 
   @classmethod

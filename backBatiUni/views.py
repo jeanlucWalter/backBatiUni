@@ -15,8 +15,9 @@ class Data(DefaultView):
     if 'action' in request.GET:
       currentUser = request.user
       action = request.GET["action"]
-      if action == "getUserData":
-        return Response(DataAccessor.getData("user", currentUser))
+      if action == "getUserData": return Response(DataAccessor.getData("user", currentUser))
+      if action == "loadImage": return Response(DataAccessor.loadImage(request.GET["id"], currentUser))
+      return Response({"data GET":"Error", "messages":{"action":action}})
     return Response({"data GET":"Error"})
 
   def post(self, request):

@@ -47,8 +47,8 @@ class CommonModel(models.Model):
   def testListIndices(cls, name, listMetaFields):
     if name + "Internal" in listMetaFields: return False
     if name in cls.manyToManyObject: return True
-    if isinstance(cls._meta.get_field(name), models.ForeignKey): return True
-    if isinstance(cls._meta.get_field(name), models.ManyToManyField): return True
+    if hasattr(cls, name) and isinstance(cls._meta.get_field(name), models.ForeignKey): return True
+    if hasattr(cls, name) and isinstance(cls._meta.get_field(name), models.ManyToManyField): return True
     return False
 
   @classmethod
@@ -83,7 +83,7 @@ class CommonModel(models.Model):
         subModel.append(model)
         values.append(model.dictValues(user))
       else:
-        values.append(getattr(self, field))
+        values.append(getattr(self, field, None))
     return subModel, values
 
   @classmethod
@@ -212,10 +212,10 @@ class UserProfile(CommonModel):
       return "Sous-traitant et entreprise"
 
 class Files(CommonModel):
-  nature = models.CharField('nature du fichier', unique=True, max_length=128, null=False, default=False, blank=False)
-  name = models.CharField('Nom du fichier pour le front', unique=True, max_length=128, null=False, default=False, blank=False)
+  nature = models.CharField('nature du fichier', max_length=128, null=False, default=False, blank=False)
+  name = models.CharField('Nom du fichier pour le front', max_length=128, null=False, default=False, blank=False)
   path = models.CharField('path', max_length=256, null=False, default=False, blank=False)
-  ext = models.CharField('extension', unique=True, max_length=8, null=False, default=False, blank=False)
+  ext = models.CharField('extension', max_length=8, null=False, default=False, blank=False)
   company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, default=None)
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
@@ -231,6 +231,7 @@ class Files(CommonModel):
     for fieldName in ["path", "company"]:
       index = superList.index(fieldName)
       del superList[index]
+    superList.append("content")
     return superList
 
   def getAttr(self, fieldName, answer=False):
@@ -238,7 +239,7 @@ class Files(CommonModel):
       image = Image.open(self.path)
       buffered = BytesIO()
       image.save(buffered, format=self.ext)
-      return {"name":self.name, "ext":self.ext, "content":base64.b64encode(buffered.getvalue()).decode("utf-8")}
+      return base64.b64encode(buffered.getvalue()).decode("utf-8")
     return getattr(self, fieldName, answer)
 
   @classmethod
@@ -255,7 +256,17 @@ class Files(CommonModel):
     objectFile = None
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.company.name + '_' + str(userProfile.company.id) + '.' + ext
-    if not Files.objects.filter(nature=nature, name=name, company=userProfile.company):
+      objectFile = Files.objects.filter(nature=nature, name=name, company=userProfile.company)
+    if objectFile:
+      objectFile = objectFile[0]
+      oldPath = objectFile.path
+      if os.path.exists(oldPath):
+        os.remove(oldPath)
+      objectFile.path = path
+      objectFile.timestamp = datetime.datetime.now().timestamp()
+      objectFile.ext = ext
+      objectFile.save()
+    else:
       objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, company=userProfile.company)
     return objectFile
 

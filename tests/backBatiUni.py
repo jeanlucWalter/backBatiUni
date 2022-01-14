@@ -33,7 +33,7 @@ def queryForToken(userName, password):
   return dictResponse['token']
 
 def getDocStr():
-  image = Image.open("./files/documents/Fantasiapp JLW QR code copie.png")
+  image = Image.open("./files/documents/Fantasiapp JLW QR.png")
   buffered = BytesIO()
   image.save(buffered, format="PNG")
   imageStr = base64.b64encode(buffered.getvalue()).decode("utf-8")
@@ -67,8 +67,8 @@ def executeQuery():
       post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2,1], [5,3,1]], 'LabelForCompany':[[1,now,1], [2,now,1]]}
       # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,0,1], [5,3,1]]}
       response = requests.post(url, headers=headers, json=post)
-    elif query == "loadDocument":
-      post = {'action':"loadDocument", "ext":"png", "name":"fichierTest", "imageBase64":getDocStr(), "expirationDate":now}
+    elif query == "changeUserImage":
+      post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr(), "expirationDate":now}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":
       url = f'{address}/createBase/'

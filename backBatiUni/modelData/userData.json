@@ -77,10 +77,11 @@
             {
                "1": [
                   "userImage",
-                  "Jean-Luc_Walter_1",
+                  "Fantasiapp_1",
                   "png",
                   null,
-                  1642092343.020329
+                  1642151434.835659,
+                  null
                ]
             }
          ]
@@ -105,6 +106,7 @@
       "name",
       "ext",
       "expirationDate",
-      "timestamp"
+      "timestamp",
+      "content"
    ]
 }

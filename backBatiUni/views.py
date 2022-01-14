@@ -23,7 +23,7 @@ class Data(DefaultView):
     currentUser = request.user
     jsonBin = request.body
     jsonString = jsonBin.decode("utf8")
-    return Response(DataAccessor().dataPost(jsonString, currentUser, request))
+    return Response(DataAccessor().dataPost(jsonString, currentUser))
 
 class Initialize(APIView):
   permission_classes = (AllowAny,)

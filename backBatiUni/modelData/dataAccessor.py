@@ -91,31 +91,43 @@ class DataAccessor():
 
 
   @classmethod
-  def dataPost(cls, jsonString, currentUser, request):
+  def dataPost(cls, jsonString, currentUser):
     data = json.loads(jsonString)
     if "action" in data:
       print("dataPost", data["action"])
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       if data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
-      if data["action"] == "changeUserImage": return cls.__changeUserImage(request, data, currentUser)
-      if data["action"] == "loadDocument": return cls.__loadDocument(request, data, currentUser)
+      if data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
+      if data["action"] == "loadDocument": return cls.__loadDocument(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 
+  # @classmethod
+  # def __changeUserImage(cls, request, dictData, currentUser):
+  #   print(dictData["imageBase64"])
+  #   image = request.data.get('imageBase64')
+  #   format, imgstr = image.split(';base64,')
+  #   ext = format.split('/')[-1]
+  #   if not dictData["name"]:
+  #     return {"changeUserImage":"Error", "messages":"field name is empty"}
+  #   objectFile = Files.createFile("userImage", dictData["name"], ext, currentUser)
+  #   image = ContentFile(base64.b64decode(imgstr), name=objectFile.path + ext)
+  #   with open(objectFile.path, "wb") as outfile:
+  #       outfile.write(image.file.getbuffer())
+  #   print({"changeUserImage":"OK", "file":objectFile.computeValues(objectFile.listFields(), currentUser)})
+  #   return {"changeUserImage":"OK", "file":objectFile.computeValues(objectFile.listFields(), currentUser)}
+
   @classmethod
-  def __changeUserImage(cls, request, dictData, currentUser):
-    print(dictData["imageBase64"])
-    image = request.data.get('imageBase64')
-    format, imgstr = image.split(';base64,')
-    ext = format.split('/')[-1]
+  def __changeUserImage(cls, dictData, currentUser):
+    imgstr = dictData["imageBase64"]
     if not dictData["name"]:
       return {"changeUserImage":"Error", "messages":"field name is empty"}
-    objectFile = Files.createFile("userImage", dictData["name"], ext, currentUser)
-    image = ContentFile(base64.b64decode(imgstr), name=objectFile.path + ext)
+    objectFile = Files.createFile("userImage", dictData["name"], dictData['ext'], currentUser)
+    image = ContentFile(base64.b64decode(imgstr), name=objectFile.path + dictData['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(image.file.getbuffer())
-    print({"changeUserImage":"OK", "file":objectFile.computeValues(objectFile.listFields(), currentUser)})
-    return {"changeUserImage":"OK", "file":objectFile.computeValues(objectFile.listFields(), currentUser)}
+    return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[1]}
+
 
   @classmethod
   def __loadDocument(cls, request, data, currentUser):

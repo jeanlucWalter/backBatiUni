@@ -65,7 +65,7 @@ def executeQuery():
     elif query == "modifyUser":
       print("modifyUser")
       now = "2022/01/12"
-      post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2], [5,3]], 'LabelForCompany':[[1,now], [2,now]]}
+      post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'walter.jeanluc@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2], [5,3]], 'LabelForCompany':[[1,now], [2,now]]}
       # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'jlw@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,0,1], [5,3,1]]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "changeUserImage":

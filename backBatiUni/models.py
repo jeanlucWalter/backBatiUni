@@ -183,7 +183,8 @@ class UserProfile(CommonModel):
       print("userName", value)
       user.username = value
       user.save()
-    super().setAttr(fieldName, value)
+    else:
+      super().setAttr(fieldName, value)
 
   class Meta:
     verbose_name = "UserProfile"

@@ -80,12 +80,12 @@ class DataAccessor():
       proposer = None
       if data['proposer'] and User.objects.get(id=data['proposer']):
         proposer = User.objects.get(id=data['proposer'])
-      userProfile = UserProfile.objects.create(userNameInternal=user, company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
+      userProfile = UserProfile.objects.create(userNameInternal=user, Company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
       for idJob in data['jobs']:
         job = Job.objects.get(id=idJob)
-        jobCompany = JobForCompany.objects.filter(job=job, company=company)
+        jobCompany = JobForCompany.objects.filter(job=job, Company=company)
         if not jobCompany:
-          JobForCompany.objects.create(job=job, company=company, number=1)
+          JobForCompany.objects.create(job=job, Company=company, number=1)
       userProfile.save()
     return message
 

@@ -40,7 +40,7 @@ class CommonModel(models.Model):
     if name + "Internal" in listMetaFields: return False
     if name in cls.manyToManyObject: return True
     if hasattr(cls, name) and isinstance(cls._meta.get_field(name), models.ForeignKey): return True
-    if hasattr(cls, name) and isinstance(cls._meta.get_field(name), models.ManyToManyField): return True
+    # if hasattr(cls, name) and isinstance(cls._meta.get_field(name), models.ManyToManyField): return True
     return False
 
   @classmethod
@@ -64,8 +64,8 @@ class CommonModel(models.Model):
         pass
       if index in listIndices and isinstance(fieldObject, models.ForeignKey):
         values.append(getattr(self, field).id)
-      elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
-        values.append([element.id for element in getattr(self, field).all()])
+      # elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
+      #   values.append([element.id for element in getattr(self, field).all()])
       elif isinstance(fieldObject, models.DateField):
         values.append(getattr(self, field).strftime("%Y/%m/%d") if getattr(self, field) else None)
       elif field in self.manyToManyObject:
@@ -87,10 +87,10 @@ class CommonModel(models.Model):
       foreign = self._meta.get_field(fieldName).remote_field.model
       newValue = foreign.objects.get(id=value)
       setattr(self, fieldName, newValue)
-    elif isinstance(self._meta.get_field(fieldName), models.ManyToManyField):
-      foreign = self._meta.get_field(fieldName).remote_field.model
-      for index in value:
-        newValue = foreign.objects.get(id=index)
+    # elif isinstance(self._meta.get_field(fieldName), models.ManyToManyField):
+    #   foreign = self._meta.get_field(fieldName).remote_field.model
+    #   for index in value:
+    #     newValue = foreign.objects.get(id=index)
     else:
       setattr(self, fieldName, value)
 
@@ -189,6 +189,7 @@ class UserProfile(CommonModel):
   
   @classmethod
   def filter(cls, user):
+    print(user)
     return [UserProfile.objects.get(userNameInternal=user)]
 
   @property

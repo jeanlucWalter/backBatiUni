@@ -110,11 +110,12 @@ class DataAccessor():
     ext = format.split('/')[-1]
     if not dictData["name"]:
       return {"changeUserImage":"Error", "messages":"field name is empty"}
-    filePath = Files.createFile("userImage", dictData["name"], ext, currentUser)
-    image = ContentFile(base64.b64decode(imgstr), name=filePath + ext)
-    with open(filePath, "wb") as outfile:
+    objectFile = Files.createFile("userImage", dictData["name"], ext, currentUser)
+    image = ContentFile(base64.b64decode(imgstr), name=objectFile.path + ext)
+    with open(objectFile.path, "wb") as outfile:
         outfile.write(image.file.getbuffer())
-    return {"changeUserImage":"OK"}
+    print({"changeUserImage":"OK", "file":objectFile.computeValues(objectFile.listFields(), currentUser)})
+    return {"changeUserImage":"OK", "file":objectFile.computeValues(objectFile.listFields(), currentUser)}
 
   @classmethod
   def __loadDocument(cls, request, data, currentUser):

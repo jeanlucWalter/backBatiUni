@@ -24,6 +24,7 @@ class CommonModel(models.Model):
     subModels, values = cls.dictValues(user)
     dictAnswer[tableName + "Values"] = values
     if subModels:
+      print("subModels", subModels)
       for subM in subModels:
         tableName = subM._meta.verbose_name.title().replace(" ", "")
         if len(subM.listFields()) > 1:
@@ -56,35 +57,35 @@ class CommonModel(models.Model):
     listFields, dictResult, subModels = cls.listFields(), {}, []
     for instance in cls.filter(user):
       if len(listFields) > 1:
-        subM, values = cls.computeValues(instance, listFields, user)
+        subM, values = instance.computeValues(listFields, user)
         subModels += subM
         dictResult[instance.id] = values
       else:
         dictResult[instance.id] = getattr(instance, listFields[0])
     return subModels, dictResult
 
-  @classmethod
-  def computeValues(cls, instance, listFields, user):
-    values, subModel, listIndices = [], [], cls.listIndices()
+  def computeValues(self, listFields, user):
+    values, subModel, listIndices = [], [], self.listIndices()
     for index in range(len(listFields)):
       field = listFields[index]
       fieldObject = None
       try:
-        fieldObject = cls._meta.get_field(field)
+        fieldObject = self._meta.get_field(field)
       except:
         pass
       if index in listIndices and isinstance(fieldObject, models.ForeignKey):
-        values.append(getattr(instance, field).id)
+        values.append(getattr(self, field).id)
       elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
-        values.append([element.id for element in getattr(instance, field).all()])
+        values.append([element.id for element in getattr(self, field).all()])
       elif isinstance(fieldObject, models.DateField):
-        values.append(instance.date.strftime("%Y/%m/%d"))
-      elif field in cls.manyToManyObject:
+        print("computeValues", self, fieldObject, field)
+        values.append(getattr(self, field).strftime("%Y/%m/%d") if getattr(self, field) else None)
+      elif field in self.manyToManyObject:
         model = apps.get_model(app_label='backBatiUni', model_name=field)
         subModel.append(model)
         values.append(model.dictValues(user))
       else:
-        values.append(getattr(instance, field))
+        values.append(getattr(self, field))
     return subModel, values
 
   @classmethod
@@ -127,7 +128,7 @@ class Company(CommonModel):
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
   stars = models.IntegerField("Notation sous forme d'étoile", null=True, default=None)
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
-  manyToManyObject = ["JobForCompany", "LabelForCompany"]
+  manyToManyObject = ["JobForCompany", "LabelForCompany", "Files"]
 
   @classmethod
   def filter(cls, user):
@@ -226,6 +227,14 @@ class Files(CommonModel):
     unique_together = ('nature', 'name', 'company')
     verbose_name = "Files"
 
+  @classmethod
+  def listFields(cls):
+    superList = super().listFields()
+    for fieldName in ["path", "company"]:
+      index = superList.index(fieldName)
+      del superList[index]
+    return superList
+
   def getAttr(self, fieldName, answer=False):
     if fieldName == "file":
       image = Image.open(self.path)
@@ -245,12 +254,12 @@ class Files(CommonModel):
   @classmethod
   def createFile(cls, nature, name, ext, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    path = None
+    objectFile = None
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.company.name + '_' + str(userProfile.company.id) + '.' + ext
     if not Files.objects.filter(nature=nature, name=name, company=userProfile.company):
-      cls.objects.create(nature=nature, name=name, path=path, ext=ext, company=userProfile.company)
-    return path
+      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, company=userProfile.company)
+    return objectFile
 
     
 

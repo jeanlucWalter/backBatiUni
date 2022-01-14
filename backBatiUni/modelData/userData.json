@@ -33,11 +33,13 @@
       "stars",
       "companyPhone",
       "JobForCompany",
-      "LabelForCompany"
+      "LabelForCompany",
+      "Files"
    ],
    "CompanyIndices": [
       8,
-      9
+      9,
+      10
    ],
    "CompanyValues": {
       "1": [
@@ -69,6 +71,18 @@
          [
             [],
             {}
+         ],
+         [
+            [],
+            {
+               "1": [
+                  "userImage",
+                  "Jean-Luc_Walter_1",
+                  "png",
+                  null,
+                  1642092343.020329
+               ]
+            }
          ]
       ]
    },
@@ -85,5 +99,12 @@
    ],
    "LabelForCompanyIndices": [
       0
+   ],
+   "FilesFields": [
+      "nature",
+      "name",
+      "ext",
+      "expirationDate",
+      "timestamp"
    ]
 }

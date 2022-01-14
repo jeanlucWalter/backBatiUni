@@ -20,7 +20,7 @@ class SmtpConnector:
       data = json.loads(response.text)
     except:
       data = {"register smtp":"work in progress"}
-    exec("""curl 127.0.0.1:6004/send_mail/ """)
+    print(exec("""curl 127.0.0.1:6004/send_mail/"""))
     return data
 
 

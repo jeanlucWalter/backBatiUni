@@ -180,6 +180,7 @@ class UserProfile(CommonModel):
   def setAttr(self, fieldName, value):
     if fieldName == "userName":
       user = self.userNameInternal
+      print("userName", value)
       user.username = value
       user.save()
     super().setAttr(fieldName, value)
@@ -226,10 +227,6 @@ class Files(CommonModel):
 
   def getAttr(self, fieldName, answer=False):
     if fieldName == "file":
-      # image = Image.open(self.path)
-      # buffered = BytesIO()
-      # image.save(buffered, format=self.ext)
-      # return base64.b64encode(buffered.getvalue()).decode("utf-8")
       with open(self.path, "rb") as fileData:
         encoded_string = base64.b64encode(fileData.read())
         return encoded_string.decode("utf-8")

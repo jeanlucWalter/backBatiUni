@@ -14,7 +14,7 @@ class SmtpConnector:
 
   def register(self, firstName, lastName, email):
     params = {"action":"mailConfirmation", "firstName":firstName, "lastName":lastName, "mail":email}
-    print("register params", params)
+    print("register params", params, self.url)
     try:
       response = requests.get(url=self.url, headers=self.headers, params=params)
       data = json.loads(response.text)

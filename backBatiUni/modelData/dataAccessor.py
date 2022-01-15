@@ -38,6 +38,7 @@ class DataAccessor():
     data = json.loads(jsonString)
     message = cls.__registerCheck(data, {})
     token = SmtpConnector(6004).register(data["firstname"], data["lastname"], data["email"])
+    print(token)
     cls.__registerAction(data, message)
     if message:
       return {"register":"Warning", "messages":message}

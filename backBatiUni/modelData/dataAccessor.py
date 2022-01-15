@@ -40,10 +40,12 @@ class DataAccessor():
     if message:
       return {"register":"Warning", "messages":message}
     token = SmtpConnector(6004).register(data["firstname"], data["lastname"], data["email"])
-    print(token, isinstance(token, str))
-    token = token if isinstance(token, str) else "empty token"
-    cls.__registerAction(data, token)
-    return {"register":"Error", "messages":"token not received"} if token == "empty token" else {"register":"OK"}
+    print(token)
+    if "token" in token and token["token"]:
+      cls.__registerAction(data, token["token"])
+      return {"register":"OK"}
+    cls.__registerAction(data, "empty token")
+    return {"register":"Error", "messages":"token not received"} 
 
   @classmethod
   def __registerCheck(cls, data, message):

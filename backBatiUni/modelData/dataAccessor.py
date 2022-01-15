@@ -37,10 +37,7 @@ class DataAccessor():
     print("register", jsonString)
     data = json.loads(jsonString)
     message = cls.__registerCheck(data, {})
-    # if not message:
-    smtpConnector = SmtpConnector(6004)
-    print("smtpConnector", smtpConnector.register(data["firstname"], data["lastname"], data["email"]))
-    # return {"register":"work in progress"}
+    token = SmtpConnector(6004).register(data["firstname"], data["lastname"], data["email"])
     cls.__registerAction(data, message)
     if message:
       return {"register":"Warning", "messages":message}
@@ -48,6 +45,8 @@ class DataAccessor():
 
   @classmethod
   def __registerCheck(cls, data, message):
+    if not data["firstname"]:
+      message["firstname"] = "Le prénom est un champ obligatoire."
     if not data["firstname"]:
       message["firstname"] = "Le prénom est un champ obligatoire."
     if not data["lastname"]:
@@ -168,6 +167,13 @@ class DataAccessor():
           keys.append(key)
       for key in keys:
         del message[key]
+    for target, move in {"Company":"JobForCompany", "Company":"LabelForCompany", "Userprofile":"Company"}.items():
+      if move in valueModified:
+        if valueModified[move]:
+          if not target in valueModified:
+            valueModified[target] = {}
+          valueModified[target][move] = valueModified[move]
+        del valueModified[move]
     if message:
       return {"modifyUser":"Error", "messages":message, "valueModified": valueModified}
     return {"modifyUser":"OK", "valueModified": valueModified}
@@ -222,8 +228,8 @@ class DataAccessor():
         company = UserProfile.objects.get(userNameInternal=user).Company
         jobForCompany = JobForCompany.objects.create(Job=job, number=listValue[1], Company=company)
         if not "JobForCompany" in valueModified:
-          valueModified["JobForCompany"] = []
-        valueModified["JobForCompany"].append([jobForCompany.Job.id, jobForCompany.number, jobForCompany.Company.id])
+          valueModified["JobForCompany"] = {}
+        valueModified["JobForCompany"][jobForCompany.id] = [jobForCompany.Job.id, jobForCompany.number]
 
   @classmethod
   def __setValuesLabel(cls, dictValue, valueModified, user):
@@ -234,5 +240,5 @@ class DataAccessor():
       company = UserProfile.objects.get(userNameInternal=user).Company
       labelForCompany = LabelForCompany.objects.create(Label=label, date=date, Company=company)
       if not "LabelForCompany" in valueModified:
-        valueModified["LabelForCompany"] = []
-      valueModified["LabelForCompany"].append([labelForCompany.Label.id, labelForCompany.date.strftime("%Y/%m/%d"), labelForCompany.Company.id])
+        valueModified["LabelForCompany"] = {}
+      valueModified["LabelForCompany"][labelForCompany.id] = [labelForCompany.Label.id, labelForCompany.date.strftime("%Y/%m/%d")]

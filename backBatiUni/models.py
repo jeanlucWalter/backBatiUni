@@ -145,12 +145,16 @@ class LabelForCompany(CommonModel):
   Label = models.ForeignKey(Label, on_delete=models.PROTECT, blank=False, null=False)
   date = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
+
   class Meta:
     unique_together = ('Label', 'Company')
 
   @classmethod
   def listFields(cls):
-    return super().listFields()[:-1]
+    superList = super().listFields()
+    superList.remove("Company")
+    # del superList[indexCompany]
+    return superList
 
   @classmethod
   def filter(cls, user):
@@ -159,7 +163,7 @@ class LabelForCompany(CommonModel):
     return cls.objects.filter(Company=Company)
 
 class UserProfile(CommonModel):
-  userNameInternal = models.OneToOneField(User, on_delete=models.PROTECT)
+  userNameInternal = models.ForeignKey(User, on_delete=models.PROTECT, null=True, default=None)
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
   firstName = models.CharField("Prénom", max_length=128, blank=False, default="Inconnu")
   lastName = models.CharField("Nom de famille", max_length=128, blank=False, default="Inconnu")

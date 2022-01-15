@@ -37,17 +37,15 @@ class DataAccessor():
     print("register", jsonString)
     data = json.loads(jsonString)
     message = cls.__registerCheck(data, {})
-    token = SmtpConnector(6004).register(data["firstname"], data["lastname"], data["email"])
-    print(token)
-    cls.__registerAction(data, message)
     if message:
       return {"register":"Warning", "messages":message}
-    return {"register":"OK"}
+    token = SmtpConnector(6004).register(data["firstname"], data["lastname"], data["email"])
+    token = token if isinstance(token, str) else "empty token"
+    cls.__registerAction(data, token)
+    return {"register":"Error", "messages":"token not received"} if token == "empty token" else {"register":"OK"}
 
   @classmethod
   def __registerCheck(cls, data, message):
-    if not data["firstname"]:
-      message["firstname"] = "Le prénom est un champ obligatoire."
     if not data["firstname"]:
       message["firstname"] = "Le prénom est un champ obligatoire."
     if not data["lastname"]:
@@ -58,10 +56,12 @@ class DataAccessor():
       message["password"] = "Le mot de passe est un champ obligatoire."
     if not data["company"]:
       message["company"] = "Le nom de l'entreprise est un champ obligatoire."
+    if User.objects.filter(username=data["email"]):
+      message["email"] = "Cet email et déjà pris."
     return message
 
   @classmethod
-  def __registerAction(cls, data, message):
+  def __registerAction(cls, data, token):
     company = Company.objects.filter(name=data['company'])
     if not company:
       if os.getenv('PATH_MIDDLE'):
@@ -69,30 +69,23 @@ class DataAccessor():
         if searchSiren["status"] == "OK":
           company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
         else:
-          message = {"searchSiren":"did not work"}
           company = Company.objects.create(name=data['company'])
       else:
         company = Company.objects.create(name=data['company'])
     else:
       company = company[0]
-    user = User.objects.filter(username=data['email'])
-    if user:
-      message["email"] = "L'email est déjà utilisé dans la base de données."
-    else:
-      user = User.objects.create_user(username=data['email'], email=data['email'], password=data['password'])
-      role = Role.objects.get(id=data['role'])
-      proposer = None
-      if data['proposer'] and User.objects.get(id=data['proposer']):
-        proposer = User.objects.get(id=data['proposer'])
-      userProfile = UserProfile.objects.create(userNameInternal=user, Company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role)
-      if 'jobs' in data:
-        for idJob in data['jobs']:
-          job = Job.objects.get(id=idJob)
-          jobCompany = JobForCompany.objects.filter(Job=job, Company=company)
-          if not jobCompany:
-            JobForCompany.objects.create(Job=job, Company=company, number=1)
-      userProfile.save()
-    return message
+    role = Role.objects.get(id=data['role'])
+    proposer = None
+    if data['proposer'] and User.objects.get(id=data['proposer']):
+      proposer = User.objects.get(id=data['proposer'])
+    userProfile = UserProfile.objects.create(Company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role, token=token, email=data["email"], password=data["password"])
+    if 'jobs' in data:
+      for idJob in data['jobs']:
+        job = Job.objects.get(id=idJob)
+        jobCompany = JobForCompany.objects.filter(Job=job, Company=company)
+        if not jobCompany:
+          JobForCompany.objects.create(Job=job, Company=company, number=1)
+    userProfile.save()
 
   @classmethod
   def dataPost(cls, jsonString, currentUser):

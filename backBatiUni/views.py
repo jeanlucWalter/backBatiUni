@@ -9,22 +9,31 @@ from .modelData.dataAccessor import DataAccessor
 class DefaultView(APIView):
   permission_classes = (IsAuthenticated,)
 
+  def confirmToken(self, user):
+    userProfile = UserProfile.objects.filter(userNameInternal=user)
+    if userProfile:
+      print(userProfile[0].token)
+      return not userProfile[0].token
+    return False
+
 
 class Data(DefaultView):
   def get(self, request):
-    if 'action' in request.GET:
+    if 'action' in request.GET and self.confirmToken(request.user):
       currentUser = request.user
       action = request.GET["action"]
       if action == "getUserData": return Response(DataAccessor.getData("user", currentUser))
       if action == "loadImage": return Response(DataAccessor.loadImage(request.GET["id"], currentUser))
       return Response({"data GET":"Error", "messages":{"action":action}})
-    return Response({"data GET":"Error"})
+    return Response({"data GET":"Warning", "messages":"La confirmation par mail n'est pas réalisée."})
 
   def post(self, request):
-    currentUser = request.user
-    jsonBin = request.body
-    jsonString = jsonBin.decode("utf8")
-    return Response(DataAccessor().dataPost(jsonString, currentUser))
+    if self.confirmToken(request.user):
+      currentUser = request.user
+      jsonBin = request.body
+      jsonString = jsonBin.decode("utf8")
+      return Response(DataAccessor().dataPost(jsonString, currentUser))
+    return Response ({"data POST":"Warning", "messages":"La confirmation par mail n'est pas réalisée."})
 
 class Initialize(APIView):
   permission_classes = (AllowAny,)
@@ -33,6 +42,8 @@ class Initialize(APIView):
       action = request.GET["action"]
       if action == "getGeneralData":
         return Response(DataAccessor().getData("general", False))
+      if action == "getGeneralData":
+        return Response(DataAccessor().registerConfirm(request.GET["token"]))
     return Response({"Initialize GET":"OK"})
 
   def post(self, request):

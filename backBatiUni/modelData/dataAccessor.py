@@ -96,7 +96,9 @@ class DataAccessor():
     print("registerConfirm", token, userProfile)
     if userProfile:
       userProfile = userProfile[0]
-      user = User.objects.create(username=userProfile.email, email=userProfile.email, password=userProfile.password)
+      user = User.objects.create(username=userProfile.email, email=userProfile.email)
+      user.set_password(userProfile.password)
+      user.save()
       print("token", user, user.email, user.username)
       userProfile.userNameInternal = user
       userProfile.token = None

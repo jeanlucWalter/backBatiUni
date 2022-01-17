@@ -95,6 +95,7 @@ class DataAccessor():
     userProfile = UserProfile.objects.filter(token=token)
     print("registerConfirm", token, userProfile)
     if userProfile:
+      userProfile = userProfile[0]
       user = User.objects.create(username=userProfile.email, email=userProfile.email, password=userProfile.password)
       print("token", user, user.email, user.username)
       userProfile.userNameInternal = user
@@ -102,6 +103,7 @@ class DataAccessor():
       userProfile.password = None
       userProfile.save()
       return {"registerConfirm":"OK"}
+    print({"registerConfirm":"Error", "messages":"wrong token or email"})
     return {"registerConfirm":"Error", "messages":"wrong token or email"}
 
 

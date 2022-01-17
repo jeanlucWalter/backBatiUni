@@ -6,7 +6,10 @@
       "lastName",
       "proposer",
       "role",
-      "cellPhone"
+      "cellPhone",
+      "token",
+      "email",
+      "password"
    ],
    "UserprofileIndices": [
       1,
@@ -14,13 +17,16 @@
    ],
    "UserprofileValues": {
       "1": [
-         "walter.jeanluc@gmail.com",
+         "jlw",
          1,
-         "Jean-Luc",
+         "Jeanluc",
          "Walter",
          null,
          1,
-         "0634090695"
+         "06 34 09 06 95",
+         null,
+         "Inconnu",
+         "Inconnu"
       ]
    },
    "CompanyFields": [
@@ -43,25 +49,17 @@
    ],
    "CompanyValues": {
       "1": [
-         "Fantasiapp",
+         "test",
+         "123456789",
+         123456,
+         654321.22,
+         null,
+         "https://stackoverflow.com",
          null,
          null,
-         null,
-         null,
-         "https://fantasiapp.com",
-         null,
-         "01 23 45 67 89",
-         [
-            4,
-            5
-         ],
-         [
-            1,
-            2
-         ],
-         [
-            1
-         ]
+         [],
+         [],
+         []
       ]
    },
    "JobForCompanyFields": [
@@ -71,16 +69,7 @@
    "JobForCompanyIndices": [
       0
    ],
-   "JobForCompanyValues": {
-      "4": [
-         4,
-         2
-      ],
-      "5": [
-         5,
-         3
-      ]
-   },
+   "JobForCompanyValues": {},
    "LabelForCompanyFields": [
       "Label",
       "date"
@@ -88,16 +77,7 @@
    "LabelForCompanyIndices": [
       0
    ],
-   "LabelForCompanyValues": {
-      "1": [
-         1,
-         "2022/01/12"
-      ],
-      "2": [
-         2,
-         "2022/01/12"
-      ]
-   },
+   "LabelForCompanyValues": {},
    "FilesFields": [
       "nature",
       "name",
@@ -106,14 +86,5 @@
       "timestamp",
       "content"
    ],
-   "FilesValues": {
-      "1": [
-         "userImage",
-         "Fantasiapp_1",
-         "png",
-         null,
-         1642184101.551341,
-         null
-      ]
-   }
+   "FilesValues": {}
 }

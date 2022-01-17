@@ -98,11 +98,11 @@ class CommonModel(models.Model):
 
 class Label(CommonModel):
   name = models.CharField('Nom du label', unique=True, max_length=128, null=False, default=False, blank=False)
+  # description = models.CharField('Description du métier', unique=False, null=True, max_length=2048, default=None)
+  # site = models.CharField('Site internet', unique=False, null=True, max_length=256, default=None)
 
 class Role(CommonModel):
   name = models.CharField('Profil du compte', unique=True, max_length=128)
-  description = models.CharField('Description du métier', unique=False, null=True, max_length=2048, default=None)
-  site = models.CharField('Site internet', unique=False, null=True, max_length=256, default=None)
 
 class Job(CommonModel):
   name = models.CharField('Nom du métier', unique=True, max_length=128)

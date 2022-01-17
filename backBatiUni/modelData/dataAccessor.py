@@ -91,6 +91,19 @@ class DataAccessor():
     userProfile.save()
 
   @classmethod
+  def registerConfirm(cls, token, email):
+    userProfile = UserProfile.objects.filter(token=token)
+    if userProfile:
+      user = User.objects.create(username=email, email=email, password=userProfile["password"])
+      userProfile.userNameInternal = user
+      userProfile.token = None
+      userProfile.password = None
+      userProfile.save()
+      return {"registerConfirm":"OK"}
+    return {"registerConfirm":"Error", "messages":"wrong token or email"}
+
+
+  @classmethod
   def dataPost(cls, jsonString, currentUser):
     data = json.loads(jsonString)
     if "action" in data:

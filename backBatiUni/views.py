@@ -42,7 +42,7 @@ class Initialize(APIView):
       action = request.GET["action"]
       if action == "getGeneralData":
         return Response(DataAccessor().getData("general", False))
-      if action == "getGeneralData":
+      if action == "registerConfirm":
         return Response(DataAccessor().registerConfirm(request.GET["token"]))
     return Response({"Initialize GET":"OK"})
 

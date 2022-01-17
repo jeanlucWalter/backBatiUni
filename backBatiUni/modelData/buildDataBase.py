@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 class CreateNewDataBase:
   listTable = {"UserProfile":UserProfile, "JobForCompany":JobForCompany, "LabelForCompany":LabelForCompany, "Files":Files, "Job":Job, "Role":Role, "Label":Label, "Company":Company}
-  listLabels = {
+  dictLabels = {
     "Qualibat":["Cet organisme apporte des réponses précises aux maitres d’œuvre et aux clients sur la capacité professionnelle de l’entreprise en explorant trois domaines précis : la situation administrative, l’envergure financière et les compétences techniques. Il délivre plusieurs certifications.","https://www.qualibat.com/",True],
     "Qualif'elec":["Si vous relevez du génie électrique et énergétique, Qualifelec est la certification qu’il vous faut obtenir absolument. Elle couvre 8 domaines d’activités précis : installations électriques., chauffage, ventilation, climatisation., branchements et réseaux., bâtiment communicant., éclairage public, courant faible., maintenance d’installations électriques., antenne.",	"https://www.qualifelec.fr/", True],
     "Quali’eau":["Ce label est destiné aux plombiers chauffagistes. C’est depuis 2003 que la réglementation impose cette certification. En effet, les conditions sanitaires d’installation de l’eau potable doivent être respectées pour éviter la multiplication des microbes comme la légionellose. Aussi, Quali’eau délivre des certifications portant sur trois grands axes : Enjeux et contexte réglementaire, maîtrise des techniques de conception de réseaux, Maîtrise des techniques de maintenance.", "https://www.capeb-paysdelaloire.fr/fich/qualieau.htm#demarche", True],
@@ -34,7 +34,6 @@ class CreateNewDataBase:
     "Quali’ENR":["", "", True],		
     "QualiGaz":["", "", True],
   }
-
   listJobs = {"TCE (Tout Corps d'Etat)",
     "Autre: .....",
     "Acousticien	Acousticienne",
@@ -240,8 +239,8 @@ class CreateNewDataBase:
     return {"fillupRole":"OK"}
 
   def fillupLabel(self, table):
-    listLabel = ['Qualibat', 'RGE', 'RGE Eco Artisan', 'NF', 'Effinergie', 'Handibat', 'Qualifelec', 'Qualit’EnR', 'Quali’Sol', 'Quali’Bois', 'Quali’PV', 'Quali’Pac', 'Certibat', 'CERQUAL Qualitel Certification', 'Autres...']
-    for label in listLabel:
+    # listLabel = ['Qualibat', 'RGE', 'RGE Eco Artisan', 'NF', 'Effinergie', 'Handibat', 'Qualifelec', 'Qualit’EnR', 'Quali’Sol', 'Quali’Bois', 'Quali’PV', 'Quali’Pac', 'Certibat', 'CERQUAL Qualitel Certification', 'Autres...']
+    for label in self.dictLabels.keys():
       table.objects.create(name=label)
     return {"fillupLabel":"OK"}
 

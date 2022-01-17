@@ -115,6 +115,8 @@ class DataAccessor():
     data = json.loads(jsonString)
     if "action" in data:
       print("dataPost", data["action"])
+      if data["action"] == "modifyUser":
+        print(data)
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       if data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       if data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)

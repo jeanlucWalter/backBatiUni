@@ -65,7 +65,7 @@ class DataAccessor():
       if userProfile.password:
         userProfile.delete()
       else:
-        message["email"] = "Cet email et déjà pris."
+        message["email"] = "Cet email et déjà utilisé."
     return message
 
   @classmethod
@@ -214,8 +214,10 @@ class DataAccessor():
         for fieldName, value in dictValue.items():
           if fieldName != "id":
             messageFlag = True
-            if objectValue.getAttr(fieldName, "does not exist") != "does not exist":
-              if objectValue.getAttr(fieldName) != value:
+            if objectValue.getAttr(fieldName, "does not exist") != "does not exist" or fieldName in ["JobForCompany", "LabelForCompany"]:
+              if fieldName.lower() in listModelName or fieldName in ["JobForCompany", "LabelForCompany"]:
+                cls.__setValues(fieldName, value, user, message, valueModified)
+              elif objectValue.getAttr(fieldName) != value:
                 objectValue.setAttr(fieldName, value)
                 if not modelName in valueModified:
                   valueModified[modelName] = {}

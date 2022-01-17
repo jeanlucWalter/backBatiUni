@@ -101,6 +101,8 @@ class Label(CommonModel):
 
 class Role(CommonModel):
   name = models.CharField('Profil du compte', unique=True, max_length=128)
+  description = models.CharField('Description du métier', unique=False, null=True, max_length=2048, default=None)
+  site = models.CharField('Site internet', unique=False, null=True, max_length=256, default=None)
 
 class Job(CommonModel):
   name = models.CharField('Nom du métier', unique=True, max_length=128)
@@ -187,7 +189,6 @@ class UserProfile(CommonModel):
   def setAttr(self, fieldName, value):
     if fieldName == "userName":
       user = self.userNameInternal
-      print("userName", value)
       user.username = value
       user.save()
     else:
@@ -198,7 +199,6 @@ class UserProfile(CommonModel):
   
   @classmethod
   def filter(cls, user):
-    print(user)
     return [UserProfile.objects.get(userNameInternal=user)]
 
   @property

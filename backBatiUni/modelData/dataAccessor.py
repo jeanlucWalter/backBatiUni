@@ -59,8 +59,12 @@ class DataAccessor():
       message["password"] = "Le mot de passe est un champ obligatoire."
     if not data["company"]:
       message["company"] = "Le nom de l'entreprise est un champ obligatoire."
-    if User.objects.filter(username=data["email"]):
-      message["email"] = "Cet email et déjà pris."
+    userProfile = UserProfile.objects.filter(email=data["email"])
+    if userProfile:
+      if userProfile.password:
+        userProfile.delete()
+      else:
+        message["email"] = "Cet email et déjà pris."
     return message
 
   @classmethod
@@ -93,19 +97,16 @@ class DataAccessor():
   @classmethod
   def registerConfirm(cls, token):
     userProfile = UserProfile.objects.filter(token=token)
-    print("registerConfirm", token, userProfile)
     if userProfile:
       userProfile = userProfile[0]
       user = User.objects.create(username=userProfile.email, email=userProfile.email)
       user.set_password(userProfile.password)
       user.save()
-      print("token", user, user.email, user.username)
       userProfile.userNameInternal = user
       userProfile.token = None
       userProfile.password = None
       userProfile.save()
       return {"registerConfirm":"OK"}
-    print({"registerConfirm":"Error", "messages":"wrong token or email"})
     return {"registerConfirm":"Error", "messages":"wrong token or email"}
 
 

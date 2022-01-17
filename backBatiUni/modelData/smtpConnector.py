@@ -18,9 +18,10 @@ class SmtpConnector:
     try:
       response = requests.get(url=self.url, headers=self.headers, params=params)
       data = json.loads(response.text)
+      if "token" in data:
+        return data["token"]
     except:
       data = {"register smtp":"work in progress"}
-    # print(exec("echo | curl '127.0.0.1:6004/send_mail/'"))
     return data
 
 

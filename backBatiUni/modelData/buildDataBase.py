@@ -5,25 +5,19 @@ from dotenv import load_dotenv
 
 class CreateNewDataBase:
   listTable = {"UserProfile":UserProfile, "JobForCompany":JobForCompany, "LabelForCompany":LabelForCompany, "Files":Files, "Job":Job, "Role":Role, "Label":Label, "Company":Company}
-  # listLabels = {
-  #   "name":["a", "b"],
-  #   Qualibat	Cet organisme apporte des réponses précises aux maitres d’œuvre et aux clients sur la capacité professionnelle de l’entreprise en explorant trois domaines précis : la situation administrative, l’envergure financière et les compétences techniques. Il délivre plusieurs certifications.	https://www.qualibat.com/	x
-  #   Qualif'elec	Si vous relevez du génie électrique et énergétique, Qualifelec est la certification qu’il vous faut obtenir absolument. Elle couvre 8 domaines d’activités précis : installations électriques., chauffage, ventilation, climatisation., branchements et réseaux., bâtiment communicant., éclairage public, courant faible., maintenance d’installations électriques., antenne.	https://www.qualifelec.fr/	x
-  #   Quali’eau	"Ce label est destiné aux plombiers chauffagistes. C’est depuis 2003 que la réglementation impose cette certification. En effet, les conditions sanitaires d’installation de l’eau potable doivent être respectées pour éviter la multiplication des microbes comme la légionellose. Aussi, Quali’eau délivre des certifications portant sur trois grands axes :
-  #   Enjeux et contexte réglementaire.,maîtrise des techniques de conception de réseaux,Maîtrise des techniques de maintenance."	https://www.capeb-paysdelaloire.fr/fich/qualieau.htm#demarche	x
-  #   Quali’Sol	"Label attribué pour la qualité de l’installation des systèmes à énergie renouvelable particulièrement dans le domaine du solaire. Les équipements concernés sont :
-  #   Les Chauffe-eau Solaires Individuels (CESI)
-  #   Les Systèmes Solaires Combinés (SSC)"	https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/	x
-  #   Quali’PV	Rassurez-vous, ceci n’est pas le sigle de la certification des contractuelles pour les autoriser à mettre des PV, mais bien le label destiné à la qualification des installations d’énergie renouvelable par les systèmes photovoltaïques.	https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/	x
-  #   Quali’Forage	Ce label est attribué au professionnel installant des forages géothermiques sur nappe.	https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/	x
-  #   Quali’Bois	"La certification est attribuée aux professionnels habilités à installer des chauffages au bois dans les habitations.
-  #   "	https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/	x
-  #   Quali'Pac	pour l’installation de pompes à chaleur	https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/	x
-  #   ISO 9001	Pour obtenir la norme ISO 9001, l’entreprise doit justifier de son système de management et organisationnel. Elle mesure la satisfaction finale des clients ce qui est un gage de reconnaissance important pour votre entreprise. Malheureusement, elle est très difficile à obtenir et demande bien souvent l’aide d’un consultant extérieur.	https://www.iso.org/fr/iso-9001-quality-management.html	x
-  #   QSE	"Qualité Sécurité Environnement. Basée sur la norme ISO 9001, la certification QSE vérifie les mêmes domaines que l’ISO, mais aussi le respect de l’environnement par l’entreprise, la sécurité et la santé sur le lieu de travail. Elle aussi nécessite le recours à un consultant pour l’obtenir.
-  #   "		
-  #   RGE	certification RGE permet aux particuliers de bénéficier des aides de l’Etat. Il devient indispensable de faire appel à un professionnel ayant obtenu le label RGE qui est un gage des compétences et de l’aptitude de l’artisan.	https://www.service-public.fr/professionnels-entreprises/vosdroits/F32251	x
-  #   FEE Bat 	Le label FEE Bat aborde les économies d’énergie en termes techniques, environnementaux, en matière d’arguments de vente mais également en terme de qualité de travaux. Il s’agit surtout d’une opportunité pour les professionnels du secteur de devenir un interlocuteur privilégié en conseillant en amont les clients sur leurs projets, en prescrivant et en mettant en œuvre les techniques qui concourent à la performance énergétique des bâtiments.	https://www.feebat.org/actualites/	x
+  listLabels = {
+    "Qualibat":["Cet organisme apporte des réponses précises aux maitres d’œuvre et aux clients sur la capacité professionnelle de l’entreprise en explorant trois domaines précis : la situation administrative, l’envergure financière et les compétences techniques. Il délivre plusieurs certifications.","https://www.qualibat.com/",True],
+    "Qualif'elec":["Si vous relevez du génie électrique et énergétique, Qualifelec est la certification qu’il vous faut obtenir absolument. Elle couvre 8 domaines d’activités précis : installations électriques., chauffage, ventilation, climatisation., branchements et réseaux., bâtiment communicant., éclairage public, courant faible., maintenance d’installations électriques., antenne.",	"https://www.qualifelec.fr/", True],
+    "Quali’eau":["Ce label est destiné aux plombiers chauffagistes. C’est depuis 2003 que la réglementation impose cette certification. En effet, les conditions sanitaires d’installation de l’eau potable doivent être respectées pour éviter la multiplication des microbes comme la légionellose. Aussi, Quali’eau délivre des certifications portant sur trois grands axes : Enjeux et contexte réglementaire, maîtrise des techniques de conception de réseaux, Maîtrise des techniques de maintenance.", "https://www.capeb-paysdelaloire.fr/fich/qualieau.htm#demarche", True],
+    "Quali’Sol":["Label attribué pour la qualité de l’installation des systèmes à énergie renouvelable particulièrement dans le domaine du solaire. Les équipements concernés sont : les Chauffe-eau Solaires Individuels (CESI), les Systèmes Solaires Combinés (SSC)", "https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/", True],
+    "Quali’PV":["Rassurez-vous, ceci n’est pas le sigle de la certification des contractuelles pour les autoriser à mettre des PV, mais bien le label destiné à la qualification des installations d’énergie renouvelable par les systèmes photovoltaïques.",	"https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/", True],
+    "Quali’Forage":["Ce label est attribué au professionnel installant des forages géothermiques sur nappe.",	"https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/", True],
+    "Quali’Bois":["La certification est attribuée aux professionnels habilités à installer des chauffages au bois dans les habitations.",	"https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/", True],
+    "Quali'Pac":["pour l’installation de pompes à chaleur",	"https://www.qualit-enr.org/decouvrir-nos-qualifications-rge/é", True],
+    "ISO 9001":["Pour obtenir la norme ISO 9001, l’entreprise doit justifier de son système de management et organisationnel. Elle mesure la satisfaction finale des clients ce qui est un gage de reconnaissance important pour votre entreprise. Malheureusement, elle est très difficile à obtenir et demande bien souvent l’aide d’un consultant extérieur.", "https://www.iso.org/fr/iso-9001-quality-management.html", True],
+    "QSE":["Qualité Sécurité Environnement. Basée sur la norme ISO 9001, la certification QSE vérifie les mêmes domaines que l’ISO, mais aussi le respect de l’environnement par l’entreprise, la sécurité et la santé sur le lieu de travail. Elle aussi nécessite le recours à un consultant pour l’obtenir.", "", False],
+    "RGE":["certification RGE permet aux particuliers de bénéficier des aides de l’Etat. Il devient indispensable de faire appel à un professionnel ayant obtenu le label RGE qui est un gage des compétences et de l’aptitude de l’artisan.", "https://www.service-public.fr/professionnels-entreprises/vosdroits/F32251", False],
+    # FEE Bat 	Le label FEE Bat aborde les économies d’énergie en termes techniques, environnementaux, en matière d’arguments de vente mais également en terme de qualité de travaux. Il s’agit surtout d’une opportunité pour les professionnels du secteur de devenir un interlocuteur privilégié en conseillant en amont les clients sur leurs projets, en prescrivant et en mettant en œuvre les techniques qui concourent à la performance énergétique des bâtiments.	https://www.feebat.org/actualites/	x
   #   Artisant d'art	"Leur attribution atteste à la fois la formation et l'expérience professionnelle qui caractérisent le savoir-faire du secteur des métiers. Les titres sont des atouts commerciaux pour le chef d’entreprise artisanale, vis à vis de ses clients et des consommateurs. La qualité d’artisan d’art est attribuée aux personnes qui exercent une activité répertoriée dans la classification des métiers d’art.
   #   Les conditions pour obtenir la qualité d’artisan d’art :
   #   - exercer un métier de la liste et avoir :
@@ -54,7 +48,8 @@ class CreateNewDataBase:
   #   PG (Professionnel du Gaz)			x
   #   Quali’ENR			
   #   QualiGaz			x
-  #     }
+  }
+
   listJobs = {"TCE (Tout Corps d'Etat)",
     "Autre: .....",
     "Acousticien	Acousticienne",
@@ -256,7 +251,7 @@ class CreateNewDataBase:
   def fillupRole(self, table):
     listRole = ["Une entreprise à la recherche de sous-traitances", "Un sous-traitant à la recherche d'une entreprise", "Les deux"]
     for role in listRole:
-      table.objects.create(name=role, description="inconnu", site="inconnu")
+      table.objects.create(name=role)
     return {"fillupRole":"OK"}
 
   def fillupLabel(self, table):

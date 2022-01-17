@@ -91,10 +91,10 @@ class DataAccessor():
     userProfile.save()
 
   @classmethod
-  def registerConfirm(cls, token, email):
+  def registerConfirm(cls, token):
     userProfile = UserProfile.objects.filter(token=token)
     if userProfile:
-      user = User.objects.create(username=email, email=email, password=userProfile["password"])
+      user = User.objects.create(username=userProfile.email, email=userProfile.email, password=userProfile.password)
       userProfile.userNameInternal = user
       userProfile.token = None
       userProfile.password = None

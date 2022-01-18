@@ -201,10 +201,10 @@ class DataAccessor():
 
   @classmethod
   def __setValues(cls, modelName, dictValue, user, message, valueModified):
-    print("start", dictValue)
+    print("start", modelName, dictValue)
     listModelName = [value.lower() for value in map(attrgetter('__name__'), apps.get_models())]
     if modelName in ["JobForCompany", "LabelForCompany"]:
-        cls.__setValuesLabelJob(modelName, dictValue, valueModified, user)
+        cls.__setValuesLabelJob(modelName, dictValue, valueModified["Company"], user)
     elif modelName.lower() in listModelName:
       modelValue = apps.get_model('backBatiUni', modelName)
       objectValue = modelValue.objects.get(id=id) if id in dictValue else None

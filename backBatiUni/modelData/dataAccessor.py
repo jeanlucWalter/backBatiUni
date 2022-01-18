@@ -147,6 +147,7 @@ class DataAccessor():
       return {"changeUserImage":"Error", "messages":"field name is empty"}
     objectFile = Files.createFile("userImage", dictData["name"], dictData['ext'], currentUser)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + dictData['ext'])
+    print(len(file), objectFile.path)
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
     return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[1]}
@@ -176,72 +177,51 @@ class DataAccessor():
 
   @classmethod
   def __updateUserInfo(cls, data, user):
-    message, valueModified = {}, {}
-    for key, dictValue in data.items():
-      if key != "action":
-        cls.__setValues(key, dictValue, user, message, valueModified)
-    if message and valueModified:
-      keys = []
-      for key, value in message.items():
-        if value == "Aucun champ n'a été modifié":
-          keys.append(key)
-      for key in keys:
-        del message[key]
-    for target, move in {"Company":"JobForCompany", "Company":"LabelForCompany", "Userprofile":"Company"}.items():
-      if move in valueModified:
-        if valueModified[move]:
-          if not target in valueModified:
-            valueModified[target] = {}
-          valueModified[target][move] = valueModified[move]
-        del valueModified[move]
+    message, valueModified, userProfile = {}, {"Userprofile":{}}, UserProfile.objects.get(id=data["Userprofile"]["id"])
+    flagModified = cls.__setValues(data["Userprofile"], user, message, valueModified["Userprofile"], userProfile, False)
+    if not flagModified:
+      message["general"] = "Aucun champ n'a été modifié" 
     if message:
-      return {"modifyUser":"Error", "messages":message, "valueModified": valueModified}
+      return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
     return {"modifyUser":"OK", "valueModified": valueModified}
 
-
   @classmethod
-  def __setValues(cls, modelName, dictValue, user, message, valueModified):
-    listModelName = [value.lower() for value in map(attrgetter('__name__'), apps.get_models())]
-    if modelName in ["JobForCompany", "LabelForCompany"]:
-      if not "Company" in valueModified:
-        valueModified["Company"] = {}
-      cls.__setValuesLabelJob(modelName, dictValue, valueModified["Company"], user)
-    elif modelName.lower() in listModelName:
-      modelValue = apps.get_model('backBatiUni', modelName)
-      objectValue = modelValue.objects.get(id=id) if id in dictValue else None
-      if not objectValue:
-        objectValue = modelValue.filter(user)
-        objectValue = objectValue[0] if len(objectValue) == 1 else None
-      if objectValue:
-        for fieldName, value in dictValue.items():
-          if fieldName != "id":
-            messageFlag = True
-            if objectValue.getAttr(fieldName, "does not exist") != "does not exist" or fieldName in ["JobForCompany", "LabelForCompany"]:
-              if fieldName.lower() in listModelName or fieldName in ["JobForCompany", "LabelForCompany"]:
-                cls.__setValues(fieldName, value, user, message, valueModified)
-              elif objectValue.getAttr(fieldName) != value:
-                objectValue.setAttr(fieldName, value)
-                if not modelName in valueModified:
-                  valueModified[modelName] = {}
-                valueModified[modelName][fieldName] = value
-                messageFlag = False
-            else:
-              message[fieldName] = "is not an field"
-        if messageFlag:
-          if not valueModified:
-            message[modelName] = "Aucun champ n'a été modifié"
+  def __setValues(cls, dictValue, user, message, valueModified, objectInstance, flagModified):
+    for fieldName, value in dictValue.items():
+      if fieldName != "id":
+        fieldObject = None
+        try:
+          fieldObject = objectInstance._meta.get_field(fieldName)
+        except:
+          pass
+        if fieldObject and isinstance(fieldObject, models.ForeignKey):
+          valueModified[fieldName], instance = {}, getattr(objectInstance, fieldName)
+          print("recursif", value, user, message, valueModified[fieldName], instance)
+          valueModified[fieldName] = {}
+          flagModified = cls.__setValues(value, user, message, valueModified[fieldName], instance, flagModified) if not flagModified else True
+        elif fieldName in objectInstance.manyToManyObject:
+          valueModified[fieldName] = {}
+          flagModified = cls.__setValuesLabelJob(fieldName, value, valueModified[fieldName], user) if not flagModified else True
+        elif getattr(objectInstance, fieldName, "does not exist") != "does not exist":
+          valueToSave = value
+          if fieldObject and isinstance(fieldObject, models.DateField):
+            valueToSave = value.strftime("%Y/%m/%d") if value else None
+          elif valueToSave != getattr(objectInstance, fieldName):
+            setattr(objectInstance, fieldName, valueToSave)
+            objectInstance.save()
+            valueModified[fieldName] = value
+            flagModified = True
         else:
-          objectValue.save()
-    else:
-      message[modelName] = "can not find associated object"
+          message[fieldName] = "is not an field"
+    return flagModified
 
   @classmethod
   def __setValuesLabelJob(cls, modelName, dictValue, valueModified, user):
+    print("__setValuesLabelJob", modelName, dictValue, valueModified, user)
     if modelName == "JobForCompany":
-      cls.__setValuesJob(dictValue, valueModified, user)
+      return cls.__setValuesJob(dictValue, valueModified, user)
     else:
-      cls.__setValuesLabel(dictValue, valueModified, user)
-
+      return cls.__setValuesLabel(dictValue, valueModified, user)
 
   @classmethod
   def __setValuesJob(cls, dictValue, valueModified, user):
@@ -251,9 +231,8 @@ class DataAccessor():
         job = Job.objects.get(id=listValue[0])
         company = UserProfile.objects.get(userNameInternal=user).Company
         jobForCompany = JobForCompany.objects.create(Job=job, number=listValue[1], Company=company)
-        if not "JobForCompany" in valueModified:
-          valueModified["JobForCompany"] = {}
-        valueModified["JobForCompany"][jobForCompany.id] = [jobForCompany.Job.id, jobForCompany.number]
+        valueModified[jobForCompany.id] = [jobForCompany.Job.id, jobForCompany.number]
+    return True
 
   @classmethod
   def __setValuesLabel(cls, dictValue, valueModified, user):
@@ -263,6 +242,5 @@ class DataAccessor():
       date = datetime.strptime(listValue[1], "%Y/%m/%d")
       company = UserProfile.objects.get(userNameInternal=user).Company
       labelForCompany = LabelForCompany.objects.create(Label=label, date=date, Company=company)
-      if not "LabelForCompany" in valueModified:
-        valueModified["LabelForCompany"] = {}
-      valueModified["LabelForCompany"][labelForCompany.id] = [labelForCompany.Label.id, labelForCompany.date.strftime("%Y/%m/%d")]
+      valueModified[labelForCompany.id] = [labelForCompany.Label.id, labelForCompany.date.strftime("%Y/%m/%d")]
+    return True

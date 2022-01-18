@@ -39,7 +39,7 @@ class DataAccessor():
     message = cls.__registerCheck(data, {})
     if message:
       return {"register":"Warning", "messages":message}
-    token = SmtpConnector(6001).register(data["firstname"], data["lastname"], data["email"])
+    token = SmtpConnector(os.getenv('URL_SMTP')).register(data["firstname"], data["lastname"], data["email"])
     print("register", jsonString, "token", token)
     if token:
       cls.__registerAction(data, token)

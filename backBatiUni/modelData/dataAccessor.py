@@ -22,6 +22,7 @@ import json
 class DataAccessor():
   loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files], "general":[Job, Role, Label]}
   dictTable = {}
+  portSMTP = os.getenv('DB_PORT')
 
   @classmethod
   def getData(cls, profile, user):
@@ -34,13 +35,12 @@ class DataAccessor():
 
   @classmethod
   def register(cls, jsonString):
-    print("register", jsonString)
     data = json.loads(jsonString)
     message = cls.__registerCheck(data, {})
     if message:
       return {"register":"Warning", "messages":message}
-    token = SmtpConnector(6004).register(data["firstname"], data["lastname"], data["email"])
-    print("token", token)
+    token = SmtpConnector(6001).register(data["firstname"], data["lastname"], data["email"])
+    print("register", jsonString, "token", token)
     if token:
       cls.__registerAction(data, token)
       return {"register":"OK"}
@@ -116,29 +116,13 @@ class DataAccessor():
     data = json.loads(jsonString)
     if "action" in data:
       print("dataPost", data["action"])
-      if data["action"] == "modifyUser":
-        print(data)
+      if data["action"] == "modifyUser": print("modify user", data)
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
-      if data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
-      if data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
-      if data["action"] == "loadDocument": return cls.__loadDocument(data, currentUser)
+      elif data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
+      elif data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
+      elif data["action"] == "loadDocument": return cls.__loadDocument(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
-
-  # @classmethod
-  # def __changeUserImage(cls, request, dictData, currentUser):
-  #   print(dictData["imageBase64"])
-  #   image = request.data.get('imageBase64')
-  #   format, imgstr = image.split(';base64,')
-  #   ext = format.split('/')[-1]
-  #   if not dictData["name"]:
-  #     return {"changeUserImage":"Error", "messages":"field name is empty"}
-  #   objectFile = Files.createFile("userImage", dictData["name"], ext, currentUser)
-  #   image = ContentFile(base64.b64decode(imgstr), name=objectFile.path + ext)
-  #   with open(objectFile.path, "wb") as outfile:
-  #       outfile.write(image.file.getbuffer())
-  #   print({"changeUserImage":"OK", "file":objectFile.computeValues(objectFile.listFields(), currentUser)})
-  #   return {"changeUserImage":"OK", "file":objectFile.computeValues(objectFile.listFields(), currentUser)}
 
   @classmethod
   def __changeUserImage(cls, dictData, currentUser):
@@ -147,7 +131,6 @@ class DataAccessor():
       return {"changeUserImage":"Error", "messages":"field name is empty"}
     objectFile = Files.createFile("userImage", dictData["name"], dictData['ext'], currentUser)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + dictData['ext'])
-    print(len(file), objectFile.path)
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
     return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[1]}
@@ -196,7 +179,6 @@ class DataAccessor():
           pass
         if fieldObject and isinstance(fieldObject, models.ForeignKey):
           valueModified[fieldName], instance = {}, getattr(objectInstance, fieldName)
-          print("recursif", value, user, message, valueModified[fieldName], instance)
           valueModified[fieldName] = {}
           flagModified = cls.__setValues(value, user, message, valueModified[fieldName], instance, flagModified) if not flagModified else True
         elif fieldName in objectInstance.manyToManyObject:
@@ -217,7 +199,6 @@ class DataAccessor():
 
   @classmethod
   def __setValuesLabelJob(cls, modelName, dictValue, valueModified, user):
-    print("__setValuesLabelJob", modelName, dictValue, valueModified, user)
     if modelName == "JobForCompany":
       return cls.__setValuesJob(dictValue, valueModified, user)
     else:

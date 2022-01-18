@@ -22,7 +22,7 @@ import json
 class DataAccessor():
   loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files], "general":[Job, Role, Label]}
   dictTable = {}
-  portSMTP = os.getenv('DB_PORT')
+  portSmtp = os.getenv('PORT_SMTP')
 
   @classmethod
   def getData(cls, profile, user):
@@ -39,7 +39,8 @@ class DataAccessor():
     message = cls.__registerCheck(data, {})
     if message:
       return {"register":"Warning", "messages":message}
-    token = SmtpConnector(os.getenv('URL_SMTP')).register(data["firstname"], data["lastname"], data["email"])
+    print("port", cls.portSmtp)
+    token = SmtpConnector(cls.portSmtp).register(data["firstname"], data["lastname"], data["email"])
     print("register", jsonString, "token", token)
     if token:
       cls.__registerAction(data, token)

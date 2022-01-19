@@ -207,14 +207,13 @@ class DataAccessor():
 
   @classmethod
   def __setValuesJob(cls, dictValue, valueModified, user):
-    company = UserProfile.objects.get(userNameInternal=user)
+    company = UserProfile.objects.get(userNameInternal=user).Company
     jobForCompany = JobForCompany.objects.filter(Company=company)
     if jobForCompany:
       jobForCompany.delete()
     for listValue in dictValue:
       if listValue[1]:
         job = Job.objects.get(id=listValue[0])
-        company = UserProfile.objects.get(userNameInternal=user).Company
         jobForCompany = JobForCompany.objects.create(Job=job, number=listValue[1], Company=company)
         valueModified[jobForCompany.id] = [jobForCompany.Job.id, jobForCompany.number]
     return True

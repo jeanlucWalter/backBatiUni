@@ -98,7 +98,6 @@ class DataAccessor():
 
   @classmethod
   def registerConfirm(cls, token):
-    print("registerConfirm", token, UserProfile.objects.get(id=2), UserProfile.objects.filter(token=token))
     userProfile = UserProfile.objects.filter(token=token)
     if userProfile:
       userProfile = userProfile[0]
@@ -209,7 +208,9 @@ class DataAccessor():
   @classmethod
   def __setValuesJob(cls, dictValue, valueModified, user):
     company = UserProfile.objects.get(userNameInternal=user)
-    JobForCompany.objects.filter(Company=company).delete()
+    jobForCompany = JobForCompany.objects.filter(Company=company)
+    if jobForCompany:
+      jobForCompany.delete()
     for listValue in dictValue:
       if listValue[1]:
         job = Job.objects.get(id=listValue[0])

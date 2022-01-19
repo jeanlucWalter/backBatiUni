@@ -47,7 +47,7 @@ class CreateNewDataBase:
     "Architecte d'intérieur",
     "Architecte naval	Architecte navale",
     "Ascensoriste",
-    "Assistant en architecture	Assistante en architecture",
+    "Assistant en architecture Assistante en architecture",
     "Assistant d’entrepreneur du BTP",
     "Bainiste",
     "BIM manager",

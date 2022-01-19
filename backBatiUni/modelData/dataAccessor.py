@@ -166,6 +166,7 @@ class DataAccessor():
     if not flagModified:
       message["general"] = "Aucun champ n'a été modifié" 
     if message:
+      print("message", message)
       return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
     return {"modifyUser":"OK", "valueModified": valueModified}
 
@@ -188,7 +189,7 @@ class DataAccessor():
         elif getattr(objectInstance, fieldName, "does not exist") != "does not exist":
           valueToSave = value
           if fieldObject and isinstance(fieldObject, models.DateField):
-            valueToSave = value.strftime("%Y/%m/%d") if value else None
+            valueToSave = value.strftime("%Y-%m-%d") if value else None
           elif fieldObject and isinstance(fieldObject, models.IntegerField):
             valueToSave = int(value) if value else None
           elif fieldObject and isinstance(fieldObject, models.FloatField):
@@ -233,7 +234,7 @@ class DataAccessor():
       labelForCompany.delete()
     for listValue in dictValue:
       label = Label.objects.get(id=listValue[0])
-      date = datetime.strptime(listValue[1], "%Y/%m/%d")
+      date = datetime.strptime(listValue[1], "%Y-%m-%d")
       labelForCompany = LabelForCompany.objects.create(Label=label, date=date, Company=company)
-      valueModified[labelForCompany.id] = [labelForCompany.Label.id, labelForCompany.date.strftime("%Y/%m/%d")]
+      valueModified[labelForCompany.id] = [labelForCompany.Label.id, labelForCompany.date.strftime("%Y-%m-%d")]
     return True

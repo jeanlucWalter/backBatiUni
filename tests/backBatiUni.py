@@ -67,7 +67,8 @@ def executeQuery():
       print("modifyUser")
       now = "2022/01/12"
       # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'walter.jeanluc@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2], [5,3]], 'LabelForCompany':[[1,now], [2,now]]}
-      post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'cellPhone': '0634090694', 'Company': {'capital': '12345', 'companyPhone': '01 23 45 67 88', 'JobForCompany':[[4,2], [5,3]], 'LabelForCompany':[[1,now], [2,now]]}}}
+      # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'cellPhone': '0634090694', 'Company': {'capital': '12345', 'companyPhone': '01 23 45 67 88', 'JobForCompany':[[4,2], [5,3]], 'LabelForCompany':[[1,now], [2,now]]}}}
+      post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'cellPhone': '0634090695', 'Company': {'JobForCompany': [[6, 0], [18, 3], [2, 1], [3, 2]], 'capital': '123456', 'webSite': 'Https', 'companyPhone': '01234567890', 'LabelForCompany': [[1, '2022/01/19'], [3, '2022/01/19']]}}}
       response = requests.post(url, headers=headers, json=post)
     elif query == "changeUserImage":
       post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr()}

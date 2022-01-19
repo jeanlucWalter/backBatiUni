@@ -194,8 +194,10 @@ class DataAccessor():
           elif fieldObject and isinstance(fieldObject, models.FloatField):
             valueToSave = float(value) if value else None
           if valueToSave != getattr(objectInstance, fieldName):
+            print("test 1", fieldName, valueToSave, getattr(objectInstance, fieldName))
             setattr(objectInstance, fieldName, valueToSave)
             objectInstance.save()
+            print("test 2", fieldName, valueToSave, getattr(objectInstance, fieldName))
             valueModified[fieldName] = value
             flagModified = True
         else:

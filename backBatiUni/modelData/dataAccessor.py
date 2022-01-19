@@ -221,12 +221,13 @@ class DataAccessor():
 
   @classmethod
   def __setValuesLabel(cls, dictValue, valueModified, user):
-    company = UserProfile.objects.get(userNameInternal=user)
-    LabelForCompany.objects.filter(Company=company).delete()
+    company = UserProfile.objects.get(userNameInternal=user).Company
+    labelForCompany = LabelForCompany.objects.filter(Company=company)
+    if labelForCompany:
+      labelForCompany.delete()
     for listValue in dictValue:
       label = Label.objects.get(id=listValue[0])
       date = datetime.strptime(listValue[1], "%Y/%m/%d")
-      company = UserProfile.objects.get(userNameInternal=user).Company
       labelForCompany = LabelForCompany.objects.create(Label=label, date=date, Company=company)
       valueModified[labelForCompany.id] = [labelForCompany.Label.id, labelForCompany.date.strftime("%Y/%m/%d")]
     return True

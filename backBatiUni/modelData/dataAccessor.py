@@ -189,11 +189,11 @@ class DataAccessor():
           valueToSave = value
           if fieldObject and isinstance(fieldObject, models.DateField):
             valueToSave = value.strftime("%Y/%m/%d") if value else None
-          if fieldObject and isinstance(fieldObject, models.IntegerField):
+          elif fieldObject and isinstance(fieldObject, models.IntegerField):
             valueToSave = int(value) if value else None
-          if fieldObject and isinstance(fieldObject, models.FloatField):
+          elif fieldObject and isinstance(fieldObject, models.FloatField):
             valueToSave = float(value) if value else None
-          elif valueToSave != getattr(objectInstance, fieldName):
+          if valueToSave != getattr(objectInstance, fieldName):
             setattr(objectInstance, fieldName, valueToSave)
             objectInstance.save()
             valueModified[fieldName] = value

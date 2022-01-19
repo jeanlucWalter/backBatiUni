@@ -1,5 +1,5 @@
 from ..models import *
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.hashers import check_password, make_password
 from django.apps import apps
 from operator import attrgetter
@@ -98,6 +98,7 @@ class DataAccessor():
 
   @classmethod
   def registerConfirm(cls, token):
+    print("registerConfirm", token, UserProfile.objects.get(id=2), UserProfile.objects.filter(token=token))
     userProfile = UserProfile.objects.filter(token=token)
     if userProfile:
       userProfile = userProfile[0]
@@ -207,7 +208,8 @@ class DataAccessor():
 
   @classmethod
   def __setValuesJob(cls, dictValue, valueModified, user):
-    JobForCompany.objects.all().delete()
+    company = UserProfile.objects.get(userNameInternal=user)
+    JobForCompany.objects.filter(Company=company).delete()
     for listValue in dictValue:
       if listValue[1]:
         job = Job.objects.get(id=listValue[0])
@@ -218,7 +220,8 @@ class DataAccessor():
 
   @classmethod
   def __setValuesLabel(cls, dictValue, valueModified, user):
-    LabelForCompany.objects.all().delete()
+    company = UserProfile.objects.get(userNameInternal=user)
+    LabelForCompany.objects.filter(Company=company).delete()
     for listValue in dictValue:
       label = Label.objects.get(id=listValue[0])
       date = datetime.strptime(listValue[1], "%Y/%m/%d")

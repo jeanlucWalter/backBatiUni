@@ -39,9 +39,7 @@ class DataAccessor():
     message = cls.__registerCheck(data, {})
     if message:
       return {"register":"Warning", "messages":message}
-    print("port", cls.portSmtp)
     token = SmtpConnector(cls.portSmtp).register(data["firstname"], data["lastname"], data["email"])
-    print("register", jsonString, "token", token)
     if token:
       cls.__registerAction(data, token)
       return {"register":"OK"}
@@ -147,7 +145,7 @@ class DataAccessor():
     return {"loadImage":"OK", id:fileList}
 
   @classmethod
-  def __loadDocument(cls, request, data, currentUser):
+  def __loadDocument(cls, data, currentUser):
     print(list(data.keys()))
     return {"loadDocument":"work in progress"}
 
@@ -166,7 +164,6 @@ class DataAccessor():
     if not flagModified:
       message["general"] = "Aucun champ n'a été modifié" 
     if message:
-      print("message", message)
       return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
     return {"modifyUser":"OK", "valueModified": valueModified}
 
@@ -181,11 +178,12 @@ class DataAccessor():
           pass
         if fieldObject and isinstance(fieldObject, models.ForeignKey):
           valueModified[fieldName], instance = {}, getattr(objectInstance, fieldName)
-          valueModified[fieldName] = {}
-          flagModified = cls.__setValues(value, user, message, valueModified[fieldName], instance, flagModified) if not flagModified else True
+          flagModifiedNew = cls.__setValues(value, user, message, valueModified[fieldName], instance, flagModified)
+          flagModified = flagModifiedNew if not flagModified else flagModified
         elif fieldName in objectInstance.manyToManyObject:
           valueModified[fieldName] = {}
-          flagModified = cls.__setValuesLabelJob(fieldName, value, valueModified[fieldName], user) if not flagModified else True
+          flagModifiedNew = cls.__setValuesLabelJob(fieldName, value, valueModified[fieldName], user)
+          flagModified = flagModifiedNew if not flagModified else flagModified
         elif getattr(objectInstance, fieldName, "does not exist") != "does not exist":
           valueToSave = value
           if fieldObject and isinstance(fieldObject, models.DateField):
@@ -195,10 +193,8 @@ class DataAccessor():
           elif fieldObject and isinstance(fieldObject, models.FloatField):
             valueToSave = float(value) if value else None
           if valueToSave != getattr(objectInstance, fieldName):
-            print("test 1", fieldName, valueToSave, getattr(objectInstance, fieldName))
             setattr(objectInstance, fieldName, valueToSave)
             objectInstance.save()
-            print("test 2", fieldName, valueToSave, getattr(objectInstance, fieldName))
             valueModified[fieldName] = value
             flagModified = True
         else:

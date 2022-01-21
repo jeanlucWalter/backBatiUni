@@ -174,7 +174,7 @@ class DataAccessor():
       if isinstance(externalResponse, dict) and externalResponse:
         response = {"getEnterpriseDataFrom":"OK"}.update(externalResponse)
         print("response", response)
-        externalResponse["getEnterpriseDataFrom":"OK"]
+        externalResponse["getEnterpriseDataFrom"] ="OK" 
         return externalResponse
       else:
         return {"getEnterpriseDataFrom":"Error", "messages":{"list":"empty"}}

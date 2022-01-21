@@ -164,10 +164,12 @@ class DataAccessor():
     return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, expirationDate=expirationDate)[:-1]}
 
   @classmethod
-  def getEnterpriseDataFrom(cls, request, currentUser):
+  def getEnterpriseDataFrom(cls, request):
+    print("getEnterpriseDataFrom")
     subName = request.GET["subName"]
     siret = request.GET["siret"] if "siret" in request.GET else None
     if os.getenv('PATH_MIDDLE'):
+      print(getEnterpriseDataFrom(subName=subName, siret=siret))
       return {"getEnterpriseDataFrom":"OK"}.update(getEnterpriseDataFrom(subName=subName, siret=siret))
     else:
       return {"getEnterpriseDataFrom":"Error", "messages":{"local":"no installation"}}

@@ -44,6 +44,8 @@ class Initialize(APIView):
         return Response(DataAccessor().getData("general", False))
       if action == "registerConfirm":
         return Response(DataAccessor().registerConfirm(request.GET["token"]))
+      if action == "getEnterpriseDataFrom":
+        return Response(DataAccessor.getEnterpriseDataFrom(request))
     return Response({"Initialize GET":"OK"})
 
   def post(self, request):

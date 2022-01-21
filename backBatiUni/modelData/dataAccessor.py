@@ -142,7 +142,7 @@ class DataAccessor():
     fileList = file.computeValues(listFields, currentUser)
     indexContent = listFields.index("content")
     fileList[indexContent] = content
-    return {"loadImage":"OK", id:fileList}
+    return {"downloadFile":"OK", id:fileList}
 
   @classmethod
   def __uploadFile(cls, data, currentUser):
@@ -155,11 +155,12 @@ class DataAccessor():
       message["fileBase64"] = "field fileBase64 is empty"
     if message:
       return {"uploadFile":"Error", "messages":message}
+    expirationDate = data["expirationDate"].strftime("%Y-%m-%d") if data["expirationDate"] else None
     objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
-    return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[:-1]}
+    return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, expirationDate=expirationDate)[:-1]}
 
 
   @classmethod

@@ -46,7 +46,6 @@ class CommonModel(models.Model):
   def dictValues(cls, user):
     listFields, dictResult = cls.listFields(), {}
     for instance in cls.filter(user):
-      print("dictValues", instance)
       if len(listFields) > 1:
         dictResult[instance.id] = instance.computeValues(listFields, user)
       else:
@@ -273,7 +272,6 @@ class Files(CommonModel):
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     company = userProfile.Company
-    print("filter", cls, user, len(cls.objects.filter(Company=company)))
     return cls.objects.filter(Company=company)
 
     

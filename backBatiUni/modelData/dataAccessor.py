@@ -114,12 +114,12 @@ class DataAccessor():
   def dataPost(cls, jsonString, currentUser):
     data = json.loads(jsonString)
     if "action" in data:
-      print("dataPost", data["action"])
+      print("dataPost", list(data.keys()))
       if data["action"] == "modifyUser": print("modify user", data)
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       elif data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       elif data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
-      elif data["action"] == "loadDocument": return cls.__loadDocument(data, currentUser)
+      elif data["action"] == "uploadFile": return cls.__loadDocument(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 

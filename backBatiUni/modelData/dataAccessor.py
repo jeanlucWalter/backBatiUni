@@ -172,9 +172,10 @@ class DataAccessor():
       externalResponse = getEnterpriseDataFrom(subName=subName, siret=siret)["data"]
       print("externalResponse", externalResponse)
       if isinstance(externalResponse, dict) and externalResponse:
-        response = {"getEnterpriseDataFrom":"OK"}.update(getEnterpriseDataFrom(subName=subName, siret=siret)["data"])
+        response = {"getEnterpriseDataFrom":"OK"}.update(externalResponse)
         print("response", response)
-        return response
+        externalResponse["getEnterpriseDataFrom":"OK"]
+        return externalResponse
       else:
         return {"getEnterpriseDataFrom":"Error", "messages":{"list":"empty"}}
     else:

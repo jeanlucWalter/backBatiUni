@@ -273,6 +273,7 @@ class Files(CommonModel):
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     company = userProfile.Company
+    print("filter", cls, user, len(cls.objects.filter(Company=company)))
     return cls.objects.filter(Company=company)
 
     

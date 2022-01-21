@@ -170,7 +170,7 @@ class DataAccessor():
     siret = request.GET["siret"] if "siret" in request.GET else None
     if os.getenv('PATH_MIDDLE'):
       response = {"getEnterpriseDataFrom":"OK"}.update(getEnterpriseDataFrom(subName=subName, siret=siret)["data"])
-      print(response)
+      print("response", response)
       return response
     else:
       return {"getEnterpriseDataFrom":"Error", "messages":{"local":"no installation"}}

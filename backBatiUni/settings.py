@@ -31,6 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [os.getenv('URL'), '127.0.0.1', '.pythonanywhere.com']
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760 
+
 
 # Application definition
 

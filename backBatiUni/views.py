@@ -23,7 +23,7 @@ class Data(DefaultView):
       action = request.GET["action"]
       if action == "getUserData":
         return Response(DataAccessor.getData("user", currentUser))
-      if action == "loadImage": return Response(DataAccessor.loadImage(request.GET["id"], currentUser))
+      if action == "downloadFile": return Response(DataAccessor.downloadFile(request.GET["id"], currentUser))
       return Response({"data GET":"Error", "messages":{"action":action}})
     return Response({"data GET":"Warning", "messages":"La confirmation par mail n'est pas réalisée."})
 

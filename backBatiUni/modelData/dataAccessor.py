@@ -114,12 +114,12 @@ class DataAccessor():
   def dataPost(cls, jsonString, currentUser):
     data = json.loads(jsonString)
     if "action" in data:
-      print("dataPost", list(data.keys()))
+      print("dataPost", data["action"], list(data.keys()))
       if data["action"] == "modifyUser": print("modify user", data)
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       elif data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       elif data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
-      elif data["action"] == "uploadFile": return cls.__loadDocument(data, currentUser)
+      elif data["action"] == "uploadFile": return cls.__uploadFile(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 
@@ -145,9 +145,11 @@ class DataAccessor():
     return {"loadImage":"OK", id:fileList}
 
   @classmethod
-  def __loadDocument(cls, data, currentUser):
-    print(list(data.keys()))
-    return {"loadDocument":"work in progress"}
+  def __uploadFile(cls, data, currentUser):
+    for key, value in data.items():
+      if key != "fileBase64":
+        print(key, value)
+    return {"__uploadFile":"work in progress"}
 
   @classmethod
   def __modifyPwd(cls, data, currentUser):

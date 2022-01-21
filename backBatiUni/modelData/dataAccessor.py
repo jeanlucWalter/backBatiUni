@@ -135,7 +135,7 @@ class DataAccessor():
     return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[1]}
 
   @classmethod
-  def loadImage(cls, id, currentUser):
+  def downloadFile(cls, id, currentUser):
     file = Files.objects.get(id=id)
     content = file.getAttr("file")
     listFields = file.listFields()
@@ -146,10 +146,21 @@ class DataAccessor():
 
   @classmethod
   def __uploadFile(cls, data, currentUser):
-    for key, value in data.items():
-      if key != "fileBase64":
-        print(key, value)
-    return {"__uploadFile":"work in progress"}
+    print("uploadFile")
+    fileStr, message = data["fileBase64"], {}
+    for field in ["name", "ext", "nature"]:
+      if not data[field]:
+        message[field] = f"field {field} is empty"
+    if not fileStr:
+      message["fileBase64"] = "field fileBase64 is empty"
+    if message:
+      return {"uploadFile":"Error", "messages":message}
+    objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser)
+    file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
+    with open(objectFile.path, "wb") as outfile:
+        outfile.write(file.file.getbuffer())
+    return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[:-1]}
+
 
   @classmethod
   def __modifyPwd(cls, data, currentUser):

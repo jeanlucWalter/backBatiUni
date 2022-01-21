@@ -6,7 +6,8 @@ import os
 import base64
 from io import BytesIO
 
-userName, password = "walter.jeanluc@gmail.com", "pwd"
+# userName, password = "walter.jeanluc@gmail.com", "pwd"
+userName, password = "jlw", "pwd"
 # userName, password = "jeanluc.walter@fantasiapp.com", "123456Aa"
 address = 'http://localhost:8000'
 query = "token"
@@ -57,8 +58,8 @@ def executeQuery():
     headers = {'Authorization': f'Token {token}'}
     if query == "getUserData":
       response = requests.get(url, headers=headers, params={"action":"getUserData"})
-    elif query == "loadImage":
-      response = requests.get(url, headers=headers, params={"action":"loadImage", "id":1})
+    elif query == "downloadFile":
+      response = requests.get(url, headers=headers, params={"action":"downloadFile", "id":1})
     elif query == "postModifyPwd":
       print("postModifyPwd")
       post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}
@@ -74,7 +75,7 @@ def executeQuery():
       post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr()}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
-      post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr()}
+      post = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(), "nature":"labels"}
       response = requests.post(url, headers=headers, json=post)
     elif query == "buildDB":
       url = f'{address}/createBase/'

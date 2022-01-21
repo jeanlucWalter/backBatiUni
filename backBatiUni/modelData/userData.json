@@ -23,7 +23,7 @@
          "Walter",
          null,
          1,
-         "06 34 09 06 95",
+         "0634090694",
          null,
          "Inconnu",
          "Inconnu"
@@ -51,15 +51,23 @@
       "1": [
          "test",
          "123456789",
-         123456,
+         12345,
          654321.22,
          null,
          "https://stackoverflow.com",
          null,
-         null,
-         [],
-         [],
-         []
+         "01 23 45 67 88",
+         [
+            1,
+            2
+         ],
+         [
+            1,
+            2
+         ],
+         [
+            1
+         ]
       ]
    },
    "JobForCompanyFields": [
@@ -69,7 +77,16 @@
    "JobForCompanyIndices": [
       0
    ],
-   "JobForCompanyValues": {},
+   "JobForCompanyValues": {
+      "1": [
+         4,
+         2
+      ],
+      "2": [
+         5,
+         3
+      ]
+   },
    "LabelForCompanyFields": [
       "Label",
       "date"
@@ -77,7 +94,16 @@
    "LabelForCompanyIndices": [
       0
    ],
-   "LabelForCompanyValues": {},
+   "LabelForCompanyValues": {
+      "1": [
+         1,
+         "2022-01-12"
+      ],
+      "2": [
+         2,
+         "2022-01-12"
+      ]
+   },
    "FilesFields": [
       "nature",
       "name",
@@ -86,5 +112,14 @@
       "timestamp",
       "content"
    ],
-   "FilesValues": {}
+   "FilesValues": {
+      "1": [
+         "labels",
+         "NF",
+         "png",
+         null,
+         1642779679.630957,
+         null
+      ]
+   }
 }

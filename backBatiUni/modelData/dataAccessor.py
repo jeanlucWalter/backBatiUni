@@ -142,7 +142,7 @@ class DataAccessor():
     fileList = file.computeValues(listFields, currentUser)
     indexContent = listFields.index("content")
     fileList[indexContent] = content
-    print({"downloadFile":"OK", id:list(fileList.keys())})
+    print({"downloadFile":"OK", id:len(fileList)})
     return {"downloadFile":"OK", id:fileList}
 
   @classmethod

@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 load_dotenv()
 if os.getenv('PATH_MIDDLE'):
   sys.path.append(os.getenv('PATH_MIDDLE'))
-  from profileScraping import searchUnitesLegalesByDenomination
+  from profileScraping import getEnterpriseDataFrom
 
 import json
 
@@ -162,6 +162,15 @@ class DataAccessor():
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
     return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, expirationDate=expirationDate)[:-1]}
+
+  @classmethod
+  def getEnterpriseDataFrom(cls, request, currentUser):
+    subName = request.GET["subName"]
+    siret = request.GET["siret"] if "siret" in request.GET else None
+    if os.getenv('PATH_MIDDLE'):
+      return {"getEnterpriseDataFrom":"OK"}.update(getEnterpriseDataFrom(subName=subName, siret=siret))
+    else:
+      return {"getEnterpriseDataFrom":"Error", "messages":{"local":"no installation"}}
 
 
   @classmethod

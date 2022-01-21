@@ -15,7 +15,6 @@ class DefaultView(APIView):
       return not userProfile[0].token
     return False
 
-
 class Data(DefaultView):
   def get(self, request):
     if 'action' in request.GET and self.confirmToken(request.user):
@@ -24,6 +23,7 @@ class Data(DefaultView):
       if action == "getUserData":
         return Response(DataAccessor.getData("user", currentUser))
       if action == "downloadFile": return Response(DataAccessor.downloadFile(request.GET["id"], currentUser))
+      if action == "getEnterpriseDataFrom": return Response(DataAccessor.getEnterpriseDataFrom(request, currentUser))
       return Response({"data GET":"Error", "messages":{"action":action}})
     return Response({"data GET":"Warning", "messages":"La confirmation par mail n'est pas réalisée."})
 

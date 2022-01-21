@@ -171,9 +171,12 @@ class DataAccessor():
     if os.getenv('PATH_MIDDLE'):
       externalResponse = getEnterpriseDataFrom(subName=subName, siret=siret)["data"]
       print("externalResponse", externalResponse)
-      response = {"getEnterpriseDataFrom":"OK"}.update(getEnterpriseDataFrom(subName=subName, siret=siret)["data"])
-      print("response", response)
-      return response
+      if isinstance(externalResponse, dict) and externalResponse:
+        response = {"getEnterpriseDataFrom":"OK"}.update(getEnterpriseDataFrom(subName=subName, siret=siret)["data"])
+        print("response", response)
+        return response
+      else:
+        return {"getEnterpriseDataFrom":"Error", "messages":{"list":"empty"}}
     else:
       return {"getEnterpriseDataFrom":"Error", "messages":{"local":"no installation"}}
 

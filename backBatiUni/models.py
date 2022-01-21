@@ -163,7 +163,6 @@ class LabelForCompany(CommonModel):
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     company = userProfile.Company
-    print("filter image", user, userProfile, company)
     return cls.objects.filter(Company=company)
 
 class UserProfile(CommonModel):
@@ -269,6 +268,12 @@ class Files(CommonModel):
     else:
       objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company)
     return objectFile
+
+  @classmethod
+  def filter(cls, user):
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    company = userProfile.Company
+    return cls.objects.filter(Company=company)
 
     
 

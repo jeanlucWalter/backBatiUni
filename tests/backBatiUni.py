@@ -7,7 +7,7 @@ import base64
 from io import BytesIO
 
 # userName, password = "walter.jeanluc@gmail.com", "pwd"
-userName, password = "jlw", "pwd"
+userName, password = "walter.jeanluc@gmail.com", "pwd"
 address = 'http://localhost:8000'
 query = "token"
 

@@ -46,6 +46,7 @@ class CommonModel(models.Model):
   def dictValues(cls, user):
     listFields, dictResult = cls.listFields(), {}
     for instance in cls.filter(user):
+      print("dictValues", instance)
       if len(listFields) > 1:
         dictResult[instance.id] = instance.computeValues(listFields, user)
       else:
@@ -161,8 +162,9 @@ class LabelForCompany(CommonModel):
   @classmethod
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    Company = userProfile.Company
-    return cls.objects.filter(Company=Company)
+    company = userProfile.Company
+    print("filter image", user, userProfile, company)
+    return cls.objects.filter(Company=company)
 
 class UserProfile(CommonModel):
   userNameInternal = models.ForeignKey(User, on_delete=models.PROTECT, null=True, default=None)

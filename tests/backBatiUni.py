@@ -74,6 +74,9 @@ def executeQuery():
     elif query == "changeUserImage":
       post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr()}
       response = requests.post(url, headers=headers, json=post)
+    elif query == "downloadPost":
+      post = {'action':"downloadPost", "Job":9}
+      response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
       post = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(), "nature":"labels"}
       response = requests.post(url, headers=headers, json=post)

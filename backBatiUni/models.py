@@ -282,13 +282,22 @@ class Files(CommonModel):
 class Post(CommonModel):
   Company = models.ForeignKey(Company, verbose_name='Société demandeuse', on_delete=models.PROTECT, blank=False, default=None) 
   Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
-  numberOfJob = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
-  mainDOeuvre = models.BooleanField("Main d'oeuvre ou fourniture et pose", null=False, default=True)
+  numberOfPeople = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
+  manPower = models.BooleanField("Main d'oeuvre ou fourniture et pose", null=False, default=True)
   dueDate = models.DateField(verbose_name="Date de d'échéance de l'annonce", null=True, default=None)
   startDate = models.DateField(verbose_name="Date de début de chantier", null=True, default=None)
   endDate = models.DateField(verbose_name="Date de fin de chantier", null=True, default=None)
-  hourlyStart = models.CharField("horaire de début de chantier", max_length=128, null=True, default=None)
-()
+  hourlyStart = models.CharField("Horaire de début de chantier", max_length=128, null=True, default=None)
+  hourlyEnd = models.CharField("Horaire de fin de chantier", max_length=128, null=True, default=None)
+  amount = models.FloatField("Montant du chantier", null=False, default=0.0)
+  currency = models.CharField("Unité monétaire", max_length=128, null=True, default="Euro")
+  counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
+  description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
+  manyToManyObject = ["DetailedPost"]
+
+class DetailedPost(CommonModel):
+  Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.PROTECT, blank=False, default=None)
+  content = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
     
 
 

@@ -89,6 +89,7 @@ class DataAccessor():
 
   @classmethod
   def registerConfirm(cls, token):
+    print("registerConfirm", token)
     userProfile = UserProfile.objects.filter(token=token)
     if userProfile:
       userProfile = userProfile[0]
@@ -99,7 +100,9 @@ class DataAccessor():
       userProfile.token = None
       userProfile.password = None
       userProfile.save()
+      print("registerConfirm OK")
       return {"registerConfirm":"OK"}
+    print("registerConfirm, not OK")
     return {"registerConfirm":"Error", "messages":"wrong token or email"}
 
 
@@ -111,6 +114,7 @@ class DataAccessor():
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       elif data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       elif data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
+      elif data["action"] == "downloadPost": return cls.__downloadPost(data, currentUser)
       elif data["action"] == "uploadFile": return cls.__uploadFile(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
@@ -125,6 +129,26 @@ class DataAccessor():
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
     return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[1]}
+
+  @classmethod
+  def __downloadPost(cls, dictData, currentUser):
+    print("downloadPost", list(dictData.keys()), Post.listFields())
+    kwargs, listFields = {"Company":UserProfile.objects.get(userNameInternal=currentUser).Company}, Post.listFields()
+    for fieldName, value in dictData.items():
+      fieldObject = None
+      try:
+        fieldObject = Post._meta.get_field(fieldName)
+      except:
+        fieldObject = None
+      print("downloadPost field", fieldName, value, fieldObject)
+      if fieldName in listFields:
+        if isinstance(fieldObject, models.ForeignKey):
+          foreign = Post._meta.get_field(fieldName).remote_field.model
+          objectForeign = foreign.objects.get(id=value)
+          kwargs[fieldName]=objectForeign
+          print("foreign", fieldName, foreign, objectForeign)
+    print(kwargs)
+    return {"downloadPost":"Warning", "messages":"work in progress"}
 
   @classmethod
   def downloadFile(cls, id, currentUser):

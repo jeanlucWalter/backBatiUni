@@ -101,9 +101,7 @@ class DataAccessor():
       userProfile.token = None
       userProfile.password = None
       userProfile.save()
-      print("registerConfirm OK")
       return {"registerConfirm":"OK"}
-    print("registerConfirm, not OK")
     return {"registerConfirm":"Error", "messages":"wrong token or email"}
 
 
@@ -133,7 +131,7 @@ class DataAccessor():
 
   @classmethod
   def __downloadPost(cls, dictData, currentUser):
-    print("downloadPost", list(dictData.keys()), Post.listFields())
+    print("downloadPost", list(dictData.keys()))
     kwargs, listFields = {"Company":UserProfile.objects.get(userNameInternal=currentUser).Company}, Post.listFields()
     for fieldName, value in dictData.items():
       fieldObject = None
@@ -141,15 +139,22 @@ class DataAccessor():
         fieldObject = Post._meta.get_field(fieldName)
       except:
         fieldObject = None
-      print("downloadPost field", fieldName, value, fieldObject)
       if fieldName in listFields:
-        if isinstance(fieldObject, models.ForeignKey):
+        if fieldObject and isinstance(fieldObject, models.ForeignKey):
           foreign = Post._meta.get_field(fieldName).remote_field.model
           objectForeign = foreign.objects.get(id=value)
           kwargs[fieldName]=objectForeign
-          print("foreign", fieldName, foreign, objectForeign)
-    print(kwargs)
-    return {"downloadPost":"Warning", "messages":"work in progress"}
+        if fieldObject and isinstance(fieldObject, models.DateField):
+          date = datetime.strptime(dictData[fieldName], "%Y-%m-%d") if dictData[fieldName] else None
+          kwargs[fieldName]=date
+        if fieldObject and isinstance(fieldObject, models.IntegerField):
+          kwargs[fieldName]=int(dictData[fieldName]) if dictData[fieldName] else 0
+        if fieldObject and isinstance(fieldObject, models.FloatField):
+          kwargs[fieldName]=float(dictData[fieldName]) if dictData[fieldName] else 0.0
+        if fieldObject and isinstance(fieldObject, models.BooleanField) or isinstance(fieldObject, models.CharField) :
+          kwargs[fieldName]= dictData[fieldName]
+    Post.objects.create(**kwargs)
+    return {"downloadPost":"OK"}
 
   @classmethod
   def downloadFile(cls, id, currentUser):

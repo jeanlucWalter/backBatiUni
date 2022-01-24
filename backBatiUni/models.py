@@ -66,6 +66,7 @@ class CommonModel(models.Model):
       # elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
       #   values.append([element.id for element in getattr(self, field).all()])
       elif isinstance(fieldObject, models.DateField):
+        print("computeValues", field, getattr(self, field), type(getattr(self, field)))
         values.append(getattr(self, field).strftime("%Y-%m-%d") if getattr(self, field) else None)
       elif field in self.manyToManyObject:
         model = apps.get_model(app_label='backBatiUni', model_name=field)

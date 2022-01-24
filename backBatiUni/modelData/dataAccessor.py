@@ -15,7 +15,6 @@ from dotenv import load_dotenv
 load_dotenv()
 if os.getenv('PATH_MIDDLE'):
   sys.path.append(os.getenv('PATH_MIDDLE'))
-  print("PATH_MIDDLE", os.getcwd(), sys.path)
   from profileScraping import getEnterpriseDataFrom
 
 import json
@@ -72,14 +71,6 @@ class DataAccessor():
   def __registerAction(cls, data, token):
     company = Company.objects.filter(name=data['company'])
     if not company:
-      # if os.getenv('PATH_MIDDLE'):
-      #   print("path", os.getcwd() , os.getenv('PATH_MIDDLE'), sys.path)
-      #   searchSiren = searchUnitesLegalesByDenomination(data['company'])
-      #   if searchSiren["status"] == "OK":
-      #     company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])
-      #   else:
-      #     company = Company.objects.create(name=data['company'])
-      # else:
         company = Company.objects.create(name=data['company'])
     else:
       company = company[0]
@@ -117,7 +108,6 @@ class DataAccessor():
     data = json.loads(jsonString)
     if "action" in data:
       print("dataPost", data["action"], list(data.keys()))
-      if data["action"] == "modifyUser": print("modify user", data)
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       elif data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       elif data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
@@ -144,7 +134,6 @@ class DataAccessor():
     fileList = file.computeValues(listFields, currentUser)
     indexContent = listFields.index("content")
     fileList[indexContent] = content
-    print({"downloadFile":"OK", id:fileList[:-1]})
     return {"downloadFile":"OK", id:fileList}
 
   @classmethod

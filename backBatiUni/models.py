@@ -258,7 +258,7 @@ class Files(CommonModel):
       path = cls.dictPath[nature] + userProfile.Company.name + '_' + str(userProfile.Company.id) + '.' + ext
     if nature == "labels":
       path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
-    print("path", nature)
+    print("path, nature", nature, nature == "labels")
     objectFile = Files.objects.filter(nature=nature, name=name, Company=userProfile.Company)
     if objectFile:
       objectFile = objectFile[0]

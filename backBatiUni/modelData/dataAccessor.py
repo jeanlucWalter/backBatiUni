@@ -152,7 +152,8 @@ class DataAccessor():
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
-    return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, expirationDate=expirationDate)[:-1]}
+    print("uploadFile", objectFile.id, objectFile.computeValues(objectFile.listFields(), currentUser)[:-1])
+    return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[:-1]}
 
   @classmethod
   def getEnterpriseDataFrom(cls, request):

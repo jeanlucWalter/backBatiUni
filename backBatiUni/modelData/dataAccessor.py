@@ -14,8 +14,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 if os.getenv('PATH_MIDDLE'):
+  print("PATH_MIDDLE")
   sys.path.append(os.getenv('PATH_MIDDLE'))
-  print(sys.path)
   from profileScraping import getEnterpriseDataFrom
 
 import json
@@ -73,6 +73,7 @@ class DataAccessor():
     company = Company.objects.filter(name=data['company'])
     if not company:
       if os.getenv('PATH_MIDDLE'):
+        print("path", os.getenv('PATH_MIDDLE'), sys.path)
         searchSiren = searchUnitesLegalesByDenomination(data['company'])
         if searchSiren["status"] == "OK":
           company = Company.objects.create(name=data['company'], siret=searchSiren["data"]["siren"])

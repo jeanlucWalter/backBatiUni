@@ -182,6 +182,7 @@ class DataAccessor():
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
+    print("test", len(file), objectFile.path)
     print("uploadFile", objectFile.id, objectFile.computeValues(objectFile.listFields(), currentUser)[:-1])
     return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[:-1]}
 

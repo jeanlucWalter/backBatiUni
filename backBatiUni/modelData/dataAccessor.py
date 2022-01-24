@@ -69,6 +69,7 @@ class DataAccessor():
 
   @classmethod
   def __registerAction(cls, data, token):
+    print("registerConfirm", data, token)
     company = Company.objects.filter(name=data['company'])
     if not company:
         company = Company.objects.create(name=data['company'])

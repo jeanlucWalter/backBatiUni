@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 load_dotenv()
 if os.getenv('PATH_MIDDLE'):
   sys.path.append(os.getenv('PATH_MIDDLE'))
+  print(sys.path)
   from profileScraping import getEnterpriseDataFrom
 
 import json

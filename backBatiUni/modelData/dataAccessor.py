@@ -150,7 +150,7 @@ class DataAccessor():
       message["fileBase64"] = "field fileBase64 is empty"
     if message:
       return {"uploadFile":"Error", "messages":message}
-    expirationDate = data["expirationDate"] if data["expirationDate"] else None
+    expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if data["expirationDate"] else None
     objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:

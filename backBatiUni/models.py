@@ -250,6 +250,7 @@ class Files(CommonModel):
 
   @classmethod
   def createFile(cls, nature, name, ext, user, expirationDate = None):
+    print("createFile", expirationDate)
     userProfile = UserProfile.objects.get(userNameInternal=user)
     objectFile = None
     if nature == "userImage":
@@ -266,6 +267,8 @@ class Files(CommonModel):
       objectFile.path = path
       objectFile.timestamp = datetime.datetime.now().timestamp()
       objectFile.ext = ext
+      if expirationDate:
+        objectFile.expirationDate = expirationDate
       objectFile.save()
     else:
       objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate)

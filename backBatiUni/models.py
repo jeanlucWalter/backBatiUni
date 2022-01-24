@@ -285,7 +285,7 @@ class Post(CommonModel):
   dueDate = models.DateField(verbose_name="Date de d'échéance de l'annonce", null=True, default=None)
   startDate = models.DateField(verbose_name="Date de début de chantier", null=True, default=None)
   endDate = models.DateField(verbose_name="Date de fin de chantier", null=True, default=None)
-  hourlyStart = models.CharField("horaire de début de chantier")
+  hourlyStart = models.CharField("horaire de début de chantier", max_length=128, null=True, default=None)
 ()
     
 

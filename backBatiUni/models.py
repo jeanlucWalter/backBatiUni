@@ -218,7 +218,7 @@ class Files(CommonModel):
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, default=None)
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
-  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/"}
+  dictPath = {"userImage":"./files/avatars/", "label":"./files/labels/"}
 
   class Meta:
     unique_together = ('nature', 'name', 'Company')
@@ -249,12 +249,12 @@ class Files(CommonModel):
     return {}
 
   @classmethod
-  def createFile(cls, nature, name, ext, user):
+  def createFile(cls, nature, name, ext, user, expirationDate = None):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    objectFile = None
+    objectFile, expirationDate = None, None
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.Company.name + '_' + str(userProfile.Company.id) + '.' + ext
-    if nature == "labels":
+    if nature == "label":
       path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
     print("path", nature)
     objectFile = Files.objects.filter(nature=nature, name=name, Company=userProfile.Company)
@@ -268,7 +268,7 @@ class Files(CommonModel):
       objectFile.ext = ext
       objectFile.save()
     else:
-      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company)
+      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate)
     return objectFile
 
   @classmethod
@@ -277,6 +277,16 @@ class Files(CommonModel):
     company = userProfile.Company
     return cls.objects.filter(Company=company)
 
+class Post(CommonModel):
+  Company = models.ForeignKey(Company, verbose_name='Société demandeuse', on_delete=models.PROTECT, blank=False, default=None) 
+  Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
+  numberOfJob = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
+  mainDOeuvre = models.BooleanField("Main d'oeuvre ou fourniture et pose", null=False, default=True)
+  dueDate = models.DateField(verbose_name="Date de d'échéance de l'annonce", null=True, default=None)
+  startDate = models.DateField(verbose_name="Date de début de chantier", null=True, default=None)
+  endDate = models.DateField(verbose_name="Date de fin de chantier", null=True, default=None)
+  hourlyStart = models.CharField("horaire de début de chantier")
+()
     
 
 

@@ -66,7 +66,6 @@ class CommonModel(models.Model):
       # elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
       #   values.append([element.id for element in getattr(self, field).all()])
       elif isinstance(fieldObject, models.DateField):
-        print("computeValues", field, getattr(self, field), type(getattr(self, field)))
         values.append(getattr(self, field).strftime("%Y-%m-%d") if getattr(self, field) else None)
       elif field in self.manyToManyObject:
         model = apps.get_model(app_label='backBatiUni', model_name=field)
@@ -219,7 +218,7 @@ class Files(CommonModel):
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, default=None)
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
-  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/"}
+  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin"}
 
   class Meta:
     unique_together = ('nature', 'name', 'Company')
@@ -256,9 +255,8 @@ class Files(CommonModel):
     objectFile = None
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.Company.name + '_' + str(userProfile.Company.id) + '.' + ext
-    if nature == "labels":
+    if nature in ["labels", "admin"]:
       path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
-    print("path, nature", nature, nature == "labels")
     objectFile = Files.objects.filter(nature=nature, name=name, Company=userProfile.Company)
     if objectFile:
       objectFile = objectFile[0]

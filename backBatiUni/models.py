@@ -251,7 +251,7 @@ class Files(CommonModel):
   @classmethod
   def createFile(cls, nature, name, ext, user, expirationDate = None):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    objectFile, expirationDate = None, None
+    objectFile = None
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.Company.name + '_' + str(userProfile.Company.id) + '.' + ext
     if nature == "label":

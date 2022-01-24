@@ -190,7 +190,10 @@ class DataAccessor():
     if not flagModified:
       message["general"] = "Aucun champ n'a été modifié" 
     if message:
+      print("valueModified Warning", valueModified)
+      print("valueModified Warning message", message)
       return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
+    print("valueModified OK", valueModified)
     return {"modifyUser":"OK", "valueModified": valueModified}
 
   @classmethod

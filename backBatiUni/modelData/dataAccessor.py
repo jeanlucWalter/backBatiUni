@@ -139,9 +139,6 @@ class DataAccessor():
   @classmethod
   def __uploadFile(cls, data, currentUser):
     print("uploadFile")
-    for key, value in data.items():
-      if key != "fileBase64":
-        print("uploadFile", key, value)
     fileStr, message = data["fileBase64"], {}
     for field in ["name", "ext", "nature"]:
       if not data[field]:

@@ -159,12 +159,11 @@ class DataAccessor():
           modelObject, listObject = apps.get_model(app_label='backBatiUni', model_name=fieldName), []
           for content in value:
             listObject.append(modelObject.objects.create(content=content))
-    kwargs["contactName"] = currentUser.username
+    kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
     objectPost = Post.objects.create(**kwargs)
     for subObject in listObject:
       subObject.Post = objectPost
       subObject.save()
-    print("kwargs", kwargs)
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser)}
 
   def deletePost(cls, id):

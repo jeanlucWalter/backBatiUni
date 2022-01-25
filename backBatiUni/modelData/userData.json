@@ -78,7 +78,9 @@
             5,
             6,
             7,
-            8
+            8,
+            9,
+            10
          ]
       ]
    },
@@ -138,6 +140,8 @@
       "Company",
       "Job",
       "numberOfPeople",
+      "address",
+      "draft",
       "manPower",
       "dueDate",
       "startDate",
@@ -153,13 +157,15 @@
    "PostIndices": [
       0,
       1,
-      13
+      15
    ],
    "PostValues": {
       "1": [
          1,
          9,
          3,
+         "",
+         true,
          true,
          "2022-02-15",
          "2022-02-16",
@@ -172,13 +178,19 @@
          "Premi\u00e8re description d'un chantier",
          [
             1,
-            2
+            2,
+            3,
+            4,
+            5,
+            6
          ]
       ],
       "2": [
          1,
          9,
          3,
+         "",
+         true,
          true,
          "2022-02-15",
          "2022-02-16",
@@ -191,13 +203,19 @@
          "Premi\u00e8re description d'un chantier",
          [
             1,
-            2
+            2,
+            3,
+            4,
+            5,
+            6
          ]
       ],
       "3": [
          1,
          9,
          3,
+         "",
+         true,
          true,
          "2022-02-15",
          "2022-02-16",
@@ -210,13 +228,19 @@
          "Premi\u00e8re description d'un chantier",
          [
             1,
-            2
+            2,
+            3,
+            4,
+            5,
+            6
          ]
       ],
       "4": [
          1,
          9,
          3,
+         "",
+         true,
          true,
          "2022-02-15",
          "2022-02-16",
@@ -229,13 +253,19 @@
          "Premi\u00e8re description d'un chantier",
          [
             1,
-            2
+            2,
+            3,
+            4,
+            5,
+            6
          ]
       ],
       "5": [
          1,
          9,
          3,
+         "",
+         true,
          true,
          "2022-02-15",
          "2022-02-16",
@@ -248,13 +278,19 @@
          "Premi\u00e8re description d'un chantier",
          [
             1,
-            2
+            2,
+            3,
+            4,
+            5,
+            6
          ]
       ],
       "6": [
          1,
          9,
          3,
+         "",
+         true,
          true,
          "2022-02-15",
          "2022-02-16",
@@ -267,13 +303,19 @@
          "Premi\u00e8re description d'un chantier",
          [
             1,
-            2
+            2,
+            3,
+            4,
+            5,
+            6
          ]
       ],
       "7": [
          1,
          9,
          3,
+         "",
+         true,
          true,
          "2022-02-15",
          "2022-02-16",
@@ -286,13 +328,19 @@
          "Premi\u00e8re description d'un chantier",
          [
             1,
-            2
+            2,
+            3,
+            4,
+            5,
+            6
          ]
       ],
       "8": [
          1,
          9,
          3,
+         "",
+         true,
          true,
          "2022-02-15",
          "2022-02-16",
@@ -305,12 +353,70 @@
          "Premi\u00e8re description d'un chantier",
          [
             1,
-            2
+            2,
+            3,
+            4,
+            5,
+            6
+         ]
+      ],
+      "9": [
+         1,
+         9,
+         3,
+         "128 rue de Paris 92100 Boulogne",
+         true,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "\u20ac",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+         ]
+      ],
+      "10": [
+         1,
+         9,
+         3,
+         "128 rue de Paris 92100 Boulogne",
+         true,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "\u20ac",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
          ]
       ]
    },
    "DetailedPostValues": {
       "1": "lavabo",
-      "2": "baignoire"
+      "2": "baignoire",
+      "3": "lavabo",
+      "4": "baignoire",
+      "5": "lavabo",
+      "6": "baignoire"
    }
 }

@@ -133,7 +133,8 @@ class DataAccessor():
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
     print("uploadPost", list(dictData.keys()))
-    kwargs, listFields = {"Company":UserProfile.objects.get(userNameInternal=currentUser).Company}, Post.listFields()
+    userProfile = UserProfile.objects.get(userNameInternal=currentUser)
+    kwargs, listFields = {"Company":userProfile.Company}, Post.listFields()
     for fieldName, value in dictData.items():
       fieldObject = None
       try:
@@ -158,11 +159,22 @@ class DataAccessor():
           modelObject, listObject = apps.get_model(app_label='backBatiUni', model_name=fieldName), []
           for content in value:
             listObject.append(modelObject.objects.create(content=content))
+    kwargs["contactName"] = currentUser.username
     objectPost = Post.objects.create(**kwargs)
     for subObject in listObject:
       subObject.Post = objectPost
       subObject.save()
+    print("kwargs", kwargs)
     return {"uploadPost":"OK", "id":objectPost.id}
+
+  def deletePost(cls, id):
+    post = Post.objects.filter(id=id)
+    if post:
+      post.delete()
+      return {"deletePost":"OK", "id":id}
+    return {"deletePost":"Error", "messages":f"{id} does not exist"}
+
+
 
   @classmethod
   def downloadFile(cls, id, currentUser):

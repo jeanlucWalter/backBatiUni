@@ -284,6 +284,8 @@ class Post(CommonModel):
   Company = models.ForeignKey(Company, verbose_name='Société demandeuse', on_delete=models.PROTECT, blank=False, default=None) 
   Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
   numberOfPeople = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
+  address = models.CharField("Adresse du chantier", max_length=1024, null=True, default=None)
+  draft = models.BooleanField("Brouillon ou validé", null=False, default=True)
   manPower = models.BooleanField("Main d'oeuvre ou fourniture et pose", null=False, default=True)
   dueDate = models.DateField(verbose_name="Date de d'échéance de l'annonce", null=True, default=None)
   startDate = models.DateField(verbose_name="Date de début de chantier", null=True, default=None)
@@ -291,16 +293,16 @@ class Post(CommonModel):
   hourlyStart = models.CharField("Horaire de début de chantier", max_length=128, null=True, default=None)
   hourlyEnd = models.CharField("Horaire de fin de chantier", max_length=128, null=True, default=None)
   amount = models.FloatField("Montant du chantier", null=False, default=0.0)
-  currency = models.CharField("Unité monétaire", max_length=128, null=True, default="Euro")
+  currency = models.CharField("Unité monétaire", max_length=128, null=True, default="€")
   counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
   manyToManyObject = ["DetailedPost"]
 
-  @classmethod
-  def filter(cls, user):
-    userProfile = UserProfile.objects.get(userNameInternal=user)
-    company = userProfile.Company
-    return cls.objects.filter(Company=company)
+  # @classmethod
+  # def filter(cls, user):
+  #   userProfile = UserProfile.objects.get(userNameInternal=user)
+  #   company = userProfile.Company
+  #   return cls.objects.filter(Company=company)
 
 class DetailedPost(CommonModel):
   Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)
@@ -314,12 +316,12 @@ class DetailedPost(CommonModel):
         del superList[index]
       return superList
 
-  @classmethod
-  def filter(cls, user):
-    userProfile = UserProfile.objects.get(userNameInternal=user)
-    company = userProfile.Company
-    listPost = Post.objects.filter(Company=company)
-    return [detail for detail in DetailedPost.objects.all() if detail.Post in listPost]
+  # @classmethod
+  # def filter(cls, user):
+  #   userProfile = UserProfile.objects.get(userNameInternal=user)
+  #   company = userProfile.Company
+  #   listPost = Post.objects.filter(Company=company)
+  #   return [detail for detail in DetailedPost.objects.all() if detail.Post in listPost]
     
 
 

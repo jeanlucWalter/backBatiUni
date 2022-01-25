@@ -74,8 +74,8 @@ def executeQuery():
     elif query == "changeUserImage":
       post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr()}
       response = requests.post(url, headers=headers, json=post)
-    elif query == "downloadPost":
-      post = {'action':"downloadPost", "Job":9, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "manPower":True, "counterOffer":True, "hourlyStart":"7h30", "hourlyEnd":"17h30", "currency":"Euro", "description":"Première description d'un chantier", "amount":65243.10}
+    elif query == "uploadPost":
+      post = {'action':"uploadPost", "Job":9, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "manPower":True, "counterOffer":True, "hourlyStart":"7h30", "hourlyEnd":"17h30", "currency":"Euro", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
       post = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(), "nature":"labels"}

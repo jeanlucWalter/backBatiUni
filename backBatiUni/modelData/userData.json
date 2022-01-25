@@ -21,10 +21,10 @@
          1,
          "Jeanluc",
          "Walter",
-         null,
+         "",
          1,
          "0634090694",
-         null,
+         "",
          "Inconnu",
          "Inconnu"
       ]
@@ -40,12 +40,14 @@
       "companyPhone",
       "JobForCompany",
       "LabelForCompany",
-      "Files"
+      "Files",
+      "Post"
    ],
    "CompanyIndices": [
       8,
       9,
-      10
+      10,
+      11
    ],
    "CompanyValues": {
       "1": [
@@ -53,9 +55,9 @@
          "123456789",
          12345,
          654321.22,
-         null,
+         "",
          "https://stackoverflow.com",
-         null,
+         "",
          "01 23 45 67 88",
          [
             1,
@@ -67,6 +69,16 @@
          ],
          [
             1
+         ],
+         [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
          ]
       ]
    },
@@ -117,9 +129,188 @@
          "labels",
          "NF",
          "png",
-         null,
+         "",
          1642779679.630957,
-         null
+         ""
       ]
+   },
+   "PostFields": [
+      "Company",
+      "Job",
+      "numberOfPeople",
+      "manPower",
+      "dueDate",
+      "startDate",
+      "endDate",
+      "hourlyStart",
+      "hourlyEnd",
+      "amount",
+      "currency",
+      "counterOffer",
+      "description",
+      "DetailedPost"
+   ],
+   "PostIndices": [
+      0,
+      1,
+      13
+   ],
+   "PostValues": {
+      "1": [
+         1,
+         9,
+         3,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "Euro",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2
+         ]
+      ],
+      "2": [
+         1,
+         9,
+         3,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "Euro",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2
+         ]
+      ],
+      "3": [
+         1,
+         9,
+         3,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "Euro",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2
+         ]
+      ],
+      "4": [
+         1,
+         9,
+         3,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "Euro",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2
+         ]
+      ],
+      "5": [
+         1,
+         9,
+         3,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "Euro",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2
+         ]
+      ],
+      "6": [
+         1,
+         9,
+         3,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "Euro",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2
+         ]
+      ],
+      "7": [
+         1,
+         9,
+         3,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "Euro",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2
+         ]
+      ],
+      "8": [
+         1,
+         9,
+         3,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7h30",
+         "17h30",
+         65243.1,
+         "Euro",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            1,
+            2
+         ]
+      ]
+   },
+   "DetailedPostValues": {
+      "1": "lavabo",
+      "2": "baignoire"
    }
 }

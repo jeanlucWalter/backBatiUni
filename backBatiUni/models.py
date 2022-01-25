@@ -117,7 +117,7 @@ class Company(CommonModel):
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
   stars = models.IntegerField("Notation sous forme d'étoile", null=True, default=None)
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
-  manyToManyObject = ["JobForCompany", "LabelForCompany", "Files"]
+  manyToManyObject = ["JobForCompany", "LabelForCompany", "Files", "Post"]
 
   @classmethod
   def filter(cls, user):
@@ -296,9 +296,30 @@ class Post(CommonModel):
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
   manyToManyObject = ["DetailedPost"]
 
+  @classmethod
+  def filter(cls, user):
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    company = userProfile.Company
+    return cls.objects.filter(Company=company)
+
 class DetailedPost(CommonModel):
-  Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.PROTECT, blank=False, default=None)
+  Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)
   content = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
+
+  @classmethod
+  def listFields(cls):
+      superList = super().listFields()
+      for fieldName in ["Post"]:
+        index = superList.index(fieldName)
+        del superList[index]
+      return superList
+
+  @classmethod
+  def filter(cls, user):
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    company = userProfile.Company
+    listPost = Post.objects.filter(Company=company)
+    return [detail for detail in DetailedPost.objects.all() if detail.Post in listPost]
     
 
 

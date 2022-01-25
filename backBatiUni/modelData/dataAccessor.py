@@ -1,3 +1,4 @@
+from re import sub
 from ..models import *
 from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.hashers import check_password, make_password
@@ -20,7 +21,7 @@ if os.getenv('PATH_MIDDLE'):
 import json
 
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, DetailedPost], "general":[Job, Role, Label]}
   dictTable = {}
   portSmtp = os.getenv('PORT_SMTP')
 
@@ -69,7 +70,7 @@ class DataAccessor():
 
   @classmethod
   def __registerAction(cls, data, token):
-    print("registerConfirm", data, token)
+    print("registerAction", data, token)
     company = Company.objects.filter(name=data['company'])
     if not company:
         company = Company.objects.create(name=data['company'])
@@ -113,7 +114,7 @@ class DataAccessor():
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       elif data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       elif data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
-      elif data["action"] == "downloadPost": return cls.__downloadPost(data, currentUser)
+      elif data["action"] == "uploadPost": return cls.__uploadPost(data, currentUser)
       elif data["action"] == "uploadFile": return cls.__uploadFile(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
@@ -130,8 +131,8 @@ class DataAccessor():
     return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[1]}
 
   @classmethod
-  def __downloadPost(cls, dictData, currentUser):
-    print("downloadPost", list(dictData.keys()))
+  def __uploadPost(cls, dictData, currentUser):
+    print("uploadPost", list(dictData.keys()))
     kwargs, listFields = {"Company":UserProfile.objects.get(userNameInternal=currentUser).Company}, Post.listFields()
     for fieldName, value in dictData.items():
       fieldObject = None
@@ -153,8 +154,15 @@ class DataAccessor():
           kwargs[fieldName]=float(dictData[fieldName]) if dictData[fieldName] else 0.0
         if fieldObject and isinstance(fieldObject, models.BooleanField) or isinstance(fieldObject, models.CharField) :
           kwargs[fieldName]= dictData[fieldName]
-    Post.objects.create(**kwargs)
-    return {"downloadPost":"OK"}
+        if fieldName in Post.manyToManyObject:
+          modelObject, listObject = apps.get_model(app_label='backBatiUni', model_name=fieldName), []
+          for content in value:
+            listObject.append(modelObject.objects.create(content=content))
+    objectPost = Post.objects.create(**kwargs)
+    for subObject in listObject:
+      subObject.Post = objectPost
+      subObject.save()
+    return {"uploadPost":"OK", "id":objectPost.id}
 
   @classmethod
   def downloadFile(cls, id, currentUser):
@@ -168,7 +176,7 @@ class DataAccessor():
 
   @classmethod
   def __uploadFile(cls, data, currentUser):
-    print("uploadFile")
+    print("uploadFile", list(data.keys()))
     fileStr, message = data["fileBase64"], {}
     for field in ["name", "ext", "nature"]:
       if not data[field]:
@@ -182,8 +190,6 @@ class DataAccessor():
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
-    print("test", len(file), objectFile.path)
-    print("uploadFile", objectFile.id, objectFile.computeValues(objectFile.listFields(), currentUser)[:-1])
     return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[:-1]}
 
   @classmethod
@@ -222,10 +228,7 @@ class DataAccessor():
     if not flagModified:
       message["general"] = "Aucun champ n'a été modifié" 
     if message:
-      print("valueModified Warning", valueModified)
-      print("valueModified Warning message", message)
       return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
-    print("valueModified OK", valueModified)
     return {"modifyUser":"OK", "valueModified": valueModified}
 
   @classmethod

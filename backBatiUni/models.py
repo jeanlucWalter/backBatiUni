@@ -285,6 +285,7 @@ class Post(CommonModel):
   Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
   numberOfPeople = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
   address = models.CharField("Adresse du chantier", max_length=1024, null=True, default=None)
+  contactName = models.CharField("Nom du contact responsable de l’app", max_length=256, null=True, default=None)
   draft = models.BooleanField("Brouillon ou validé", null=False, default=True)
   manPower = models.BooleanField("Main d'oeuvre ou fourniture et pose", null=False, default=True)
   dueDate = models.DateField(verbose_name="Date de d'échéance de l'annonce", null=True, default=None)
@@ -296,7 +297,16 @@ class Post(CommonModel):
   currency = models.CharField("Unité monétaire", max_length=128, null=True, default="€")
   counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
-  manyToManyObject = ["DetailedPost"]
+  manyToManyObject = ["DetailedPost", "Files"]
+
+  @classmethod
+  def listFields(cls):
+      superList = super().listFields()
+      for fieldName in ["Company"]:
+        index = superList.index(fieldName)
+        del superList[index]
+      print("listFields", superList)
+      return superList
 
   # @classmethod
   # def filter(cls, user):

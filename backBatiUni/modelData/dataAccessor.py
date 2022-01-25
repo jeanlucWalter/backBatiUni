@@ -165,7 +165,7 @@ class DataAccessor():
       subObject.Post = objectPost
       subObject.save()
     print("kwargs", kwargs)
-    return {"uploadPost":"OK", "id":objectPost.id}
+    return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser)}
 
   def deletePost(cls, id):
     post = Post.objects.filter(id=id)

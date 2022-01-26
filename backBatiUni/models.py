@@ -125,10 +125,10 @@ class Company(CommonModel):
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
   manyToManyObject = ["JobForCompany", "LabelForCompany", "Files", "Post"]
 
-  @classmethod
-  def filter(cls, user):
-    userProfile = UserProfile.objects.get(userNameInternal=user)
-    return [userProfile.Company]
+  # @classmethod
+  # def filter(cls, user):
+  #   userProfile = UserProfile.objects.get(userNameInternal=user)
+  #   return [userProfile.Company]
 
 
 class JobForCompany(CommonModel):

@@ -142,12 +142,12 @@ class DataAccessor():
       except:
         fieldObject = None
       if fieldName in listFields:
+        print("__uploadPost", fieldName, dictData[fieldName])
         if fieldObject and isinstance(fieldObject, models.ForeignKey):
           foreign = Post._meta.get_field(fieldName).remote_field.model
           objectForeign = foreign.objects.get(id=value)
           kwargs[fieldName]=objectForeign
         if fieldObject and isinstance(fieldObject, models.DateField):
-          print("__uploadPost", fieldName, dictData[fieldName])
           date = datetime.strptime(dictData[fieldName], "%Y-%m-%d") if dictData[fieldName] else None
           kwargs[fieldName]=date
         if fieldObject and isinstance(fieldObject, models.IntegerField):

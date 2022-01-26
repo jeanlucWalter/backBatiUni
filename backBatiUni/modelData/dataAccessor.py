@@ -147,6 +147,7 @@ class DataAccessor():
           objectForeign = foreign.objects.get(id=value)
           kwargs[fieldName]=objectForeign
         if fieldObject and isinstance(fieldObject, models.DateField):
+          print("__uploadPost", fieldName, dictData[fieldName])
           date = datetime.strptime(dictData[fieldName], "%Y-%m-%d") if dictData[fieldName] else None
           kwargs[fieldName]=date
         if fieldObject and isinstance(fieldObject, models.IntegerField):

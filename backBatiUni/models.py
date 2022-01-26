@@ -62,6 +62,7 @@ class CommonModel(models.Model):
       except:
         pass
       if index in listIndices and isinstance(fieldObject, models.ForeignKey):
+        print("computeValues", self, field, listFields)
         values.append(getattr(self, field).id)
       # elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
       #   values.append([element.id for element in getattr(self, field).all()])
@@ -220,6 +221,45 @@ class UserProfile(CommonModel):
     if self.role == 3:
       return "Sous-traitant et entreprise"
 
+class Post(CommonModel):
+  Company = models.ForeignKey(Company, verbose_name='Société demandeuse', on_delete=models.PROTECT, blank=False, default=None) 
+  Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
+  numberOfPeople = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
+  address = models.CharField("Adresse du chantier", max_length=1024, null=True, default=None)
+  contactName = models.CharField("Nom du contact responsable de l’app", max_length=256, null=True, default=None)
+  draft = models.BooleanField("Brouillon ou validé", null=False, default=True)
+  manPower = models.BooleanField("Main d'oeuvre ou fourniture et pose", null=False, default=True)
+  dueDate = models.DateField(verbose_name="Date de d'échéance de l'annonce", null=True, default=None)
+  startDate = models.DateField(verbose_name="Date de début de chantier", null=True, default=None)
+  endDate = models.DateField(verbose_name="Date de fin de chantier", null=True, default=None)
+  hourlyStart = models.CharField("Horaire de début de chantier", max_length=128, null=True, default=None)
+  hourlyEnd = models.CharField("Horaire de fin de chantier", max_length=128, null=True, default=None)
+  amount = models.FloatField("Montant du chantier", null=False, default=0.0)
+  currency = models.CharField("Unité monétaire", max_length=128, null=True, default="€")
+  counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
+  description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
+  manyToManyObject = ["DetailedPost", "FilesPost"]
+
+  @classmethod
+  def listFields(cls):
+      superList = super().listFields()
+      for fieldName in ["Company"]:
+        index = superList.index(fieldName)
+        del superList[index]
+      return superList
+
+class DetailedPost(CommonModel):
+  Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)
+  content = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
+
+  @classmethod
+  def listFields(cls):
+      superList = super().listFields()
+      for fieldName in ["Post"]:
+        index = superList.index(fieldName)
+        del superList[index]
+      return superList
+
 class Files(CommonModel):
   nature = models.CharField('nature du fichier', max_length=128, null=False, default=False, blank=False)
   name = models.CharField('Nom du fichier pour le front', max_length=128, null=False, default=False, blank=False)
@@ -282,63 +322,18 @@ class Files(CommonModel):
       objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate)
     return objectFile
 
-  # @classmethod
-  # def filter(cls, user):
-  #   userProfile = UserProfile.objects.get(userNameInternal=user)
-  #   company = userProfile.Company
-  #   return cls.objects.filter(Company=company)
-
-class Post(CommonModel):
-  Company = models.ForeignKey(Company, verbose_name='Société demandeuse', on_delete=models.PROTECT, blank=False, default=None) 
-  Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
-  numberOfPeople = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
-  address = models.CharField("Adresse du chantier", max_length=1024, null=True, default=None)
-  contactName = models.CharField("Nom du contact responsable de l’app", max_length=256, null=True, default=None)
-  draft = models.BooleanField("Brouillon ou validé", null=False, default=True)
-  manPower = models.BooleanField("Main d'oeuvre ou fourniture et pose", null=False, default=True)
-  dueDate = models.DateField(verbose_name="Date de d'échéance de l'annonce", null=True, default=None)
-  startDate = models.DateField(verbose_name="Date de début de chantier", null=True, default=None)
-  endDate = models.DateField(verbose_name="Date de fin de chantier", null=True, default=None)
-  hourlyStart = models.CharField("Horaire de début de chantier", max_length=128, null=True, default=None)
-  hourlyEnd = models.CharField("Horaire de fin de chantier", max_length=128, null=True, default=None)
-  amount = models.FloatField("Montant du chantier", null=False, default=0.0)
-  currency = models.CharField("Unité monétaire", max_length=128, null=True, default="€")
-  counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
-  description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
-  manyToManyObject = ["DetailedPost"]
+class FilesPost(CommonModel):
+  Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, blank=False, default=None)
 
   @classmethod
   def listFields(cls):
-      superList = super().listFields()
-      for fieldName in ["Company"]:
-        index = superList.index(fieldName)
-        del superList[index]
-      return superList
+    superList = super().listFields()
+    for fieldName in ["Post"]:
+      index = superList.index(fieldName)
+      del superList[index]
+    superList.append("content")
+    return superList
 
-  # @classmethod
-  # def filter(cls, user):
-  #   userProfile = UserProfile.objects.get(userNameInternal=user)
-  #   company = userProfile.Company
-  #   return cls.objects.filter(Company=company)
-
-class DetailedPost(CommonModel):
-  Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)
-  content = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
-
-  @classmethod
-  def listFields(cls):
-      superList = super().listFields()
-      for fieldName in ["Post"]:
-        index = superList.index(fieldName)
-        del superList[index]
-      return superList
-
-  # @classmethod
-  # def filter(cls, user):
-  #   userProfile = UserProfile.objects.get(userNameInternal=user)
-  #   company = userProfile.Company
-  #   listPost = Post.objects.filter(Company=company)
-  #   return [detail for detail in DetailedPost.objects.all() if detail.Post in listPost]
     
 
 

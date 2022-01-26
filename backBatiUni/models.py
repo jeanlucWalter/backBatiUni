@@ -275,11 +275,11 @@ class Files(CommonModel):
       objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate)
     return objectFile
 
-  @classmethod
-  def filter(cls, user):
-    userProfile = UserProfile.objects.get(userNameInternal=user)
-    company = userProfile.Company
-    return cls.objects.filter(Company=company)
+  # @classmethod
+  # def filter(cls, user):
+  #   userProfile = UserProfile.objects.get(userNameInternal=user)
+  #   company = userProfile.Company
+  #   return cls.objects.filter(Company=company)
 
 class Post(CommonModel):
   Company = models.ForeignKey(Company, verbose_name='Société demandeuse', on_delete=models.PROTECT, blank=False, default=None) 

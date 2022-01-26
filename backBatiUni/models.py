@@ -45,7 +45,6 @@ class CommonModel(models.Model):
   @classmethod
   def dictValues(cls, user):
     listFields, dictResult = cls.listFields(), {}
-    print("dictValues", cls)
     for instance in cls.filter(user):
       if len(listFields) > 1:
         dictResult[instance.id] = instance.computeValues(listFields, user)
@@ -78,8 +77,6 @@ class CommonModel(models.Model):
 
   @classmethod
   def filter(cls, user):
-    print("filter", cls)
-    print(cls.objects.all())
     return cls.objects.all()
 
   def setAttr(self, fieldName, value):
@@ -254,7 +251,6 @@ class Files(CommonModel):
 
   @classmethod
   def createFile(cls, nature, name, ext, user, expirationDate = None):
-    print("createFile", expirationDate)
     userProfile = UserProfile.objects.get(userNameInternal=user)
     objectFile = None
     if nature == "userImage":

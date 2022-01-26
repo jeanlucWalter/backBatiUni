@@ -273,7 +273,7 @@ class DataAccessor():
             valueToSave = int(value) if value else None
           elif fieldObject and isinstance(fieldObject, models.FloatField):
             valueToSave = float(value) if value else None
-          if valueToSave != objectInstance.getattr(fieldName):
+          if valueToSave != objectInstance.getAttr(fieldName):
             objectInstance.setAttr(fieldName, valueToSave)
             objectInstance.save()
             valueModified[fieldName] = value

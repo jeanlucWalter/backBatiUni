@@ -301,9 +301,7 @@ class DataAccessor():
   @classmethod
   def __setValuesLabel(cls, dictValue, valueModified, user):
     company = UserProfile.objects.get(userNameInternal=user).Company
-    labelForCompany = LabelForCompany.objects.filter(Company=company)
-    if labelForCompany:
-      labelForCompany.delete()
+    LabelForCompany.objects.filter(Company=company).delete()
     for listValue in dictValue:
       label = Label.objects.get(id=listValue[0])
       print("__setValuesLabel", listValue)

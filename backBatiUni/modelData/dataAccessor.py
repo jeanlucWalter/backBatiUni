@@ -309,5 +309,6 @@ class DataAccessor():
       print("__setValuesLabel", listValue)
       date = datetime.strptime(listValue[1], "%Y-%m-%d") if listValue[1] else None
       labelForCompany = LabelForCompany.objects.create(Label=label, date=date, Company=company)
+      date = labelForCompany.date.strftime("%Y-%m-%d") if labelForCompany.date else ""
       valueModified[labelForCompany.id] = [labelForCompany.Label.id, labelForCompany.date.strftime("%Y-%m-%d")]
     return True

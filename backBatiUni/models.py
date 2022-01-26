@@ -78,6 +78,8 @@ class CommonModel(models.Model):
 
   @classmethod
   def filter(cls, user):
+    print("filter", cls)
+    print(cls.objects.all())
     return cls.objects.all()
 
   def setAttr(self, fieldName, value):

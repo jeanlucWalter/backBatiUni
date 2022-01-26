@@ -128,7 +128,7 @@ class DataAccessor():
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + dictData['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
-    return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[1]}
+    return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)[1]}
 
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
@@ -165,11 +165,11 @@ class DataAccessor():
     for subObject in listObject:
       subObject.Post = objectPost
       subObject.save()
-    return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser)}
+    return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 
   @classmethod
   def getPost(cls, currentUser):
-    return {objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser) for objectPost in Post.objects.all()}
+    return {objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True) for objectPost in Post.objects.all()}
 
   @classmethod
   def deletePost(cls, id):
@@ -206,7 +206,7 @@ class DataAccessor():
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
-    return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser)[:-1]}
+    return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)[:-1]}
 
   @classmethod
   def getEnterpriseDataFrom(cls, request):

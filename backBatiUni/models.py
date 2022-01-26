@@ -52,7 +52,8 @@ class CommonModel(models.Model):
         dictResult[instance.id] = getattr(instance, listFields[0])
     return dictResult
 
-  def computeValues(self, listFields, user):
+  def computeValues(self, listFields, user, dictFormat=False):
+    print(self, self.__class__.__name__)
     values, listIndices = [], self.listIndices()
     for index in range(len(listFields)):
       field = listFields[index]
@@ -69,7 +70,13 @@ class CommonModel(models.Model):
         values.append(getattr(self, field).strftime("%Y-%m-%d") if getattr(self, field) else "")
       elif field in self.manyToManyObject:
         model = apps.get_model(app_label='backBatiUni', model_name=field)
-        values.append(list(model.dictValues(user).keys()))
+        listFieldsModel = model.listFields()
+        if dictFormat:
+          listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__) == self}
+        else:
+          listModel = [objectModel.id for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__) == self]
+        print("listModel", listModel)
+        values.append(listModel)
       else:
         value = getattr(self, field, "")
         values.append(value or "")

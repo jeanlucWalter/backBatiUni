@@ -60,7 +60,7 @@ class DataAccessor():
     if not data["company"]:
       message["company"] = "Le nom de l'entreprise est un champ obligatoire."
     userProfile = UserProfile.objects.filter(email=data["email"])
-    if userProfile:
+    if userProfile or User.object.filter(id=data["email"]):
       userProfile = userProfile[0]
       if userProfile.password:
         userProfile.delete()

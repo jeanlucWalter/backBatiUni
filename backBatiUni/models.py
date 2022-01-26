@@ -45,7 +45,7 @@ class CommonModel(models.Model):
   @classmethod
   def dictValues(cls, user):
     listFields, dictResult = cls.listFields(), {}
-    print("dictValues", cls, cls.filter(user))
+    print("dictValues", cls)
     for instance in cls.filter(user):
       if len(listFields) > 1:
         dictResult[instance.id] = instance.computeValues(listFields, user)

@@ -53,7 +53,6 @@ class CommonModel(models.Model):
     return dictResult
 
   def computeValues(self, listFields, user, dictFormat=False):
-    print(self, self.__class__.__name__)
     values, listIndices = [], self.listIndices()
     for index in range(len(listFields)):
       field = listFields[index]
@@ -75,7 +74,6 @@ class CommonModel(models.Model):
           listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__) == self}
         else:
           listModel = [objectModel.id for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__) == self]
-        print("listModel", listModel)
         values.append(listModel)
       else:
         value = getattr(self, field, "")

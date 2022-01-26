@@ -72,6 +72,7 @@ class CommonModel(models.Model):
         listFieldsModel = model.listFields()
         if dictFormat:
           listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__) == self}
+          listModel = {key:valueList if len(value) != 1 else valueList[0] for key, valueList in listModel.items()}
         else:
           listModel = [objectModel.id for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__) == self]
         values.append(listModel)

@@ -80,6 +80,8 @@ def executeQuery():
     elif query == "uploadFile":
       post = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(), "nature":"labels"}
       response = requests.post(url, headers=headers, json=post)
+    elif query == "getPost":
+      response = requests.get(url, headers=headers, params={"action":"getPost"})
     elif query == "buildDB":
       url = f'{address}/createBase/'
       response = requests.get(url, headers=headers, params={"action":"reload"})

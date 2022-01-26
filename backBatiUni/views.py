@@ -24,6 +24,8 @@ class Data(DefaultView):
         return Response(DataAccessor.getData("user", currentUser))
       if action == "downloadFile": return Response(DataAccessor.downloadFile(request.GET["id"], currentUser))
       if action == "getEnterpriseDataFrom": return Response(DataAccessor.getEnterpriseDataFrom(request, currentUser))
+      if action == "deletePost": return Response(DataAccessor.deletePost(request.GET["id"]))
+      if action == "getPost": return Response(DataAccessor.getPost(currentUser))
       return Response({"data GET":"Error", "messages":{"action":action}})
     return Response({"data GET":"Warning", "messages":"La confirmation par mail n'est pas réalisée."})
 

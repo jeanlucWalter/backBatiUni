@@ -268,7 +268,7 @@ class Files(CommonModel):
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, default=None)
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
-  Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, blank=False, default=None)
+  Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, null=True, default=None)
   dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/"}
 
   class Meta:
@@ -300,7 +300,7 @@ class Files(CommonModel):
     return {}
 
   @classmethod
-  def createFile(cls, nature, name, ext, user, expirationDate = None, Post=None):
+  def createFile(cls, nature, name, ext, user, expirationDate = None, post=None):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     objectFile = None
     if nature == "userImage":
@@ -308,7 +308,8 @@ class Files(CommonModel):
     if nature in ["labels", "admin"]:
       path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
     if nature == "post":
-      path = cls.dictPath[nature] + name + '_' + str(Post.id) + '.' + ext
+      path = cls.dictPath[nature] + name + '_' + str(post.id) + '.' + ext
+      print("createFile", path)
     objectFile = Files.objects.filter(nature=nature, name=name, Company=userProfile.Company)
     if objectFile:
       objectFile = objectFile[0]
@@ -322,7 +323,7 @@ class Files(CommonModel):
         objectFile.expirationDate = expirationDate
       objectFile.save()
     else:
-      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate)
+      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate, Post=post)
     return objectFile
 
 # class FilesPost(CommonModel):

@@ -238,7 +238,7 @@ class Post(CommonModel):
   currency = models.CharField("Unité monétaire", max_length=128, null=True, default="€")
   counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
-  manyToManyObject = ["DetailedPost", "FilesPost"]
+  manyToManyObject = ["DetailedPost", "Files"]
 
   @classmethod
   def listFields(cls):

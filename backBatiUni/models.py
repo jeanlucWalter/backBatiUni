@@ -268,7 +268,8 @@ class Files(CommonModel):
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, default=None)
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
-  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/"}
+  Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, blank=False, default=None)
+  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "posts":"./files/posts/"}
 
   class Meta:
     unique_together = ('nature', 'name', 'Company')
@@ -277,7 +278,7 @@ class Files(CommonModel):
   @classmethod
   def listFields(cls):
     superList = super().listFields()
-    for fieldName in ["path", "Company"]:
+    for fieldName in ["path", "Company", "Post"]:
       index = superList.index(fieldName)
       del superList[index]
     superList.append("content")
@@ -299,12 +300,14 @@ class Files(CommonModel):
     return {}
 
   @classmethod
-  def createFile(cls, nature, name, ext, user, expirationDate = None):
+  def createFile(cls, nature, name, ext, user, expirationDate = None, Post=None):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     objectFile = None
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.Company.name + '_' + str(userProfile.Company.id) + '.' + ext
     if nature in ["labels", "admin"]:
+      path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
+    if nature == "postDoc":
       path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
     objectFile = Files.objects.filter(nature=nature, name=name, Company=userProfile.Company)
     if objectFile:
@@ -322,17 +325,18 @@ class Files(CommonModel):
       objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate)
     return objectFile
 
-class FilesPost(CommonModel):
-  Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, blank=False, default=None)
+# class FilesPost(CommonModel):
+#   Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, blank=False, default=None)
 
-  @classmethod
-  def listFields(cls):
-    superList = super().listFields()
-    for fieldName in ["Post"]:
-      index = superList.index(fieldName)
-      del superList[index]
-    superList.append("content")
-    return superList
+# @classmethod
+#   def listFields(cls):
+#     superList = super().listFields()
+#     for fieldName in ["Post"]:
+#       index = superList.index(fieldName)
+#       del superList[index]
+#     superList.append("content")
+#     return superList
+  
 
     
 

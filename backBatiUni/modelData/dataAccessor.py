@@ -203,7 +203,8 @@ class DataAccessor():
     if message:
       return {"uploadFile":"Error", "messages":message}
     expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if data["expirationDate"] else None
-    objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate)
+    post = Files.objects.get(id=data["Post"]) if "Post" in data else None
+    objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, Post=post)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())

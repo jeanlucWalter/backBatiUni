@@ -269,7 +269,7 @@ class Files(CommonModel):
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
   Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, blank=False, default=None)
-  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "posts":"./files/posts/"}
+  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/"}
 
   class Meta:
     unique_together = ('nature', 'name', 'Company')
@@ -307,8 +307,8 @@ class Files(CommonModel):
       path = cls.dictPath[nature] + userProfile.Company.name + '_' + str(userProfile.Company.id) + '.' + ext
     if nature in ["labels", "admin"]:
       path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
-    if nature == "postDoc":
-      path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
+    if nature == "post":
+      path = cls.dictPath[nature] + name + '_' + str(Post.id) + '.' + ext
     objectFile = Files.objects.filter(nature=nature, name=name, Company=userProfile.Company)
     if objectFile:
       objectFile = objectFile[0]

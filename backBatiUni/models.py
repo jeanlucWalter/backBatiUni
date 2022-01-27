@@ -62,7 +62,6 @@ class CommonModel(models.Model):
       except:
         pass
       if index in listIndices and isinstance(fieldObject, models.ForeignKey):
-        print("computeValues", self, field, listFields)
         values.append(getattr(self, field).id)
       # elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
       #   values.append([element.id for element in getattr(self, field).all()])
@@ -72,10 +71,10 @@ class CommonModel(models.Model):
         model = apps.get_model(app_label='backBatiUni', model_name=field)
         listFieldsModel = model.listFields()
         if dictFormat:
-          listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__) == self}
+          listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__, False) == self}
           listModel = {key:valueList if len(valueList) != 1 else valueList[0] for key, valueList in listModel.items()}
         else:
-          listModel = [objectModel.id for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__) == self]
+          listModel = [objectModel.id for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self]
         values.append(listModel)
       else:
         value = getattr(self, field, "")
@@ -117,6 +116,7 @@ class Job(CommonModel):
 
 class Company(CommonModel):
   name = models.CharField('Nom de la société', unique=True, max_length=128, null=False, blank=False)
+  role = models.ForeignKey(Role, on_delete=models.PROTECT, blank=False, null=False, default=3)
   siret = models.CharField('Numéro de Siret', unique=True, max_length=32, null=True, default=None)
   address = models.CharField("Adresse de l'entreprise", unique=True, max_length=32, null=True, default=None)
   activity = models.CharField("Activite principale de l'entreprise", unique=True, max_length=32, null=True, default=None)
@@ -181,11 +181,13 @@ class UserProfile(CommonModel):
   firstName = models.CharField("Prénom", max_length=128, blank=False, default="Inconnu")
   lastName = models.CharField("Nom de famille", max_length=128, blank=False, default="Inconnu")
   proposer = models.IntegerField(blank=False, null=True, default=None)
-  role = models.ForeignKey(Role, on_delete=models.PROTECT, blank=False, null=False)
   cellPhone = models.CharField("Téléphone mobile", max_length=128, blank=False, null=True, default=None)
   token = models.CharField("Token de validation", max_length=512, blank=True, null=True, default="empty token")
   email = models.CharField("Email", max_length=128, blank=True, null=True, default="Inconnu")
   password = models.CharField("Mot de passe", max_length=128, blank=True, null=True, default="Inconnu")
+
+  class Meta:
+    verbose_name = "UserProfile"
 
   @property
   def userName(self):
@@ -204,25 +206,14 @@ class UserProfile(CommonModel):
       user.save()
     else:
       super().setAttr(fieldName, value)
-
-  class Meta:
-    verbose_name = "UserProfile"
   
   @classmethod
   def filter(cls, user):
     return [UserProfile.objects.get(userNameInternal=user)]
 
-  @property
-  def getRole(self):
-    if self.role == 1:
-      return "Entreprise"
-    if self.role == 2:
-      return "Sous-traitant"
-    if self.role == 3:
-      return "Sous-traitant et entreprise"
-
 class Post(CommonModel):
-  Company = models.ForeignKey(Company, verbose_name='Société demandeuse', on_delete=models.PROTECT, blank=False, default=None) 
+  subContractor = models.ForeignKey(Company, related_name='subContractor', verbose_name='Société sous-traitante', on_delete=models.PROTECT, null=True, default=None) 
+  Company = models.ForeignKey(Company, related_name='Company', verbose_name='Société demandeuse', on_delete=models.PROTECT, blank=False, default=None) 
   Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
   numberOfPeople = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
   address = models.CharField("Adresse du chantier", max_length=1024, null=True, default=None)
@@ -243,22 +234,59 @@ class Post(CommonModel):
   @classmethod
   def listFields(cls):
       superList = super().listFields()
+      for fieldName in ["Company", "subContractor"]:
+        index = superList.index(fieldName)
+        del superList[index]
+      return superList
+
+  @classmethod
+  def filter(cls, user):
+    return Post.objects.filter(subContractor__isnull=True)
+
+class Mission(Post):
+  class Meta:
+    proxy = True
+
+  @classmethod
+  def listFields(cls):
+      superList = [field.name.replace("Internal", "") for field in cls._meta.fields][1:] + cls.manyToManyObject
       for fieldName in ["Company"]:
         index = superList.index(fieldName)
         del superList[index]
       return superList
 
+  @classmethod
+  def filter(cls, user):
+    return Mission.objects.filter(subContractor__isnull=False)
+
+
 class DetailedPost(CommonModel):
-  Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)
+  Post = models.ForeignKey(Post, related_name='Post', verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)
+  Mission = models.ForeignKey(Mission, related_name='Mission', verbose_name='Mission associée', on_delete=models.PROTECT, null=True, default=None)
   content = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
+  manyToManyObject = ["Supervision"]
 
   @classmethod
   def listFields(cls):
       superList = super().listFields()
-      for fieldName in ["Post"]:
+      for fieldName in ["Post", "Mission"]:
         index = superList.index(fieldName)
         del superList[index]
       return superList
+
+class Supervision(CommonModel):
+  DetailedPost = models.ForeignKey(DetailedPost, verbose_name='Détail associé', on_delete=models.PROTECT, null=True, default=None)
+  date = models.DateField(verbose_name="Date du suivi", null=True, default=None)
+  commment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
+
+  @classmethod
+  def listFields(cls):
+      superList = super().listFields()
+      for fieldName in ["DetailedPost"]:
+        index = superList.index(fieldName)
+        del superList[index]
+      return superList
+
 
 class Files(CommonModel):
   nature = models.CharField('nature du fichier', max_length=128, null=False, default=False, blank=False)
@@ -309,7 +337,6 @@ class Files(CommonModel):
       path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
     if nature == "post":
       path = cls.dictPath[nature] + name + '_' + str(post.id) + '.' + ext
-      print("createFile", path)
     objectFile = Files.objects.filter(nature=nature, name=name, Company=userProfile.Company)
     if objectFile:
       objectFile = objectFile[0]

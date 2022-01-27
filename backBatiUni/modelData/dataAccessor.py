@@ -21,7 +21,7 @@ if os.getenv('PATH_MIDDLE'):
 import json
 
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, DetailedPost], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, DetailedPost, Mission], "general":[Job, Role, Label]}
   dictTable = {}
   portSmtp = os.getenv('PORT_SMTP')
 
@@ -203,8 +203,6 @@ class DataAccessor():
     if message:
       return {"uploadFile":"Error", "messages":message}
     expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if data["expirationDate"] else None
-    if "Post" in data:
-      print("Post", data["Post"])
     post = Post.objects.get(id=data["Post"]) if "Post" in data else None
     objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])

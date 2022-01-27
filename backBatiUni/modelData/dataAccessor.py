@@ -206,7 +206,7 @@ class DataAccessor():
     if "Post" in data:
       print("Post", data["Post"])
     post = Post.objects.get(id=data["Post"]) if "Post" in data else None
-    objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, Post=post)
+    objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())

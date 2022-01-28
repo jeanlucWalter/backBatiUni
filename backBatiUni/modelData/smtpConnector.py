@@ -21,7 +21,7 @@ class SmtpConnector:
       if "token" in data:
         return data["token"]
     except:
-      data = {"register smtp":"work in progress"}
+      data = "token not received"
     return data
 
 

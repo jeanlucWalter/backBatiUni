@@ -76,11 +76,12 @@ class DataAccessor():
         company = Company.objects.create(name=data['company'])
     else:
       company = company[0]
-    role = Role.objects.get(id=data['role'])
+    company.Role = Role.objects.get(id=data['role'])
+    company.save()
     proposer = None
     if data['proposer'] and User.objects.get(id=data['proposer']):
       proposer = User.objects.get(id=data['proposer'])
-    userProfile = UserProfile.objects.create(Company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, role=role, token=token, email=data["email"], password=data["password"])
+    userProfile = UserProfile.objects.create(Company=company, firstName=data['firstname'], lastName=data['lastname'], proposer=proposer, token=token, email=data["email"], password=data["password"])
     if 'jobs' in data:
       for idJob in data['jobs']:
         job = Job.objects.get(id=idJob)
@@ -202,7 +203,7 @@ class DataAccessor():
       message["fileBase64"] = "field fileBase64 is empty"
     if message:
       return {"uploadFile":"Error", "messages":message}
-    expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if data["expirationDate"] else None
+    expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if "expirationDate" in data and data["expirationDate"] else None
     post = Post.objects.get(id=data["Post"]) if "Post" in data else None
     objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])

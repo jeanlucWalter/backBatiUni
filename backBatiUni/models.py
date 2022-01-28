@@ -62,7 +62,8 @@ class CommonModel(models.Model):
       except:
         pass
       if index in listIndices and isinstance(fieldObject, models.ForeignKey):
-        values.append(getattr(self, field).id)
+        print(self, field)
+        values.append(getattr(self, field).id if getattr(self, field, None) else "")
       # elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
       #   values.append([element.id for element in getattr(self, field).all()])
       elif isinstance(fieldObject, models.DateField):
@@ -278,6 +279,7 @@ class Supervision(CommonModel):
   DetailedPost = models.ForeignKey(DetailedPost, verbose_name='Détail associé', on_delete=models.PROTECT, null=True, default=None)
   date = models.DateField(verbose_name="Date du suivi", null=True, default=None)
   commment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
+  manyToManyObject = ["Files"]
 
   @classmethod
   def listFields(cls):
@@ -297,16 +299,17 @@ class Files(CommonModel):
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
   Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, null=True, default=None)
-  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/"}
+  Supervision = models.ForeignKey(Supervision, verbose_name="Suivi associé", on_delete=models.PROTECT, null=True, default=None)
+  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/", "supervision":"./files/supervision/"}
 
   class Meta:
-    unique_together = ('nature', 'name', 'Company')
+    unique_together = ('nature', 'name', 'Company', "Post", "Supervision")
     verbose_name = "Files"
 
   @classmethod
   def listFields(cls):
     superList = super().listFields()
-    for fieldName in ["path", "Company", "Post"]:
+    for fieldName in ["path", "Company", "Post", "Supervision"]:
       index = superList.index(fieldName)
       del superList[index]
     superList.append("content")
@@ -328,7 +331,7 @@ class Files(CommonModel):
     return {}
 
   @classmethod
-  def createFile(cls, nature, name, ext, user, expirationDate = None, post=None):
+  def createFile(cls, nature, name, ext, user, expirationDate = None, post=None, supervision=None):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     objectFile = None
     if nature == "userImage":
@@ -337,7 +340,10 @@ class Files(CommonModel):
       path = cls.dictPath[nature] + name + '_' + str(userProfile.Company.id) + '.' + ext
     if nature == "post":
       path = cls.dictPath[nature] + name + '_' + str(post.id) + '.' + ext
-    objectFile = Files.objects.filter(nature=nature, name=name, Company=userProfile.Company)
+    if nature == "supervision":
+      path = cls.dictPath[nature] + name + '_' + str(supervision.id) + '.' + ext
+    company = userProfile.Company if not post and not supervision else None
+    objectFile = Files.objects.filter(nature=nature, name=name, Company=company, Post=post, Supervision=supervision)
     if objectFile:
       objectFile = objectFile[0]
       oldPath = objectFile.path
@@ -350,7 +356,7 @@ class Files(CommonModel):
         objectFile.expirationDate = expirationDate
       objectFile.save()
     else:
-      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate, Post=post)
+      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate, Post=post, Supervision=supervision)
     return objectFile
 
 # class FilesPost(CommonModel):

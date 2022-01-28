@@ -6,8 +6,8 @@ import os
 import base64
 from io import BytesIO
 
-# userName, password = "walter.jeanluc@gmail.com", "pwd"
-userName, password = "jlw", "pwd"
+userName, password = "walter.jeanluc@gmail.com", "pwd"
+# userName, password = "jlw", "pwd"
 # userName, password = "jeanluc.walter@fantasiapp.com", "123456Aa"
 address = 'http://localhost:8000'
 query = "token"
@@ -48,6 +48,9 @@ def executeQuery():
     headers = {}
     post = {"firstname":"Jean-Luc","lastname":"Walter","email":"walter.jeanluc@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
+  elif query == "registerConfirm":
+      print("registerConfirm")
+      response = requests.get(f'{address}/initialize/', headers=headers, params={"action":"registerConfirm", "token":"token not received"})
   elif query == "getGeneralData":
     response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
   else:
@@ -78,7 +81,7 @@ def executeQuery():
       post = {'action':"uploadPost", "address":"128 rue de Paris 92100 Boulogne", "Job":9, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
-      post = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(), "nature":"labels"}
+      post = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(), "nature":"labels", "expirationDate":"2022-01-12"}
       response = requests.post(url, headers=headers, json=post)
     elif query == "getPost":
       response = requests.get(url, headers=headers, params={"action":"getPost"})
@@ -90,7 +93,7 @@ def executeQuery():
     print("data", data)
 
 if query == "all":
-    for key in ["buildDB", "register", "modifyUser", "changeUserImage", "getUserData"]:
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "getPost", "uploadFile"]:
       query = key
       executeQuery()
 else:

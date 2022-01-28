@@ -49,7 +49,7 @@ def executeQuery():
     post = {"firstname":"Jean-Luc","lastname":"Walter","email":"walter.jeanluc@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
   elif query == "registerConfirm":
-      print("registerConfirm")
+      print("registerConfirm", url)
       response = requests.get(f'{address}/initialize/', headers=headers, params={"action":"registerConfirm", "token":"token not received"})
   elif query == "getGeneralData":
     response = requests.get(url, headers=headers, params={"action":"getGeneralData"})

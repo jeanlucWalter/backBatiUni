@@ -92,7 +92,7 @@ class DataAccessor():
 
   @classmethod
   def registerConfirm(cls, token):
-    print("registerConfirm", token)
+    print("registerConfirm token", token)
     userProfile = UserProfile.objects.filter(token=token)
     if userProfile:
       userProfile = userProfile[0]
@@ -203,7 +203,7 @@ class DataAccessor():
       message["fileBase64"] = "field fileBase64 is empty"
     if message:
       return {"uploadFile":"Error", "messages":message}
-    expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if "expirationDate" in data and data["expirationDate"] else None
+    expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if data["expirationDate"] else None
     post = Post.objects.get(id=data["Post"]) if "Post" in data else None
     objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])

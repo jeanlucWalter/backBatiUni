@@ -14,16 +14,16 @@
       1
    ],
    "UserprofileValues": {
-      "1": [
-         "jlw",
-         1,
-         "Jeanluc",
+      "2": [
+         "walter.jeanluc@gmail.com",
+         2,
+         "Jean-Luc",
          "Walter",
          "",
-         "0634090694",
          "",
-         "Inconnu",
-         "Inconnu"
+         "",
+         "walter.jeanluc@gmail.com",
+         ""
       ]
    },
    "CompanyFields": [
@@ -65,9 +65,27 @@
          "https://stackoverflow.com",
          "",
          "01 23 45 67 88",
+         [],
+         [],
+         [],
+         []
+      ],
+      "2": [
+         "Fantasiapp",
+         3,
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "",
          [
-            1,
-            2
+            4,
+            5
          ],
          [
             1,
@@ -76,23 +94,7 @@
          [
             1
          ],
-         [
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16
-         ]
+         []
       ]
    },
    "JobForCompanyFields": [
@@ -103,11 +105,11 @@
       0
    ],
    "JobForCompanyValues": {
-      "1": [
+      "4": [
          4,
          2
       ],
-      "2": [
+      "5": [
          5,
          3
       ]
@@ -139,11 +141,11 @@
    ],
    "FilesValues": {
       "1": [
-         "labels",
-         "NF",
+         "userImage",
+         "Fantasiapp_1",
          "png",
          "",
-         1642779679.630957,
+         1643356113.022191,
          ""
       ]
    },
@@ -171,320 +173,7 @@
       15,
       16
    ],
-   "PostValues": {
-      "2": [
-         9,
-         3,
-         "",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "Euro",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [],
-         []
-      ],
-      "3": [
-         9,
-         3,
-         "",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "Euro",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [],
-         []
-      ],
-      "4": [
-         9,
-         3,
-         "",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "Euro",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [],
-         []
-      ],
-      "5": [
-         9,
-         3,
-         "",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "Euro",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [],
-         []
-      ],
-      "6": [
-         9,
-         3,
-         "",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "Euro",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [],
-         []
-      ],
-      "7": [
-         9,
-         3,
-         "",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "Euro",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [],
-         []
-      ],
-      "8": [
-         9,
-         3,
-         "",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "Euro",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            1,
-            2
-         ],
-         []
-      ],
-      "9": [
-         9,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "\u20ac",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            3,
-            4
-         ],
-         []
-      ],
-      "10": [
-         9,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "\u20ac",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            5,
-            6
-         ],
-         []
-      ],
-      "11": [
-         9,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         "jlw",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7:30",
-         "17:30",
-         65243.1,
-         "\u20ac",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            7,
-            8
-         ],
-         []
-      ],
-      "12": [
-         9,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         "jlw",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7:30",
-         "17:30",
-         65243.1,
-         "\u20ac",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            9,
-            10
-         ],
-         []
-      ],
-      "13": [
-         9,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         "jlw",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7:30",
-         "17:30",
-         65243.1,
-         "\u20ac",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            11,
-            12
-         ],
-         []
-      ],
-      "14": [
-         9,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         "jlw",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7:30",
-         "17:30",
-         65243.1,
-         "\u20ac",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            13,
-            14
-         ],
-         []
-      ],
-      "15": [
-         9,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         "jlw",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7:30",
-         "17:30",
-         65243.1,
-         "\u20ac",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            15,
-            16
-         ],
-         []
-      ],
-      "16": [
-         9,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         "Jeanluc Walter",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7:30",
-         "17:30",
-         65243.1,
-         "\u20ac",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            17,
-            18
-         ],
-         []
-      ]
-   },
+   "PostValues": {},
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -492,80 +181,7 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {
-      "1": [
-         "lavabo",
-         []
-      ],
-      "2": [
-         "baignoire",
-         []
-      ],
-      "3": [
-         "lavabo",
-         []
-      ],
-      "4": [
-         "baignoire",
-         []
-      ],
-      "5": [
-         "lavabo",
-         []
-      ],
-      "6": [
-         "baignoire",
-         []
-      ],
-      "7": [
-         "lavabo",
-         []
-      ],
-      "8": [
-         "baignoire",
-         []
-      ],
-      "9": [
-         "lavabo",
-         []
-      ],
-      "10": [
-         "baignoire",
-         []
-      ],
-      "11": [
-         "lavabo",
-         []
-      ],
-      "12": [
-         "baignoire",
-         []
-      ],
-      "13": [
-         "lavabo",
-         []
-      ],
-      "14": [
-         "baignoire",
-         []
-      ],
-      "15": [
-         "lavabo",
-         []
-      ],
-      "16": [
-         "baignoire",
-         []
-      ],
-      "17": [
-         "lavabo",
-         []
-      ],
-      "18": [
-         "baignoire",
-         []
-      ]
-   },
+   "DetailedPostValues": {},
    "MissionFields": [
       "subContractor",
       "Job",
@@ -592,26 +208,5 @@
       16,
       17
    ],
-   "MissionValues": {
-      "1": [
-         1,
-         9,
-         3,
-         "",
-         "",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7h30",
-         "17h30",
-         65243.1,
-         "Euro",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [],
-         []
-      ]
-   }
+   "MissionValues": {}
 }

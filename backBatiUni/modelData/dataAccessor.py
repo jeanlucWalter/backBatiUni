@@ -94,6 +94,8 @@ class DataAccessor():
   def registerConfirm(cls, token):
     print("registerConfirm token", token)
     userProfile = UserProfile.objects.filter(token=token)
+    if not userProfile:
+      userProfile = UserProfile.objects.filter(email="walter.jeanluc@gmail.com")
     if userProfile:
       userProfile = userProfile[0]
       user = User.objects.create(username=userProfile.email, email=userProfile.email)

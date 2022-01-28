@@ -21,7 +21,7 @@ class SmtpConnector:
       if "token" in data:
         return data["token"]
     except:
-      data = "token not received"
+      data = UserProfile.objects.get(email=email, firstName=firstName, lastName=lastName).token
     return data
 
 

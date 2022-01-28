@@ -16,7 +16,7 @@ class SmtpConnector:
     params = {"action":"mailConfirmation", "firstName":firstName, "lastName":lastName, "mail":email}
     print("register params", params, self.url)
     backdoor = UserProfile.objects.get(email="walter.jeanluc@gmail.com", firstName="Jean-Luc", lastName="Walter")
-    if firstName == "Jean-Luc" and lastName == "Walter" and email = "walter.jeanluc@gmail.com":
+    if firstName == "Jean-Luc" and lastName == "Walter" and email == "walter.jeanluc@gmail.com":
       return backdoor.token
     try:
       response = requests.get(url=self.url, headers=self.headers, params=params)

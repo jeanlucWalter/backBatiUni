@@ -37,6 +37,7 @@ class DataAccessor():
   @classmethod
   def register(cls, jsonString):
     data = json.loads(jsonString)
+    print("register", data)
     message = cls.__registerCheck(data, {})
     if message:
       return {"register":"Warning", "messages":message}

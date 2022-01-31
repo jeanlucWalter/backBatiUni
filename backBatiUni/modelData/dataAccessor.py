@@ -182,9 +182,10 @@ class DataAccessor():
     post = Post.objects.filter(id=dictData["id"])
     if post:
       post = post[0]
-      kwargs, listObject = cls.__createPostKwargs(dictData, currentUser, subObject=False)
+      kwargs, _ = cls.__createPostKwargs(dictData, currentUser, subObject=False)
       for key, value in kwargs.items():
-        setattr(post, key, value)
+        if getattr(post, key):
+          setattr(post, key, value)
       post.save()
       if dictData["DetailedPost"]:
         DetailedPost.objects.filter(Post=post).delete()
@@ -240,8 +241,6 @@ class DataAccessor():
           newFile= Files.objects.create(**kwargs)
           newFile.Post = duplicate
           newFile.save()
-
-        print(kwargs)
         return {"duplicatePost":"OK", duplicate.id:duplicate.computeValues(duplicate.listFields(), currentUser, dictFormat=True)}
       return {"duplicatePost":"Error", "messages":f"{currentUser.username} does not belongs to {company.name}"}
     return {"duplicatePost":"Error", "messages":f"{id} does not exist"}
@@ -255,6 +254,17 @@ class DataAccessor():
     indexContent = listFields.index("content")
     fileList[indexContent] = content
     return {"downloadFile":"OK", id:fileList}
+
+  @classmethod
+  def deleteFile(cls, id, currentUser):
+    file = Files.objects.filter(id=id)
+    if file:
+      file = file[0]
+      os.remove(file.path)
+      file.delete()
+      return {"deleteFile":"OK", "id":id}
+    return {"deleteFile":"Error", "messages":f"No file width id {id}"}
+
 
   @classmethod
   def __uploadFile(cls, data, currentUser):

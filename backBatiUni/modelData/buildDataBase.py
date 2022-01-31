@@ -200,6 +200,7 @@ class CreateNewDataBase:
 
   def emptyDataBase (self):
     for table in CreateNewDataBase.listTable.values():
+      print("emptyDataBase", table)
       table.objects.all().delete()
       tableName = table.objects.model._meta.db_table
       self.cursor.execute(f"ALTER TABLE {tableName} AUTO_INCREMENT=1;")

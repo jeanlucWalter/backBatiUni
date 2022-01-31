@@ -34,9 +34,9 @@ def queryForToken(userName, password):
   dictResponse = json.loads(response.text)
   return dictResponse['token']
 
-def getDocStr():
-  file = "./files/documents/test.png"
-  with open(file, "rb") as fileData:
+def getDocStr(index = 0):
+  file = ["./files/documents/logoFantasiapp.png", "./files/documents/test_1.pdf", "./files/documents/test_2.pdf"]
+  with open(file[index], "rb") as fileData:
     encoded_string = base64.b64encode(fileData.read())
   return encoded_string.decode("utf-8")
 
@@ -70,19 +70,29 @@ def executeQuery():
     elif query == "modifyUser":
       print("modifyUser")
       now = "2022-01-12"
-      # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'userName': 'walter.jeanluc@gmail.com', 'cellPhone': '0634090695'}, 'Company': {'id': 1, 'webSite': 'https://fantasiapp.com', "companyPhone":"01 23 45 67 89"}, 'JobForCompany':[[4,2], [5,3]], 'LabelForCompany':[[1,now], [2,now]]}
       post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'cellPhone': '0634090694', 'Company': {'capital': '12345', 'companyPhone': '01 23 45 67 88', 'JobForCompany':[[4,2], [5,3]], 'LabelForCompany':[[1,now], [2,now]]}}}
-      # post = {'action': 'modifyUser', 'Userprofile': {'id': 1, 'cellPhone': '0634090695', 'Company': {'JobForCompany': [[6, 0], [18, 3], [2, 1], [3, 2]], 'capital': '123456', 'webSite': 'Https', 'companyPhone': '01234567890', 'LabelForCompany': [[1, '2022/01/19'], [3, '2022/01/19']]}}}
       response = requests.post(url, headers=headers, json=post)
     elif query == "changeUserImage":
-      post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr()}
+      post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr(0)}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadPost":
-      post = {'action':"uploadPost", "address":"128 rue de Paris 92100 Boulogne", "Job":9, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
-      response = requests.post(url, headers=headers, json=post)
+      post1 = {'action':"uploadPost", "address":"128 rue de Paris 92100 Boulogne", "Job":9, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
+      post2 = {'action':"uploadPost", "address":"156 rue du Cherche-Midi 75006 Paris", "Job":5, "numberOfPeople":1, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":23456.10, "DetailedPost":["radiateur", "cloison"]}
+      requests.post(url, headers=headers, json=post2)
+      response = requests.post(url, headers=headers, json=post1)
     elif query == "uploadFile":
-      post = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(), "nature":"labels", "expirationDate":"2022-01-12"}
-      response = requests.post(url, headers=headers, json=post)
+      post1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(1), "nature":"labels", "expirationDate":"2022-01-12"}
+      post2 = {'action':"uploadFile", "ext":"png", "name":"Kbis", "fileBase64":getDocStr(1), "nature":"admin", "expirationDate":"2022-01-12"}
+      requests.post(url, headers=headers, json=post2)
+      response = requests.post(url, headers=headers, json=post1)
+    elif query == "switchDraft":
+      print("switchDraft")
+      response = requests.get(url, headers=headers, params={"action":"switchDraft", "id":1})
+    elif query == "duplicatePost":
+      print("duplicatePost")
+      response = requests.get(url, headers=headers, params={"action":"duplicatePost", "id":1})
+    elif query == "createMissionFromPost":
+      response = requests.get(url, headers=headers, params={"action":"createMissionFromPost", "id":1})
     elif query == "getPost":
       response = requests.get(url, headers=headers, params={"action":"getPost"})
     elif query == "buildDB":
@@ -91,6 +101,8 @@ def executeQuery():
   if response:
     data = json.loads(response.text)
     print("data", data)
+  else:
+    print("no answer")
 
 if query == "all":
     for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "getPost", "uploadFile"]:

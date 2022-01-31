@@ -92,7 +92,7 @@ class DataAccessor():
 
   @classmethod
   def registerConfirm(cls, token):
-    print("registerConfirm token", token)
+    print("registerConfirm", token)
     userProfile = UserProfile.objects.filter(token=token)
     if not userProfile:
       userProfile = UserProfile.objects.filter(email="walter.jeanluc@gmail.com")
@@ -183,7 +183,35 @@ class DataAccessor():
       return {"deletePost":"OK", "id":id}
     return {"deletePost":"Error", "messages":f"{id} does not exist"}
 
+  @classmethod
+  def createMissionFromPost(cls, id):
+    return {"createMissionFromPost":"Error", "messages":f"{id} does not exist"}
 
+  @classmethod
+  def switchDraft(cls, id, currentUser):
+    company = UserProfile.objects.get(userNameInternal=currentUser).Company
+    post = Post.objects.filter(id=id)
+    if post:
+      post = post[0]
+      if company == post.Company:
+        post.draft = not post.draft
+        post.save()
+        return {"switchDraft":"OK"}
+      return {"switchDraft":"Error", "messages":f"{currentUser.username} does not belongs to {company.name}"}
+    return {"switchDraft":"Error", "messages":f"{id} does not exist"}
+
+  @classmethod
+  def duplicatePost(cls, id, currentUser):
+    company = UserProfile.objects.get(userNameInternal=currentUser).Company
+    post = Post.objects.filter(id=id)
+    if post:
+      post = post[0]
+      if company == post.Company:
+        kwargs = {field.name:getattr(post, field.name) for field in Post._meta.fields[1:]}
+        print(kwargs)
+        return {"duplicatePost":"OK"}
+      return {"duplicatePost":"Error", "messages":f"{currentUser.username} does not belongs to {company.name}"}
+    return {"duplicatePost":"Error", "messages":f"{id} does not exist"}
 
   @classmethod
   def downloadFile(cls, id, currentUser):

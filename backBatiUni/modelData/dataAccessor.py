@@ -21,7 +21,7 @@ if os.getenv('PATH_MIDDLE'):
 import json
 
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, DetailedPost, Mission], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, DetailedPost, Mission, Disponibility], "general":[Job, Role, Label]}
   dictTable = {}
   portSmtp = os.getenv('PORT_SMTP')
 
@@ -30,6 +30,7 @@ class DataAccessor():
     dictAnswer = {}
     for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
+      print(dictAnswer)
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer
@@ -120,6 +121,7 @@ class DataAccessor():
       elif data["action"] == "uploadPost": return cls.__uploadPost(data, currentUser)
       elif data["action"] == "modifyPost": return cls.__modifyPost(data, currentUser)
       elif data["action"] == "uploadFile": return cls.__uploadFile(data, currentUser)
+      elif data["action"] == "modifyDisponibility": return cls.__modifyDisponibility(data["disponibility"], currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 
@@ -201,6 +203,7 @@ class DataAccessor():
 
   @classmethod
   def deletePost(cls, id):
+    prin("deletePost", id)
     post = Post.objects.filter(id=id)
     if post:
       [detail.delete() for detail in DetailedPost.objects.filter(Post=post)]
@@ -391,3 +394,15 @@ class DataAccessor():
       date = labelForCompany.date.strftime("%Y-%m-%d") if labelForCompany.date else ""
       valueModified[labelForCompany.id] = [labelForCompany.Label.id, date]
     return True
+
+  @classmethod
+  def __modifyDisponibility(cls, listValue, user):
+    company = UserProfile.objects.get(userNameInternal=user).Company
+    if company.role.id == 1:
+      return {"modifyDisponibility":"Error", "messages":f"User company is not sub contractor {company.name}"}
+    Disponibility.objects.all().delete()
+    for date in listValue:
+      Disponibility.objects.create(Company=company, date=datetime.strptime(date, "%Y-%m-%d"))
+    answer = {"modifyDisponibility":"OK"}
+    answer.update({disponibility.id:disponibility.date.strftime("%Y-%m-%d") for disponibility in Disponibility.objects.filter(Company=company)})
+    return answer

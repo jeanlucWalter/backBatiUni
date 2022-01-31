@@ -46,7 +46,7 @@ def executeQuery():
   if query == "register":
     print("query", query, url)
     headers = {}
-    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"walter.jeanluc@gmail.com","password":"pwd","company":"Fantasiapp","role":1,"proposer":"","jobs":[1,2,3]}
+    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"walter.jeanluc@gmail.com","password":"pwd","company":"Fantasiapp","role":2,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
   elif query == "registerConfirm":
       print("registerConfirm", url)
@@ -83,6 +83,19 @@ def executeQuery():
     elif query == "modifyPost":
       print("modifyPost")
       post = {'action':"modifyPost", "id":1, "address":"156 rue du Cherche-Midi 75006 Paris", "Job":6, "numberOfPeople":2, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":24456.10, "DetailedPost":["radiateur", "cloison", "doublage"]}
+      response = requests.post(url, headers=headers, json=post)
+    # elif query == "deletePost":
+    #   print("deletePost")
+    #   post = {'action':"uploadPost", "address":"129 rue de Paris 92100 Boulogne", "Job":9, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
+    #   response = requests.post(url, headers=headers, json=post)
+    #   id = None
+    #   for key, value in json.loads(response.text).items():
+    #     if key != "action":
+    #       id = key
+    #     response = requests.get(url, headers=headers, params={"action":"deletePost", "id":id})
+    elif query == "modifyDisponibility":
+      print("modifyDisponibility")
+      post = {'action':"modifyDisponibility", "disponibility":["2022-02-13", "2022-02-14", "2022-02-15"]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
       post1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(1), "nature":"labels", "expirationDate":"2022-01-12"}

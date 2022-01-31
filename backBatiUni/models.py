@@ -49,7 +49,7 @@ class CommonModel(models.Model):
       if len(listFields) > 1:
         dictResult[instance.id] = instance.computeValues(listFields, user)
       else:
-        dictResult[instance.id] = getattr(instance, listFields[0])
+        dictResult[instance.id] = getattr(instance, listFields[0]) if listFields[0] != "date" else getattr(instance, "date").strftime("%Y-%m-%d")
     return dictResult
 
   def computeValues(self, listFields, user, dictFormat=False):
@@ -67,6 +67,7 @@ class CommonModel(models.Model):
       # elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
       #   values.append([element.id for element in getattr(self, field).all()])
       elif isinstance(fieldObject, models.DateField):
+        print(fieldObject, field, getattr(self, field))
         values.append(getattr(self, field).strftime("%Y-%m-%d") if getattr(self, field) else "")
       elif field in self.manyToManyObject:
         model = apps.get_model(app_label='backBatiUni', model_name=field)
@@ -128,13 +129,22 @@ class Company(CommonModel):
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
   stars = models.IntegerField("Notation sous forme d'étoile", null=True, default=None)
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
-  manyToManyObject = ["JobForCompany", "LabelForCompany", "Files", "Post"]
+  manyToManyObject = ["JobForCompany", "LabelForCompany", "Files", "Post", "Disponibility"]
 
   # @classmethod
   # def filter(cls, user):
   #   userProfile = UserProfile.objects.get(userNameInternal=user)
   #   return [userProfile.Company]
 
+class Disponibility(CommonModel):
+  Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
+  date = models.DateField(verbose_name="Date de disponibilité", null=True, default=None)
+
+  @classmethod
+  def listFields(cls):
+    superList = super().listFields()
+    superList.remove("Company")
+    return superList
 
 class JobForCompany(CommonModel):
   Job = models.ForeignKey(Job, on_delete=models.PROTECT, blank=False, null=False)
@@ -259,7 +269,6 @@ class Mission(Post):
   @classmethod
   def filter(cls, user):
     return Mission.objects.filter(subContractor__isnull=False)
-
 
 class DetailedPost(CommonModel):
   Post = models.ForeignKey(Post, related_name='Post', verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)

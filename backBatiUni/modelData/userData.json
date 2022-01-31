@@ -42,18 +42,20 @@
       "JobForCompany",
       "LabelForCompany",
       "Files",
-      "Post"
+      "Post",
+      "Disponibility"
    ],
    "CompanyIndices": [
       1,
       12,
       13,
       14,
-      15
+      15,
+      16
    ],
    "CompanyValues": {
       "1": [
-         "test",
+         "BatiUni",
          3,
          "123456789",
          "",
@@ -65,6 +67,7 @@
          "https://stackoverflow.com",
          "",
          "01 23 45 67 88",
+         [],
          [],
          [],
          [],
@@ -92,9 +95,19 @@
             2
          ],
          [
-            1
+            1,
+            2,
+            3
          ],
-         []
+         [
+            1,
+            2
+         ],
+         [
+            1,
+            2,
+            3
+         ]
       ]
    },
    "JobForCompanyFields": [
@@ -145,7 +158,23 @@
          "Fantasiapp_1",
          "png",
          "",
-         1643625098.93483,
+         1643648237.704904,
+         ""
+      ],
+      "2": [
+         "admin",
+         "Kbis",
+         "png",
+         "2022-01-12",
+         1643648237.704904,
+         ""
+      ],
+      "3": [
+         "labels",
+         "NF",
+         "png",
+         "2022-01-12",
+         1643648237.704904,
          ""
       ]
    },
@@ -173,7 +202,53 @@
       15,
       16
    ],
-   "PostValues": {},
+   "PostValues": {
+      "1": [
+         6,
+         2,
+         "156 rue du Cherche-Midi 75006 Paris",
+         "Jean-Luc Walter",
+         true,
+         "",
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         24456.1,
+         "\u20ac",
+         "",
+         "Deuxi\u00e8me description d'un chantier",
+         [
+            5,
+            6,
+            7
+         ],
+         []
+      ],
+      "2": [
+         9,
+         3,
+         "128 rue de Paris 92100 Boulogne",
+         "Jean-Luc Walter",
+         true,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7:30",
+         "17:30",
+         65243.1,
+         "\u20ac",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            3,
+            4
+         ],
+         []
+      ]
+   },
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -181,7 +256,28 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {},
+   "DetailedPostValues": {
+      "3": [
+         "lavabo",
+         []
+      ],
+      "4": [
+         "baignoire",
+         []
+      ],
+      "5": [
+         "radiateur",
+         []
+      ],
+      "6": [
+         "cloison",
+         []
+      ],
+      "7": [
+         "doublage",
+         []
+      ]
+   },
    "MissionFields": [
       "subContractor",
       "Job",
@@ -208,5 +304,10 @@
       16,
       17
    ],
-   "MissionValues": {}
+   "MissionValues": {},
+   "DisponibilityValues": {
+      "1": "2022-02-13",
+      "2": "2022-02-14",
+      "3": "2022-02-15"
+   }
 }

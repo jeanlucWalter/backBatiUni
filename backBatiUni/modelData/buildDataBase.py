@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 class CreateNewDataBase:
-  listTable = {"UserProfile":UserProfile, "JobForCompany":JobForCompany, "LabelForCompany":LabelForCompany,"DetailedPost":DetailedPost, "Files":Files, "Post":Post, "Company":Company, "Job":Job, "Role":Role, "Label":Label}
+  listTable = {"UserProfile":UserProfile, "JobForCompany":JobForCompany, "LabelForCompany":LabelForCompany, "Disponibility":Disponibility,"DetailedPost":DetailedPost, "Files":Files, "Post":Post, "Company":Company, "Job":Job, "Role":Role, "Label":Label}
   dictLabels = {
     "Qualibat":["Cet organisme apporte des réponses précises aux maitres d’œuvre et aux clients sur la capacité professionnelle de l’entreprise en explorant trois domaines précis : la situation administrative, l’envergure financière et les compétences techniques. Il délivre plusieurs certifications.","https://www.qualibat.com/",True],
     "Qualif'elec":["Si vous relevez du génie électrique et énergétique, Qualifelec est la certification qu’il vous faut obtenir absolument. Elle couvre 8 domaines d’activités précis : installations électriques., chauffage, ventilation, climatisation., branchements et réseaux., bâtiment communicant., éclairage public, courant faible., maintenance d’installations électriques., antenne.",	"https://www.qualifelec.fr/", True],
@@ -200,7 +200,6 @@ class CreateNewDataBase:
 
   def emptyDataBase (self):
     for table in CreateNewDataBase.listTable.values():
-      print("emptyDataBase", table)
       table.objects.all().delete()
       tableName = table.objects.model._meta.db_table
       self.cursor.execute(f"ALTER TABLE {tableName} AUTO_INCREMENT=1;")
@@ -219,16 +218,18 @@ class CreateNewDataBase:
     return response
 
   def fillupUserProfile(self, table):
-    UserProfile.objects.create(userNameInternal=User.objects.get(username="jlw"), Company=Company.objects.get(name="test"), firstName="Jeanluc", lastName="Walter", cellPhone="06 34 09 06 95", token=None)
+    UserProfile.objects.create(userNameInternal=User.objects.get(username="jlw"), Company=Company.objects.get(name="BatiUni"), firstName="Eric", lastName="Walter", cellPhone="06 34 09 06 95", token=None)
     return {"create user profile":"OK"}
+
   def fillupCompany(self, table):
-    Company.objects.create(name="test", siret="123456789", capital=123456, revenue=654321.22, webSite="https://stackoverflow.com")
+    Company.objects.create(name="BatiUni", siret="123456789", capital=123456, revenue=654321.22, webSite="https://stackoverflow.com")
     return {}
   def fillupLabelForCompany(self, table): return {} 
   def fillupJobForCompany(self, table):return {}
   def fillupFiles(self, table):return {}
   def fillupPost(self, table): return {}
-  def fillupDetailedPost(self, table): return {} 
+  def fillupDetailedPost(self, table): return {}
+  def fillupDisponibility(self, table): return {}
 
   def fillupJob(self, table):
     for job in self.listJobs:

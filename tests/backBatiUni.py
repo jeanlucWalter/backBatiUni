@@ -80,6 +80,10 @@ def executeQuery():
       post2 = {'action':"uploadPost", "address":"156 rue du Cherche-Midi 75006 Paris", "Job":5, "numberOfPeople":1, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":23456.10, "DetailedPost":["radiateur", "cloison"]}
       requests.post(url, headers=headers, json=post2)
       response = requests.post(url, headers=headers, json=post1)
+    elif query == "modifyPost":
+      print("modifyPost")
+      post = {'action':"modifyPost", "id":1, "address":"156 rue du Cherche-Midi 75006 Paris", "Job":6, "numberOfPeople":2, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":24456.10, "DetailedPost":["radiateur", "cloison", "doublage"]}
+      response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
       post1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(1), "nature":"labels", "expirationDate":"2022-01-12"}
       post2 = {'action':"uploadFile", "ext":"png", "name":"Kbis", "fileBase64":getDocStr(1), "nature":"admin", "expirationDate":"2022-01-12"}
@@ -105,7 +109,7 @@ def executeQuery():
     print("no answer")
 
 if query == "all":
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "getPost", "uploadFile"]:
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "uploadFile"]:
       query = key
       executeQuery()
 else:

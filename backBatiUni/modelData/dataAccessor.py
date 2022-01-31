@@ -118,6 +118,7 @@ class DataAccessor():
       elif data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       elif data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
       elif data["action"] == "uploadPost": return cls.__uploadPost(data, currentUser)
+      elif data["action"] == "modifyPost": return cls.__modifyPost(data, currentUser)
       elif data["action"] == "uploadFile": return cls.__uploadFile(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
@@ -136,6 +137,15 @@ class DataAccessor():
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
     print("uploadPost", list(dictData.keys()))
+    kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
+    objectPost = Post.objects.create(**kwargs)
+    for subObject in listObject:
+      subObject.Post = objectPost
+      subObject.save()
+    return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
+
+  @classmethod
+  def __createPostKwargs(cls, dictData, currentUser, subOjbect=True):
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     kwargs, listFields = {"Company":userProfile.Company}, Post.listFields()
     for fieldName, value in dictData.items():
@@ -159,20 +169,32 @@ class DataAccessor():
           kwargs[fieldName]=float(dictData[fieldName]) if dictData[fieldName] else 0.0
         if fieldObject and isinstance(fieldObject, models.BooleanField) or isinstance(fieldObject, models.CharField) :
           kwargs[fieldName]= dictData[fieldName]
-        if fieldName in Post.manyToManyObject:
+        listObject = None
+        if fieldName in Post.manyToManyObject and subOjbect:
           modelObject, listObject = apps.get_model(app_label='backBatiUni', model_name=fieldName), []
           for content in value:
             listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
-    objectPost = Post.objects.create(**kwargs)
-    for subObject in listObject:
-      subObject.Post = objectPost
-      subObject.save()
-    return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
+    return kwargs, listObject
+
+  @classmethod
+  def __modifyPost(cls, dictData, currentUser):
+    post = Post.objects.filter(id=dictData["id"])
+    if post:
+      post = post[0]
+      kwargs, listObject = cls.__createPostKwargs(dictData, currentUser, subOjbect=False)
+      for key, value in kwargs.items():
+        setattr(post, key, value)
+      post.save()
+      print ("modifyPost", kwargs)
+      print ("modifyPost", listObject)
+      return {"modifyPost":"Warning", "messages":"work in progress"}
+    return {"modifyPost":"Error", "messages":f"{dictData['id']} is not a Post id"}
+
 
   @classmethod
   def getPost(cls, currentUser):
-    return {objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True) for objectPost in Post.objects.all()}
+    return {objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, dictFormat=True) for objectPost in Post.objects.all()}
 
   @classmethod
   def deletePost(cls, id):
@@ -208,8 +230,17 @@ class DataAccessor():
       post = post[0]
       if company == post.Company:
         kwargs = {field.name:getattr(post, field.name) for field in Post._meta.fields[1:]}
+        duplicate = Post.objects.create(**kwargs)
+        for detailPost in DetailedPost.object.filter(Post=post):
+          DetailedPost.objects.create(Post=duplicate, content=detailPost.content)
+        for file in Files.objects.filter(Post=post):
+          kwargs =  {field.name:getattr(file, field.name) for field in Files._meta.fields[1:]}
+          newFile= Files.objects.create(**kwargs)
+          newFile.Post = duplicate
+          newFile.save()
+
         print(kwargs)
-        return {"duplicatePost":"OK"}
+        return {"duplicatePost":"OK", duplicate.id:duplicate.computeValues(duplicate.listFields(), currentUser, dictFormat=True)}
       return {"duplicatePost":"Error", "messages":f"{currentUser.username} does not belongs to {company.name}"}
     return {"duplicatePost":"Error", "messages":f"{id} does not exist"}
 

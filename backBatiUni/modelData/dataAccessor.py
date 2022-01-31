@@ -145,7 +145,7 @@ class DataAccessor():
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 
   @classmethod
-  def __createPostKwargs(cls, dictData, currentUser, subOjbect=True):
+  def __createPostKwargs(cls, dictData, currentUser, subObject=True):
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     kwargs, listFields = {"Company":userProfile.Company}, Post.listFields()
     for fieldName, value in dictData.items():
@@ -170,7 +170,7 @@ class DataAccessor():
         if fieldObject and isinstance(fieldObject, models.BooleanField) or isinstance(fieldObject, models.CharField) :
           kwargs[fieldName]= dictData[fieldName]
         listObject = None
-        if fieldName in Post.manyToManyObject and subOjbect:
+        if fieldName in Post.manyToManyObject and subObject:
           modelObject, listObject = apps.get_model(app_label='backBatiUni', model_name=fieldName), []
           for content in value:
             listObject.append(modelObject.objects.create(content=content))
@@ -182,13 +182,15 @@ class DataAccessor():
     post = Post.objects.filter(id=dictData["id"])
     if post:
       post = post[0]
-      kwargs, listObject = cls.__createPostKwargs(dictData, currentUser, subOjbect=False)
+      kwargs, listObject = cls.__createPostKwargs(dictData, currentUser, subObject=False)
       for key, value in kwargs.items():
         setattr(post, key, value)
       post.save()
-      print ("modifyPost", kwargs)
-      print ("modifyPost", listObject)
-      return {"modifyPost":"Warning", "messages":"work in progress"}
+      if dictData["DetailedPost"]:
+        DetailedPost.objects.filter(Post=post).delete()
+        for content in dictData["DetailedPost"]:
+          DetailedPost.objects.create(Post=post, content=content)
+      return {"modifyPost":"Warning", post.id:post.computeValues(post.listFields(), currentUser, True)}
     return {"modifyPost":"Error", "messages":f"{dictData['id']} is not a Post id"}
 
 

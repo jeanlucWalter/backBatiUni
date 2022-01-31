@@ -139,6 +139,7 @@ class Company(CommonModel):
 class Disponibility(CommonModel):
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
   date = models.DateField(verbose_name="Date de disponibilité", null=True, default=None)
+  nature = models.CharField('Disponibilité', unique=False, max_length=32, null=True, default="Disponible")
 
   @classmethod
   def listFields(cls):

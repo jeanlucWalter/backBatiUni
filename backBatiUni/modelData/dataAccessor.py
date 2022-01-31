@@ -30,7 +30,6 @@ class DataAccessor():
     dictAnswer = {}
     for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
-      print(dictAnswer)
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer
@@ -138,7 +137,6 @@ class DataAccessor():
 
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
-    print("uploadPost", list(dictData.keys()))
     kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
     objectPost = Post.objects.create(**kwargs)
     for subObject in listObject:
@@ -157,7 +155,6 @@ class DataAccessor():
       except:
         fieldObject = None
       if fieldName in listFields:
-        print("__uploadPost", fieldName, dictData[fieldName])
         if fieldObject and isinstance(fieldObject, models.ForeignKey):
           foreign = Post._meta.get_field(fieldName).remote_field.model
           objectForeign = foreign.objects.get(id=value)
@@ -397,12 +394,17 @@ class DataAccessor():
 
   @classmethod
   def __modifyDisponibility(cls, listValue, user):
-    company = UserProfile.objects.get(userNameInternal=user).Company
+    company, messages = UserProfile.objects.get(userNameInternal=user).Company, {}
     if company.role.id == 1:
       return {"modifyDisponibility":"Error", "messages":f"User company is not sub contractor {company.name}"}
     Disponibility.objects.all().delete()
-    for date in listValue:
-      Disponibility.objects.create(Company=company, date=datetime.strptime(date, "%Y-%m-%d"))
+    for date, nature in listValue:
+      if not nature in ["Disponible", "Disponibilité Sous Conditions", "Non Disponible"]:
+        messages[date] = f"nature incorrect: {nature} replaced by Disponible"
+        nature = "Disponible"
+      Disponibility.objects.create(Company=company, date=datetime.strptime(date, "%Y-%m-%d"), nature=nature)
     answer = {"modifyDisponibility":"OK"}
-    answer.update({disponibility.id:disponibility.date.strftime("%Y-%m-%d") for disponibility in Disponibility.objects.filter(Company=company)})
+    answer.update({disponibility.id:[disponibility.date.strftime("%Y-%m-%d"), disponibility.nature] for disponibility in Disponibility.objects.filter(Company=company)})
+    if messages:
+      answer["messages"] = messages
     return answer

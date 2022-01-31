@@ -191,7 +191,7 @@ class DataAccessor():
         DetailedPost.objects.filter(Post=post).delete()
         for content in dictData["DetailedPost"]:
           DetailedPost.objects.create(Post=post, content=content)
-      return {"modifyPost":"Warning", post.id:post.computeValues(post.listFields(), currentUser, True)}
+      return {"modifyPost":"OK", post.id:post.computeValues(post.listFields(), currentUser, True)}
     return {"modifyPost":"Error", "messages":f"{dictData['id']} is not a Post id"}
 
 

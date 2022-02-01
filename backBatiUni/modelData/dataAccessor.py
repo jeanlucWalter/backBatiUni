@@ -211,6 +211,7 @@ class DataAccessor():
     print("deletePost", id)
     post = Post.objects.filter(id=id)
     if post:
+      print(post)
       for detail in DetailedPost.objects.filter(Post=post):
         detail.delete()
       post.delete()

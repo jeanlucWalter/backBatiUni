@@ -62,12 +62,10 @@ class CommonModel(models.Model):
       except:
         pass
       if index in listIndices and isinstance(fieldObject, models.ForeignKey):
-        print(self, field)
         values.append(getattr(self, field).id if getattr(self, field, None) else "")
       # elif index in listIndices and isinstance(fieldObject, models.ManyToManyField):
       #   values.append([element.id for element in getattr(self, field).all()])
       elif isinstance(fieldObject, models.DateField):
-        print(fieldObject, field, getattr(self, field))
         values.append(getattr(self, field).strftime("%Y-%m-%d") if getattr(self, field) else "")
       elif field in self.manyToManyObject:
         model = apps.get_model(app_label='backBatiUni', model_name=field)
@@ -120,7 +118,7 @@ class Company(CommonModel):
   name = models.CharField('Nom de la société', unique=True, max_length=128, null=False, blank=False)
   role = models.ForeignKey(Role, on_delete=models.PROTECT, blank=False, null=False, default=3)
   siret = models.CharField('Numéro de Siret', unique=True, max_length=32, null=True, default=None)
-  address = models.CharField("Adresse de l'entreprise", unique=True, max_length=32, null=True, default=None)
+  address = models.CharField("Adresse de l'entreprise", unique=True, max_length=256, null=True, default=None)
   activity = models.CharField("Activite principale de l'entreprise", unique=True, max_length=32, null=True, default=None)
   ntva = models.CharField("Numéro de TVA intra communautaire", unique=True, max_length=32, null=True, default=None)
   capital = models.IntegerField("Capital de l'entreprise", null=True, default=None)

@@ -75,12 +75,12 @@
          []
       ],
       "2": [
-         "Fantasiapp",
+         "CARREFOUR",
          3,
-         "",
-         "",
-         "",
-         "",
+         "40422352100018",
+         "  QUARTIER PEROU, 97230 SAINTE-MARIE",
+         "Activit\u00e9 inconnue",
+         "FR49404223521",
          "",
          "",
          "",
@@ -88,27 +88,18 @@
          "",
          "",
          [
-            6,
-            7
-         ],
-         [
-            3,
-            4
-         ],
-         [
-            1,
-            2,
-            3
+            4,
+            5
          ],
          [
             1,
             2
          ],
          [
-            10,
-            11,
-            12
-         ]
+            1
+         ],
+         [],
+         []
       ]
    },
    "JobForCompanyFields": [
@@ -119,11 +110,11 @@
       0
    ],
    "JobForCompanyValues": {
-      "6": [
+      "4": [
          4,
          2
       ],
-      "7": [
+      "5": [
          5,
          3
       ]
@@ -136,11 +127,11 @@
       0
    ],
    "LabelForCompanyValues": {
-      "3": [
+      "1": [
          1,
          "2022-01-12"
       ],
-      "4": [
+      "2": [
          2,
          "2022-01-12"
       ]
@@ -159,23 +150,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1643648237.704904,
-         ""
-      ],
-      "2": [
-         "admin",
-         "Kbis",
-         "png",
-         "2022-01-12",
-         1643648237.704904,
-         ""
-      ],
-      "3": [
-         "labels",
-         "NF",
-         "png",
-         "2022-01-12",
-         1643648237.704904,
+         1643725829.419931,
          ""
       ]
    },
@@ -203,53 +178,7 @@
       15,
       16
    ],
-   "PostValues": {
-      "1": [
-         6,
-         2,
-         "156 rue du Cherche-Midi 75006 Paris",
-         "Jean-Luc Walter",
-         true,
-         "",
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         24456.1,
-         "\u20ac",
-         "",
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            11,
-            12,
-            13
-         ],
-         []
-      ],
-      "2": [
-         9,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         "Jean-Luc Walter",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7:30",
-         "17:30",
-         65243.1,
-         "\u20ac",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            3,
-            4
-         ],
-         []
-      ]
-   },
+   "PostValues": {},
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -257,28 +186,7 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {
-      "3": [
-         "lavabo",
-         []
-      ],
-      "4": [
-         "baignoire",
-         []
-      ],
-      "11": [
-         "radiateur",
-         []
-      ],
-      "12": [
-         "cloison",
-         []
-      ],
-      "13": [
-         "doublage",
-         []
-      ]
-   },
+   "DetailedPostValues": {},
    "MissionFields": [
       "subContractor",
       "Job",
@@ -310,18 +218,5 @@
       "date",
       "nature"
    ],
-   "DisponibilityValues": {
-      "10": [
-         "2022-02-13",
-         "Disponible"
-      ],
-      "11": [
-         "2022-02-14",
-         "Disponibilit\u00e9 Sous Conditions"
-      ],
-      "12": [
-         "2022-02-15",
-         "Non Disponible"
-      ]
-   }
+   "DisponibilityValues": {}
 }

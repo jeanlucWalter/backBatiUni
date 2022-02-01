@@ -74,7 +74,7 @@ class DataAccessor():
     company = Company.objects.filter(name=data['company'])
     if not company:
         company = Company.objects.create(name=data['company'])
-    elif data["address"] and Company.objects.filter(name=data['company'], address=data["address"]):
+    elif "address" in data and Company.objects.filter(name=data['company'], address=data["address"]):
       company = Company.objects.filter(name=data['company'], address=data["address"])[0]
     else:
       company = company[0]

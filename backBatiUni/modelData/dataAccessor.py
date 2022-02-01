@@ -71,10 +71,9 @@ class DataAccessor():
 
   @classmethod
   def __registerAction(cls, data, token):
-    company = Company.objects.filter(name=data['company'])
+    companyData = data['siret']
+    company = Company.objects.filter(name=companyData['siret'])
     if not company:
-      companyData = data['company']
-      print("__registerAction", companyData)
       company = Company.objects.create(name=companyData['name'], address=companyData['address'], activity=companyData['activitePrincipale'], ntva=companyData['NTVAI'], siret=companyData['siret'])
     else:
       company = company[0]

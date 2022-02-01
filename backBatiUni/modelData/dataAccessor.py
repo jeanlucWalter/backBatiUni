@@ -74,6 +74,7 @@ class DataAccessor():
     companyData = data['company']
     company = Company.objects.filter(name=companyData['siret'])
     if not company:
+      print("__registerAction", companyData['address'])
       company = Company.objects.create(name=companyData['name'], address=companyData['address'], activity=companyData['activitePrincipale'], ntva=companyData['NTVAI'], siret=companyData['siret'])
     else:
       company = company[0]

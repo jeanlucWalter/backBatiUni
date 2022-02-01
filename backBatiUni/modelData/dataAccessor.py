@@ -75,6 +75,8 @@ class DataAccessor():
     company = Company.objects.filter(name=data['company'])
     if not company:
         company = Company.objects.create(name=data['company'])
+    elif data["address"] and Company.objects.filter(name=data['company'], address=data["address"]):
+      company = Company.objects.filter(name=data['company'], address=data["address"])[0]
     else:
       company = company[0]
     company.Role = Role.objects.get(id=data['role'])
@@ -138,6 +140,7 @@ class DataAccessor():
 
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
+    print("upload", dictData, currentUser)
     kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
     objectPost = Post.objects.create(**kwargs)
     for subObject in listObject:
@@ -292,13 +295,10 @@ class DataAccessor():
     siret = request.GET["siret"] if "siret" in request.GET else None
     if os.getenv('PATH_MIDDLE'):
       externalResponse = getEnterpriseDataFrom(subName=subName, siret=siret)["data"]
-      print("externalResponse", externalResponse)
       if isinstance(externalResponse, dict) and externalResponse:
         response = {"getEnterpriseDataFrom":"OK"}
         response.update(externalResponse)
-        print("response", response)
         externalResponse["getEnterpriseDataFrom"] = "OK"
-        print("response", externalResponse) 
         return externalResponse
       else:
         return {"getEnterpriseDataFrom":"Error", "messages":{"list":"empty"}}
@@ -400,7 +400,7 @@ class DataAccessor():
       return {"modifyDisponibility":"Error", "messages":f"User company is not sub contractor {company.name}"}
     Disponibility.objects.all().delete()
     for date, nature in listValue:
-      if not nature in ["Disponible", "Disponibilité Sous Conditions", "Non Disponible"]:
+      if not nature in ["Disponible", "Disponible Sous Conditions", "Non Disponible"]:
         messages[date] = f"nature incorrect: {nature} replaced by Disponible"
         nature = "Disponible"
       Disponibility.objects.create(Company=company, date=datetime.strptime(date, "%Y-%m-%d"), nature=nature)

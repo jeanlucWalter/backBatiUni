@@ -155,7 +155,6 @@ class DataAccessor():
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     kwargs, listFields = {"Company":userProfile.Company}, Post.listFields()
     for fieldName, value in dictData.items():
-      print("__createPostKwargs", fieldName, value)
       fieldObject = None
       try:
         fieldObject = Post._meta.get_field(fieldName)
@@ -339,7 +338,6 @@ class DataAccessor():
           fieldObject = objectInstance._meta.get_field(fieldName)
         except:
           pass
-        print("setValues", fieldName, value, fieldObject)
         if fieldObject and isinstance(fieldObject, models.ForeignKey):
           valueModified[fieldName], instance = {}, getattr(objectInstance, fieldName)
           flagModifiedNew = cls.__setValues(value, user, message, valueModified[fieldName], instance, flagModified)

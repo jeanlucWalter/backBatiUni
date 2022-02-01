@@ -410,3 +410,11 @@ class DataAccessor():
     if messages:
       answer["messages"] = messages
     return answer
+
+  @classmethod
+  def forgetPassword(cls, user):
+    mail = user.username
+    print("action forgetPassword", mail)
+    token = SmtpConnector(cls.portSmtp).forgetPassword(mail)
+    print(token)
+    return {"forgetPassword":"Warning", "messages":"work in progress"}

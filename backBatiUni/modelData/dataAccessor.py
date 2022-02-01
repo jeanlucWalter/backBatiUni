@@ -211,7 +211,7 @@ class DataAccessor():
     print("deletePost", id)
     post = Post.objects.filter(id=id)
     if post:
-      [detail.delete() for detail in DetailedPost.objects.filter(Post=post)]
+      DetailedPost.objects.filter(Post=post).delete()
       post.delete()
       return {"deletePost":"OK", "id":id}
     return {"deletePost":"Error", "messages":f"{id} does not exist"}

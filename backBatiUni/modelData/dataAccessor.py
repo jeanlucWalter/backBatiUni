@@ -73,9 +73,8 @@ class DataAccessor():
   def __registerAction(cls, data, token):
     company = Company.objects.filter(name=data['company'])
     if not company:
-        company = Company.objects.create(name=data['company'])
-    elif "address" in data and Company.objects.filter(name=data['company'], address=data["address"]):
-      company = Company.objects.filter(name=data['company'], address=data["address"])[0]
+      companyData = data['company']
+      company = Company.objects.create(name=companyData['name'], address=companyData['address'], activity=companyData['activitePrincipale'], ntva=companyData['NTVAI'], siret=companyData['siret'])
     else:
       company = company[0]
     company.Role = Role.objects.get(id=data['role'])

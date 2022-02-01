@@ -140,12 +140,12 @@ class DataAccessor():
 
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
-    print("upload", dictData, currentUser)
     kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
     objectPost = Post.objects.create(**kwargs)
-    for subObject in listObject:
-      subObject.Post = objectPost
-      subObject.save()
+    if listObject:
+      for subObject in listObject:
+        subObject.Post = objectPost
+        subObject.save()
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 
   @classmethod

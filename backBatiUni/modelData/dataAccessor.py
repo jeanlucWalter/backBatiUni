@@ -141,6 +141,8 @@ class DataAccessor():
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
     kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
+    if "uploadPost" in kwargs and kwargs["uploadPost"] == "Error":
+      return kwargs
     objectPost = Post.objects.create(**kwargs)
     if listObject:
       for subObject in listObject:
@@ -162,8 +164,11 @@ class DataAccessor():
       if fieldName in listFields:
         if fieldObject and isinstance(fieldObject, models.ForeignKey):
           foreign = Post._meta.get_field(fieldName).remote_field.model
-          objectForeign = foreign.objects.get(id=value)
-          kwargs[fieldName]=objectForeign
+          objectForeign = foreign.objects.filter(id=value)
+          if objectForeign:
+            kwargs[fieldName]=objectForeign[0]
+          else:
+            return {"uploadPost":"Error", "messages":{fieldName:"is not documented"}}, False
         if fieldObject and isinstance(fieldObject, models.DateField):
           date = datetime.strptime(dictData[fieldName], "%Y-%m-%d") if dictData[fieldName] else None
           kwargs[fieldName]=date

@@ -213,6 +213,9 @@ class DataAccessor():
     if post:
       for detail in DetailedPost.objects.filter(Post=post[0]):
         detail.delete()
+      for file in Files.objects.filter(Post=post[0]):
+        file.delete()
+        
       post.delete()
       return {"deletePost":"OK", "id":id}
     return {"deletePost":"Error", "messages":f"{id} does not exist"}

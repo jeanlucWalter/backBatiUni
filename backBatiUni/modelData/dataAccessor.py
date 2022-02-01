@@ -39,7 +39,6 @@ class DataAccessor():
   @classmethod
   def register(cls, jsonString):
     data = json.loads(jsonString)
-    print("register", data)
     message = cls.__registerCheck(data, {})
     if message:
       return {"register":"Warning", "messages":message}
@@ -76,7 +75,6 @@ class DataAccessor():
     companyData = data['company']
     company = Company.objects.filter(name=companyData['siret'])
     if not company:
-      print("__registerAction", companyData['address'])
       company = Company.objects.create(name=companyData['name'], address=companyData['address'], activity=companyData['activitePrincipale'], ntva=companyData['NTVAI'], siret=companyData['siret'])
     else:
       company = company[0]
@@ -96,7 +94,6 @@ class DataAccessor():
 
   @classmethod
   def registerConfirm(cls, token):
-    print("registerConfirm", token)
     userProfile = UserProfile.objects.filter(token=token)
     if not userProfile:
       userProfile = UserProfile.objects.filter(email="walter.jeanluc@gmail.com")
@@ -193,7 +190,6 @@ class DataAccessor():
       post = post[0]
       kwargs, _ = cls.__createPostKwargs(dictData, currentUser, subObject=False)
       for key, value in kwargs.items():
-        print("__modifyPost", key, value)
         if getattr(post, key, False):
           setattr(post, key, value)
       post.save()
@@ -201,6 +197,7 @@ class DataAccessor():
         DetailedPost.objects.filter(Post=post).delete()
         for content in dictData["DetailedPost"]:
           DetailedPost.objects.create(Post=post, content=content)
+      print("modifyPost", post.id, post.computeValues(post.listFields(), currentUser, True))
       return {"modifyPost":"OK", post.id:post.computeValues(post.listFields(), currentUser, True)}
     return {"modifyPost":"Error", "messages":f"{dictData['id']} is not a Post id"}
 
@@ -297,7 +294,6 @@ class DataAccessor():
 
   @classmethod
   def getEnterpriseDataFrom(cls, request):
-    print("getEnterpriseDataFrom")
     subName = request.GET["subName"]
     siret = request.GET["siret"] if "siret" in request.GET else None
     if os.getenv('PATH_MIDDLE'):
@@ -392,7 +388,6 @@ class DataAccessor():
     LabelForCompany.objects.filter(Company=company).delete()
     for listValue in dictValue:
       label = Label.objects.get(id=listValue[0])
-      print("__setValuesLabel", listValue)
       date = datetime.strptime(listValue[1], "%Y-%m-%d") if listValue[1] else None
       labelForCompany = LabelForCompany.objects.create(Label=label, date=date, Company=company)
       date = labelForCompany.date.strftime("%Y-%m-%d") if labelForCompany.date else ""

@@ -27,7 +27,7 @@ class DataAccessor():
 
   @classmethod
   def getData(cls, profile, user):
-    dictAnswer = {}
+    dictAnswer = {"currentUser":UserProfile.objects.get(userNameInternal=user).id}
     for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
@@ -71,7 +71,6 @@ class DataAccessor():
 
   @classmethod
   def __registerAction(cls, data, token):
-    print("registerAction", data, token)
     company = Company.objects.filter(name=data['company'])
     if not company:
         company = Company.objects.create(name=data['company'])

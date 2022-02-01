@@ -153,6 +153,7 @@ class DataAccessor():
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     kwargs, listFields = {"Company":userProfile.Company}, Post.listFields()
     for fieldName, value in dictData.items():
+      print("__createPostKwargs", fieldName, value)
       fieldObject = None
       try:
         fieldObject = Post._meta.get_field(fieldName)

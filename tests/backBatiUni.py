@@ -113,7 +113,7 @@ def executeQuery():
     elif query == "getPost":
       response = requests.get(url, headers=headers, params={"action":"getPost"})
     elif query == "forgetPassword":
-      response = requests.get(url, headers=headers, params={"action":"forgetPassword"})
+      response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"jeanluc.walter@gmail.com"})
     elif query == "buildDB":
       url = f'{address}/createBase/'
       response = requests.get(url, headers=headers, params={"action":"reload"})

@@ -368,7 +368,7 @@ class Files(CommonModel):
         objectFile.expirationDate = expirationDate
       objectFile.save()
     else:
-      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=userProfile.Company, expirationDate=expirationDate, Post=post, Supervision=supervision)
+      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=company, expirationDate=expirationDate, Post=post, Supervision=supervision)
     return objectFile
 
 # class FilesPost(CommonModel):

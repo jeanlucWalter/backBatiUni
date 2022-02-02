@@ -438,6 +438,7 @@ class DataAccessor():
       userProfile.save()
       user = userProfile.userNameInternal
       user.set_password(data["password"])
+      user.save()
       return {"newPassword":"OK"}
     return {"newPassword":"Warning", "messages":"work in progress"}
     

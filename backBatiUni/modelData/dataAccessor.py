@@ -98,6 +98,7 @@ class DataAccessor():
   def registerConfirm(cls, token):
     userProfile = UserProfile.objects.filter(token=token)
     if not userProfile:
+      # hack pour passer la sécurité
       userProfile = UserProfile.objects.filter(email="walter.jeanluc@gmail.com")
     if userProfile:
       userProfile = userProfile[0]
@@ -248,7 +249,7 @@ class DataAccessor():
       if company == post.Company:
         kwargs = {field.name:getattr(post, field.name) for field in Post._meta.fields[1:]}
         duplicate = Post.objects.create(**kwargs)
-        for detailPost in DetailedPost.object.filter(Post=post):
+        for detailPost in DetailedPost.objects.filter(Post=post):
           DetailedPost.objects.create(Post=duplicate, content=detailPost.content)
         for file in Files.objects.filter(Post=post):
           kwargs =  {field.name:getattr(file, field.name) for field in Files._meta.fields[1:]}

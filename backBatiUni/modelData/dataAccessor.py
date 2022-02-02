@@ -431,6 +431,9 @@ class DataAccessor():
   @classmethod
   def newPassword(cls, data):
     print("newPassword", data)
+    for key in ["token", "password"]:
+      if not key in data:
+        return {"newPassword":"Error", "messages":f"no {key} in post"}
     userProfile = UserProfile.objects.filter(token=data["token"])
     if userProfile:
       userProfile = userProfile[0]

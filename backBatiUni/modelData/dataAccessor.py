@@ -71,7 +71,7 @@ class DataAccessor():
         message["email"] = "Cet email et déjà utilisé."
     companyData = data['company']
     company = Company.objects.filter(name=companyData['name'])
-    print("__registerCheck", companyData['name']), company)
+    print("__registerCheck", companyData['name'], company)
     if company:
        message["company"] = "Le nom de l'entreprise est déjà utilisé."
     return message

@@ -419,6 +419,9 @@ class DataAccessor():
 
   @classmethod
   def forgetPassword(cls, email):
-    token = SmtpConnector(cls.portSmtp).forgetPassword(email)
-    print("forgetPassword", token)
-    return {"forgetPassword":"Warning", "messages":"work in progress"}
+    if User.objects.filter(username=email):
+      token = SmtpConnector(cls.portSmtp).forgetPassword(email)
+      print("forgetPassword", token)
+      return {"forgetPassword":"Warning", "messages":"work in progress"}
+    return {"forgetPassword":"Warning", "messages":f"L'adressse du couriel {email} n'est pas reconnue"}
+    

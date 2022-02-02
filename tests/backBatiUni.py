@@ -54,7 +54,7 @@ def executeQuery():
   elif query == "getGeneralData":
     response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
   elif query == "forgetPassword":
-      response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"jeanluc.walter@gmail.com"})
+      response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"walter.jeanluc@gmail.com"})
   else:
     token = queryForToken("jlw", "pwd") if query == "buildDB" else queryForToken(userName, password)
     if query == "token":

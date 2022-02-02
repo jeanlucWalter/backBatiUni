@@ -1,4 +1,5 @@
 import requests
+import requests_async as reqsourceuestsAsync
 from ..models import *
 import json
 
@@ -49,6 +50,7 @@ class SmtpConnector:
       "mail": mail
     }
     try:
+      print(self.url)
       response = requests.get(url=self.url, headers=self.headers, params=params)
       data = json.loads(response.text)
       if "token" in data:

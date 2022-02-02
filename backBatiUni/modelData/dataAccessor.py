@@ -6,7 +6,6 @@ from django.apps import apps
 from operator import attrgetter
 import sys
 import os
-import re
 from datetime import datetime
 import base64
 from django.core.files.base import ContentFile
@@ -294,7 +293,6 @@ class DataAccessor():
     expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if data["expirationDate"] else None
     post = Post.objects.get(id=data["Post"]) if "Post" in data else None
     objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
-    # file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
     file = ContentFile(base64.urlsafe_b64decode(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
@@ -422,22 +420,12 @@ class DataAccessor():
 
   @classmethod
   def forgetPassword(cls, email):
-    if User.objects.filter(username=email):
-      token = SmtpConnector(cls.portSmtp).forgetPassword(email)
-      print("forgetPassword", token)
+    user = User.objects.filter(username=email)
+    if user:
+      userProfile = UserProfile.objects.get(userNameInternal=user)
+      userProfile.token = SmtpConnector(cls.portSmtp).forgetPassword(email)
+      print("forgetPassword", userProfile.token)
+      userProfile.save()
       return {"forgetPassword":"Warning", "messages":"work in progress"}
     return {"forgetPassword":"Warning", "messages":f"L'adressse du couriel {email} n'est pas reconnue"}
-
-def decodeBase64(data, altchars=b'+/'):
-    """Decode base64, padding being optional.
-
-    :param data: Base64 data as an ASCII byte string
-    :returns: The decoded byte string.
-
-    """
-    data = re.sub(rb'[^a-zA-Z0-9%s]+' % altchars, b'', data)  # normalize
-    missing_padding = len(data) % 4
-    if missing_padding:
-        data += b'='* (4 - missing_padding)
-    return base64.b64decode(data, altchars)
     

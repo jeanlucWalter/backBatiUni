@@ -52,6 +52,8 @@ class SmtpConnector:
     try:
       print(self.url)
       response = requests.get(url=self.url, headers=self.headers, params=params)
+      # print(f'{self.url}/?action=forgetPassword&mail={mail}')
+      # response = await requests.get(f'{self.url}/?action=forgetPassword&mail={mail}')
       data = json.loads(response.text)
       if "token" in data:
         return data["token"]

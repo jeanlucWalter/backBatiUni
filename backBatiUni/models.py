@@ -16,12 +16,10 @@ class CommonModel(models.Model):
   def dumpStructure(cls, user):
     dictAnswer = {}
     tableName = cls._meta.verbose_name.title().replace(" ", "")
-    print("dumpStructure", tableName)
     if len(cls.listFields()) > 1:
       dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
         dictAnswer[tableName + "Indices"] = cls.listIndices()
-        if tableName == "Post": print("dumpStructure", cls.dictValues(user))
     dictAnswer[tableName + "Values"] = cls.dictValues(user)
     return dictAnswer
 

@@ -6,6 +6,7 @@ from django.apps import apps
 from operator import attrgetter
 import sys
 import os
+import re
 from datetime import datetime
 import base64
 from django.core.files.base import ContentFile
@@ -31,7 +32,6 @@ class DataAccessor():
       {"register":"Error", "messages":"currentUser does not exist"} 
     dictAnswer = {"currentUser":UserProfile.objects.get(userNameInternal=user).id} if profile == "user" else {}
     for table in cls.loadTables[profile]:
-      print("table", table)
       dictAnswer.update(table.dumpStructure(user))
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)
@@ -294,7 +294,8 @@ class DataAccessor():
     expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if data["expirationDate"] else None
     post = Post.objects.get(id=data["Post"]) if "Post" in data else None
     objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
-    file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
+    # file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + data['ext'])
+    file = ContentFile(decodeBase64(fileStr), name=objectFile.path + data['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
     return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)[:-1]}
@@ -426,4 +427,17 @@ class DataAccessor():
       print("forgetPassword", token)
       return {"forgetPassword":"Warning", "messages":"work in progress"}
     return {"forgetPassword":"Warning", "messages":f"L'adressse du couriel {email} n'est pas reconnue"}
+
+def decodeBase64(data, altchars=b'+/'):
+    """Decode base64, padding being optional.
+
+    :param data: Base64 data as an ASCII byte string
+    :returns: The decoded byte string.
+
+    """
+    data = re.sub(rb'[^a-zA-Z0-9%s]+' % altchars, b'', data)  # normalize
+    missing_padding = len(data) % 4
+    if missing_padding:
+        data += b'='* (4 - missing_padding)
+    return base64.b64decode(data, altchars)
     

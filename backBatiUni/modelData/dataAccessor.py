@@ -422,7 +422,7 @@ class DataAccessor():
   def forgetPassword(cls, email):
     user = User.objects.filter(username=email)
     if user:
-      userProfile = UserProfile.objects.get(userNameInternal=user)
+      userProfile = UserProfile.objects.get(userNameInternal=user[0])
       userProfile.token = SmtpConnector(cls.portSmtp).forgetPassword(email)
       print("forgetPassword", userProfile.token)
       userProfile.save()

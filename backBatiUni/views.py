@@ -30,7 +30,6 @@ class Data(DefaultView):
       if action == "createMissionFromPost": return Response(DataAccessor.createMissionFromPost(request.GET["id"], currentUser))
       if action == "switchDraft": return Response(DataAccessor.switchDraft(request.GET["id"], currentUser))
       if action == "duplicatePost": return Response(DataAccessor.duplicatePost(request.GET["id"], currentUser))
-      if action == "forgetPassword": return Response(DataAccessor.forgetPassword(currentUser))
       return Response({"data GET":"Error", "messages":{"action":action}})
     return Response({"data GET":"Warning", "messages":"La confirmation par mail n'est pas réalisée."})
 
@@ -47,12 +46,13 @@ class Initialize(APIView):
   def get(self, request):
     if 'action' in request.GET:
       action = request.GET["action"]
+      print("initialize action", action)
       if action == "getGeneralData":
         return Response(DataAccessor().getData("general", False))
       if action == "registerConfirm":
         return Response(DataAccessor().registerConfirm(request.GET["token"]))
-      if action == "getEnterpriseDataFrom":
-        return Response(DataAccessor.getEnterpriseDataFrom(request))
+      if action == "getEnterpriseDataFrom": return Response(DataAccessor.getEnterpriseDataFrom(request))
+      if action == "forgetPassword": return Response(DataAccessor.forgetPassword(request.GET["email"]))
     return Response({"Initialize GET":"OK"})
 
   def post(self, request):

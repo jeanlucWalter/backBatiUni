@@ -53,6 +53,8 @@ def executeQuery():
       response = requests.get(f'{address}/initialize/', headers=headers, params={"action":"registerConfirm", "token":"token not received"})
   elif query == "getGeneralData":
     response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
+  elif query == "forgetPassword":
+      response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"jeanluc.walter@gmail.com"})
   else:
     token = queryForToken("jlw", "pwd") if query == "buildDB" else queryForToken(userName, password)
     if query == "token":
@@ -112,8 +114,6 @@ def executeQuery():
       response = requests.get(url, headers=headers, params={"action":"createMissionFromPost", "id":1})
     elif query == "getPost":
       response = requests.get(url, headers=headers, params={"action":"getPost"})
-    elif query == "forgetPassword":
-      response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"jeanluc.walter@gmail.com"})
     elif query == "buildDB":
       url = f'{address}/createBase/'
       response = requests.get(url, headers=headers, params={"action":"reload"})

@@ -303,6 +303,7 @@ class DataAccessor():
     siret = request.GET["siret"] if "siret" in request.GET else None
     if os.getenv('PATH_MIDDLE'):
       externalResponse = getEnterpriseDataFrom(subName=subName, siret=siret)
+      print(externalResponse)
       externalResponse = externalResponse["data"] if "data" in externalResponse else None
       if isinstance(externalResponse, dict) and externalResponse:
         response = {"getEnterpriseDataFrom":"OK"}

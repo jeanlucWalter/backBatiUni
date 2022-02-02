@@ -69,6 +69,8 @@ class CommonModel(models.Model):
       #   values.append([element.id for element in getattr(self, field).all()])
       elif isinstance(fieldObject, models.DateField):
         values.append(getattr(self, field).strftime("%Y-%m-%d") if getattr(self, field) else "")
+      elif isinstance(fieldObject, models.BooleanField):
+        values.append(getattr(self, field))
       elif field in self.manyToManyObject:
         model = apps.get_model(app_label='backBatiUni', model_name=field)
         listFieldsModel = model.listFields()
@@ -80,7 +82,7 @@ class CommonModel(models.Model):
         values.append(listModel)
       else:
         value = getattr(self, field, "")
-        values.append(value or "")
+        values.append(value)
     return values
 
   @classmethod

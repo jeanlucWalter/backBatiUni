@@ -31,6 +31,7 @@ def queryForToken(userName, password):
   data = json.dumps({"username": userName, "password": password})
   print(data)
   response = requests.post(tokenUrl, headers=headers, data=data)
+  print("response row", response.text)
   dictResponse = json.loads(response.text)
   return dictResponse['token']
 
@@ -97,7 +98,7 @@ def executeQuery():
     #     response = requests.get(url, headers=headers, params={"action":"deletePost", "id":id})
     elif query == "modifyDisponibility":
       print("modifyDisponibility")
-      post = {'action':"modifyDisponibility", "disponibility":[["2022-02-13", "Disponible"], ["2022-02-14", "Disponibilité Sous Conditions"], ["2022-02-15", "Non Disponible"]]}
+      post = {'action':"modifyDisponibility", "disponibility":[["2022-02-13", "Disponible"], ["2022-02-14", "Disponible Sous Conditions"], ["2022-02-15", "Non Disponible"]]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
       post1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(1), "nature":"labels", "expirationDate":"2022-01-12"}

@@ -415,6 +415,7 @@ class DataAccessor():
     answer = {"modifyDisponibility":"OK"}
     answer.update({disponibility.id:[disponibility.date.strftime("%Y-%m-%d"), disponibility.nature] for disponibility in Disponibility.objects.filter(Company=company)})
     if messages:
+      answer["modifyDisponibility"] = "Warning"
       answer["messages"] = messages
     return answer
 

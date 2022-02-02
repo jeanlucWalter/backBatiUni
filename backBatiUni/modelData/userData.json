@@ -1,5 +1,5 @@
 {
-   "currentUser": 2,
+   "currentUser": 3,
    "UserprofileFields": [
       "userName",
       "Company",
@@ -15,15 +15,15 @@
       1
    ],
    "UserprofileValues": {
-      "2": [
-         "walter.jeanluc@gmail.com",
-         2,
-         "Jean-Luc",
-         "Walter",
+      "3": [
+         "baptiste.prevost@telecom-paris.fr",
+         3,
+         "Baptiste",
+         "Pr\u00e9vost",
          "",
+         "0695526759",
          "",
-         "",
-         "walter.jeanluc@gmail.com",
+         "baptiste.prevost@telecom-paris.fr",
          ""
       ]
    },
@@ -87,16 +87,42 @@
          "",
          "",
          "",
+         [],
+         [],
          [
-            4,
-            5
+            1,
+            2,
+            3
          ],
          [
             1,
             2
          ],
          [
-            1
+            1,
+            2,
+            3
+         ]
+      ],
+      "3": [
+         "ZEMMOUR 2022-COMITE DE SOUTIEN DE L'INDRE",
+         3,
+         "89342009100017",
+         "5 RUE DES PONTS, 36250 SAINT-MAUR",
+         "Activit\u00e9s des organisations politiques",
+         "FR32893420091",
+         "",
+         "",
+         "",
+         "",
+         "",
+         "0695526759",
+         [
+            6
+         ],
+         [],
+         [
+            4
          ],
          [],
          []
@@ -110,13 +136,9 @@
       0
    ],
    "JobForCompanyValues": {
-      "4": [
-         4,
-         2
-      ],
-      "5": [
-         5,
-         3
+      "6": [
+         3,
+         1
       ]
    },
    "LabelForCompanyFields": [
@@ -126,16 +148,7 @@
    "LabelForCompanyIndices": [
       0
    ],
-   "LabelForCompanyValues": {
-      "1": [
-         1,
-         "2022-01-12"
-      ],
-      "2": [
-         2,
-         "2022-01-12"
-      ]
-   },
+   "LabelForCompanyValues": {},
    "FilesFields": [
       "nature",
       "name",
@@ -150,7 +163,31 @@
          "Fantasiapp_1",
          "png",
          "",
-         1643798777.935519,
+         1643810416.732948,
+         ""
+      ],
+      "2": [
+         "admin",
+         "Kbis",
+         "png",
+         "2022-01-12",
+         1643810416.732948,
+         ""
+      ],
+      "3": [
+         "labels",
+         "NF",
+         "png",
+         "2022-01-12",
+         1643810416.732948,
+         ""
+      ],
+      "4": [
+         "userImage",
+         "Baptiste-Pr\u00e9vost-3",
+         "jpeg",
+         "",
+         1643811427.92431,
          ""
       ]
    },
@@ -178,7 +215,53 @@
       15,
       16
    ],
-   "PostValues": {},
+   "PostValues": {
+      "1": [
+         6,
+         2,
+         "156 rue du Cherche-Midi 75006 Paris",
+         "Jean-Luc Walter",
+         true,
+         "",
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         24456.1,
+         "\u20ac",
+         "",
+         "Deuxi\u00e8me description d'un chantier",
+         [
+            5,
+            6,
+            7
+         ],
+         []
+      ],
+      "2": [
+         9,
+         3,
+         "128 rue de Paris 92100 Boulogne",
+         "Jean-Luc Walter",
+         true,
+         true,
+         "2022-02-15",
+         "2022-02-16",
+         "2022-02-28",
+         "7:30",
+         "17:30",
+         65243.1,
+         "\u20ac",
+         true,
+         "Premi\u00e8re description d'un chantier",
+         [
+            3,
+            4
+         ],
+         []
+      ]
+   },
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -186,7 +269,32 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {},
+   "DetailedPostValues": {
+      "3": [
+         "lavabo",
+         []
+      ],
+      "4": [
+         "baignoire",
+         []
+      ],
+      "5": [
+         "radiateur",
+         []
+      ],
+      "6": [
+         "cloison",
+         []
+      ],
+      "7": [
+         "doublage",
+         []
+      ],
+      "8": [
+         "Prestation 1....",
+         []
+      ]
+   },
    "MissionFields": [
       "subContractor",
       "Job",
@@ -218,5 +326,18 @@
       "date",
       "nature"
    ],
-   "DisponibilityValues": {}
+   "DisponibilityValues": {
+      "1": [
+         "2022-02-13",
+         "Disponible"
+      ],
+      "2": [
+         "2022-02-14",
+         "Disponible Sous Conditions"
+      ],
+      "3": [
+         "2022-02-15",
+         "Non Disponible"
+      ]
+   }
 }

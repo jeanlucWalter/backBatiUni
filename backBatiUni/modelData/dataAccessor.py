@@ -10,6 +10,7 @@ from datetime import datetime
 import base64
 from django.core.files.base import ContentFile
 from .smtpConnector import SmtpConnector
+import json
 
 from dotenv import load_dotenv
 
@@ -17,8 +18,6 @@ load_dotenv()
 if os.getenv('PATH_MIDDLE'):
   sys.path.append(os.getenv('PATH_MIDDLE'))
   from profileScraping import getEnterpriseDataFrom
-
-import json
 
 class DataAccessor():
   loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, DetailedPost, Mission, Disponibility], "general":[Job, Role, Label]}
@@ -37,8 +36,7 @@ class DataAccessor():
     return dictAnswer
 
   @classmethod
-  def register(cls, jsonString):
-    data = json.loads(jsonString)
+  def register(cls, data):
     message = cls.__registerCheck(data, {})
     if message:
       print("register message", message)
@@ -429,4 +427,9 @@ class DataAccessor():
       userProfile.save()
       return {"forgetPassword":"Warning", "messages":"work in progress"}
     return {"forgetPassword":"Warning", "messages":f"L'adressse du couriel {email} n'est pas reconnue"}
+
+  @classmethod
+  def newPassword(cls, data):
+    print("newPassword", data)
+    return {"newPassword":"Warning", "messages":"work in progress"}
     

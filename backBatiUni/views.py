@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .models import *
 from .modelData.buildDataBase import CreateNewDataBase
 from .modelData.dataAccessor import DataAccessor
+import json
 
 class DefaultView(APIView):
   permission_classes = (IsAuthenticated,)
@@ -58,7 +59,10 @@ class Initialize(APIView):
   def post(self, request):
     jsonBin = request.body
     jsonString = jsonBin.decode("utf8")
-    return Response(DataAccessor().register(jsonString))
+    data = json.loads(jsonString)
+    print(data)
+    if "action" in data and data["action"] == "newPassword":  return Response(DataAccessor.newPassword(data))
+    return Response(DataAccessor().register(data))
 
 class CreateBase(DefaultView):
   def get(self, request):

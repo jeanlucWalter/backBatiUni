@@ -41,6 +41,7 @@ class DataAccessor():
     data = json.loads(jsonString)
     message = cls.__registerCheck(data, {})
     if message:
+      print("register message", message)
       return {"register":"Warning", "messages":message}
     token = SmtpConnector(cls.portSmtp).register(data["firstname"], data["lastname"], data["email"])
     if token != "token not received" or data["email"] == "walter.jeanluc@gmail.com":
@@ -70,6 +71,7 @@ class DataAccessor():
         message["email"] = "Cet email et déjà utilisé."
     companyData = data['company']
     company = Company.objects.filter(name=companyData['name'])
+    print("__registerCheck", companyData['name']), company)
     if company:
        message["company"] = "Le nom de l'entreprise est déjà utilisé."
     return message

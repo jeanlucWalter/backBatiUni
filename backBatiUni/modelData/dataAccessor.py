@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 load_dotenv()
 if os.getenv('PATH_MIDDLE'):
   sys.path.append(os.getenv('PATH_MIDDLE'))
+  print("load profileScraping")
   from profileScraping import getEnterpriseDataFrom
 
 class DataAccessor():
@@ -303,15 +304,12 @@ class DataAccessor():
     siret = request.GET["siret"] if "siret" in request.GET else None
     if os.getenv('PATH_MIDDLE'):
       externalResponse = getEnterpriseDataFrom(subName=subName, siret=siret)
-      print("response raw", externalResponse)
       externalResponse = externalResponse["data"] if "data" in externalResponse else None
       if isinstance(externalResponse, dict) and externalResponse:
         response = {"getEnterpriseDataFrom":"OK"}
         response.update(externalResponse)
-        print(response)
         return response
       else:
-        print("getEnterpriseDataFrom no answer")
         return {"getEnterpriseDataFrom":"Error", "messages":{"list":"empty"}}
     else:
       return {"getEnterpriseDataFrom":"Error", "messages":{"local":"no installation"}}

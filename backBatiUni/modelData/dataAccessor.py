@@ -431,5 +431,13 @@ class DataAccessor():
   @classmethod
   def newPassword(cls, data):
     print("newPassword", data)
+    userProfile = UserProfile.objects.filter(token=data["token"])
+    if userProfile:
+      userProfile = userProfile[0]
+      userProfile.token = None
+      userProfile.save()
+      user = userProfile.userNameInternal
+      user.set_password(data["password"])
+      return {"newPassword":"OK"}
     return {"newPassword":"Warning", "messages":"work in progress"}
     

@@ -31,6 +31,7 @@ class DataAccessor():
       {"register":"Error", "messages":"currentUser does not exist"} 
     dictAnswer = {"currentUser":UserProfile.objects.get(userNameInternal=user).id} if profile == "user" else {}
     for table in cls.loadTables[profile]:
+      print("table", table)
       dictAnswer.update(table.dumpStructure(user))
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
         json.dump(dictAnswer, jsonFile, indent = 3)

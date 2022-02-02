@@ -68,16 +68,16 @@ class DataAccessor():
         userProfile.delete()
       else:
         message["email"] = "Cet email et déjà utilisé."
+    companyData = data['company']
+    company = Company.objects.filter(name=companyData['name'])
+    if company:
+       message["company"] = "Le nom de l'entreprise est déjà utilisé."
     return message
 
   @classmethod
   def __registerAction(cls, data, token):
     companyData = data['company']
-    company = Company.objects.filter(name=companyData['siret'])
-    if not company:
-      company = Company.objects.create(name=companyData['name'], address=companyData['address'], activity=companyData['activitePrincipale'], ntva=companyData['NTVAI'], siret=companyData['siret'])
-    else:
-      company = company[0]
+    company = Company.objects.create(name=companyData['name'], address=companyData['address'], activity=companyData['activitePrincipale'], ntva=companyData['NTVAI'], siret=companyData['siret'])
     company.Role = Role.objects.get(id=data['role'])
     company.save()
     proposer = None

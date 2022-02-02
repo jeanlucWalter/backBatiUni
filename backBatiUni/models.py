@@ -21,6 +21,7 @@ class CommonModel(models.Model):
       dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
         dictAnswer[tableName + "Indices"] = cls.listIndices()
+        if tableName == "Post": print("dumpStructure", cls.dictValues(user))
     dictAnswer[tableName + "Values"] = cls.dictValues(user)
     return dictAnswer
 

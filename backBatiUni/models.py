@@ -307,7 +307,7 @@ class Files(CommonModel):
   name = models.CharField('Nom du fichier pour le front', max_length=128, null=False, default=False, blank=False)
   path = models.CharField('path', max_length=256, null=False, default=False, blank=False)
   ext = models.CharField('extension', max_length=8, null=False, default=False, blank=False)
-  Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, default=None)
+  Company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True, default=None)
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
   Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, null=True, default=None)

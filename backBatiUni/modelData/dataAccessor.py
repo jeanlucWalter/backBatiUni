@@ -307,9 +307,10 @@ class DataAccessor():
       if isinstance(externalResponse, dict) and externalResponse:
         response = {"getEnterpriseDataFrom":"OK"}
         response.update(externalResponse)
-        externalResponse["getEnterpriseDataFrom"] = "OK"
-        return externalResponse
+        print(response)
+        return response
       else:
+        print("getEnterpriseDataFrom no answer")
         return {"getEnterpriseDataFrom":"Error", "messages":{"list":"empty"}}
     else:
       return {"getEnterpriseDataFrom":"Error", "messages":{"local":"no installation"}}

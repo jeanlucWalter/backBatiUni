@@ -245,6 +245,7 @@ class DataAccessor():
       post = post[0]
       if company == post.Company:
         kwargs = {field.name:getattr(post, field.name) for field in Post._meta.fields[1:]}
+        kwargs["draft"] = True
         duplicate = Post.objects.create(**kwargs)
         for detailPost in DetailedPost.objects.filter(Post=post):
           DetailedPost.objects.create(Post=duplicate, content=detailPost.content)

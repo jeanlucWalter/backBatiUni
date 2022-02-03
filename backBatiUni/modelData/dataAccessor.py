@@ -155,7 +155,7 @@ class DataAccessor():
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
-    kwargs, listFields = {"Company":userProfile.Company}, Post.listFields()
+    kwargs, listFields, listObject = {"Company":userProfile.Company}, Post.listFields(), None
     for fieldName, value in dictData.items():
       fieldObject = None
       try:
@@ -179,10 +179,10 @@ class DataAccessor():
           kwargs[fieldName]=float(dictData[fieldName]) if dictData[fieldName] else 0.0
         if fieldObject and isinstance(fieldObject, models.BooleanField) or isinstance(fieldObject, models.CharField) :
           kwargs[fieldName]= dictData[fieldName]
-        listObject = None
         if fieldName in Post.manyToManyObject and subObject:
           modelObject, listObject = apps.get_model(app_label='backBatiUni', model_name=fieldName), []
           for content in value:
+            print("loop", modelObject, content)
             listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
     print("__createPostKwargs", listObject)

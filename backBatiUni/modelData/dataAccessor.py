@@ -141,6 +141,7 @@ class DataAccessor():
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
     kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
+    print("__uploadPost", listObject)
     if "uploadPost" in kwargs and kwargs["uploadPost"] == "Error":
       return kwargs
     objectPost = Post.objects.create(**kwargs)
@@ -184,6 +185,7 @@ class DataAccessor():
           for content in value:
             listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
+    print("__createPostKwargs", listObject)
     return kwargs, listObject
 
   @classmethod

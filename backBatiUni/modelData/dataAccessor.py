@@ -6,6 +6,7 @@ from django.apps import apps
 from operator import attrgetter
 import sys
 import os
+import shutil
 from datetime import datetime
 import base64
 from django.core.files.base import ContentFile
@@ -250,6 +251,8 @@ class DataAccessor():
           DetailedPost.objects.create(Post=duplicate, content=detailPost.content)
         for file in Files.objects.filter(Post=post):
           kwargs =  {field.name:getattr(file, field.name) for field in Files._meta.fields[1:]}
+          newName = Files.dictPath["post"] + kwargs["name"] + '_' + str(duplicate.id) + '.' + kwargs["ext"]
+          shutil.copy(kwargs["path"], newName)
           kwargs["path"] = Files.dictPath["post"] + kwargs["name"] + '_' + str(duplicate.id) + '.' + kwargs["ext"]
           newFile= Files.objects.create(**kwargs)
           newFile.Post = duplicate

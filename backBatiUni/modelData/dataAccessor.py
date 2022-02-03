@@ -1,3 +1,4 @@
+from asyncio import subprocess
 from re import sub
 from ..models import *
 from django.contrib.auth.models import User, UserManager
@@ -146,6 +147,7 @@ class DataAccessor():
     if listObject:
       for subObject in listObject:
         subObject.Post = objectPost
+        print("createPost", subObject, subObject.Post)
         subObject.save()
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 

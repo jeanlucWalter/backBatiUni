@@ -97,9 +97,6 @@ class DataAccessor():
   @classmethod
   def registerConfirm(cls, token):
     userProfile = UserProfile.objects.filter(token=token)
-    if token == "A secret code to check 9243672519":
-      # hack pour passer la sécurité
-      userProfile = UserProfile.objects.filter(email="walter.jeanluc@gmail.com")
     if userProfile:
       userProfile = userProfile[0]
       user = User.objects.create(username=userProfile.email, email=userProfile.email)

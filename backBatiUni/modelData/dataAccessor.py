@@ -197,7 +197,6 @@ class DataAccessor():
         DetailedPost.objects.filter(Post=post).delete()
         for content in dictData["DetailedPost"]:
           DetailedPost.objects.create(Post=post, content=content)
-      print("modifyPost", post.id, post.computeValues(post.listFields(), currentUser, True))
       return {"modifyPost":"OK", post.id:post.computeValues(post.listFields(), currentUser, True)}
     return {"modifyPost":"Error", "messages":f"{dictData['id']} is not a Post id"}
 
@@ -251,6 +250,7 @@ class DataAccessor():
           DetailedPost.objects.create(Post=duplicate, content=detailPost.content)
         for file in Files.objects.filter(Post=post):
           kwargs =  {field.name:getattr(file, field.name) for field in Files._meta.fields[1:]}
+          kwargs["path"] = Files.dictPath["post"] + kwargs["name"] + '_' + str(duplicate.id) + '.' + kwargs["ext"]
           newFile= Files.objects.create(**kwargs)
           newFile.Post = duplicate
           newFile.save()

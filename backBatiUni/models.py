@@ -366,6 +366,7 @@ class Files(CommonModel):
         objectFile.expirationDate = expirationDate
       objectFile.save()
     else:
+      print("createfile", nature, name, path, ext, company, expirationDate, post, supervision)
       objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=company, expirationDate=expirationDate, Post=post, Supervision=supervision)
     return objectFile
 

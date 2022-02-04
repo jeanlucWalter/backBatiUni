@@ -311,10 +311,13 @@ class DataAccessor():
     expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if data["expirationDate"] else None
     post = Post.objects.get(id=data["Post"]) if "Post" in data else None
     objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
-    file = ContentFile(base64.urlsafe_b64decode(fileStr), name=objectFile.path + data['ext'])
-    with open(objectFile.path, "wb") as outfile:
-        outfile.write(file.file.getbuffer())
-    return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)[:-1]}
+    try:
+      file = ContentFile(base64.urlsafe_b64decode(fileStr), name=objectFile.path + data['ext']) if data['ext'] != "txt" else fileStr
+      with open(objectFile.path, "wb") as outfile:
+          outfile.write(file.file.getbuffer())
+      return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)[:-1]}
+    except:
+      return {"uploadFile":"Warning", "messages":"Le fichier ne peut être sauvegardé"}
 
   @classmethod
   def getEnterpriseDataFrom(cls, request):

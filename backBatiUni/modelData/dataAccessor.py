@@ -195,6 +195,7 @@ class DataAccessor():
       post = post[0]
       kwargs, _ = cls.__createPostKwargs(dictData, currentUser, subObject=False)
       for key, value in kwargs.items():
+        print("__modifyPost", key, value)
         if getattr(post, key, False):
           setattr(post, key, value)
       post.save()

@@ -153,9 +153,15 @@ class DataAccessor():
 
   @classmethod
   def __getGeoCoordinates(cls, objectPost):
-    print("__getGeoCoordinates", objectPost.latitude, objectPost.longitude, objectPost.address)
     dictCoord = getCoordinatesFrom(objectPost.address)
-    print("getCoordinatesFrom", dictCoord)
+    if dictCoord["getCoordinatesFrom"] == "OK":
+      objectPost.address = dictCoord["address"]
+      objectPost.lattitude = dictCoord["x"]
+      objectPost.longitude = dictCoord["y"]
+      objectPost.save()
+      print("getGeoCoordinates", objectPost.latitude, objectPost.longitude, objectPost.address)
+      return
+    print("getGeoCoordinates error")
 
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):
@@ -198,8 +204,10 @@ class DataAccessor():
       post = post[0]
       kwargs, _ = cls.__createPostKwargs(dictData, currentUser, subObject=False)
       for key, value in kwargs.items():
-        if getattr(post, key, "empty field") != "empty field":
+        if getattr(post, key, "empty field") != "empty field" and getattr(post, key, "empty field") != value:
           setattr(post, key, value)
+          if key == "address":
+            cls.__getGeoCoordinates(cls, post)
       post.save()
       if dictData["DetailedPost"]:
         DetailedPost.objects.filter(Post=post).delete()

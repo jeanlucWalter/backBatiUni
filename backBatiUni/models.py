@@ -229,7 +229,7 @@ class Post(CommonModel):
   Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
   numberOfPeople = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
   address = models.CharField("Adresse du chantier", max_length=1024, null=True, default=None)
-  latitude = models.FloatField("Latitude", null=True, default=None)
+  lattitude = models.FloatField("Latitude", null=True, default=None)
   longitude = models.FloatField("Longitude", null=True, default=None)
   contactName = models.CharField("Nom du contact responsable de l’app", max_length=256, null=True, default=None)
   draft = models.BooleanField("Brouillon ou validé", null=False, default=True)

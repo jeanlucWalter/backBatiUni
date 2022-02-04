@@ -185,7 +185,6 @@ class DataAccessor():
             print("loop", modelObject, content)
             listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
-    print("__createPostKwargs", listObject)
     return kwargs, listObject
 
   @classmethod
@@ -195,10 +194,8 @@ class DataAccessor():
       post = post[0]
       kwargs, _ = cls.__createPostKwargs(dictData, currentUser, subObject=False)
       for key, value in kwargs.items():
-        print("__modifyPost", key, value)
         if getattr(post, key, "empty field") != "empty field":
           setattr(post, key, value)
-          print("follow", key, value, getattr(post, key, "empty field"))
       post.save()
       if dictData["DetailedPost"]:
         DetailedPost.objects.filter(Post=post).delete()

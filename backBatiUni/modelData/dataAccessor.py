@@ -154,6 +154,8 @@ class DataAccessor():
   @classmethod
   def __getGeoCoordinates(cls, objectPost):
     print("__getGeoCoordinates", objectPost.latitude, objectPost.longitude, objectPost.address)
+    dictCoord = getCoordinatesFrom(objectPost.address)
+    print("getCoordinatesFrom", dictCoord)
 
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):

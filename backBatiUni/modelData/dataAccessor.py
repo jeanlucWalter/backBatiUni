@@ -19,9 +19,8 @@ from dotenv import load_dotenv
 load_dotenv()
 if os.getenv('PATH_MIDDLE'):
   sys.path.append(os.getenv('PATH_MIDDLE'))
-  print("load profileScraping")
   from profileScraping import getEnterpriseDataFrom
-
+  from geocoding import getCoordinatesFrom # argument str address
 class DataAccessor():
   loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, DetailedPost, Mission, Disponibility], "general":[Job, Role, Label]}
   dictTable = {}
@@ -145,12 +144,16 @@ class DataAccessor():
     if "uploadPost" in kwargs and kwargs["uploadPost"] == "Error":
       return kwargs
     objectPost = Post.objects.create(**kwargs)
+    cls.__getGeoCoordonates(objectPost)
     if listObject:
       for subObject in listObject:
         subObject.Post = objectPost
-        print("createPost", subObject, subObject.Post)
         subObject.save()
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
+
+  @classmethod
+  def __getGeoCoordonates(cls, objectPost):
+    print(objectPost.latitude, objectPost.longitude)
 
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):
@@ -182,7 +185,6 @@ class DataAccessor():
         if fieldName in Post.manyToManyObject and subObject:
           modelObject, listObject = apps.get_model(app_label='backBatiUni', model_name=fieldName), []
           for content in value:
-            print("loop", modelObject, content)
             listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
     return kwargs, listObject
@@ -425,11 +427,11 @@ class DataAccessor():
 
   @classmethod
   def forgetPassword(cls, email):
+    print("forgetPassword", email)
     user = User.objects.filter(username=email)
     if user:
       userProfile = UserProfile.objects.get(userNameInternal=user[0])
       userProfile.token = SmtpConnector(cls.portSmtp).forgetPassword(email)
-      print("forgetPassword", userProfile.token)
       userProfile.save()
       return {"forgetPassword":"Warning", "messages":"work in progress"}
     return {"forgetPassword":"Warning", "messages":f"L'adressse du couriel {email} n'est pas reconnue"}

@@ -225,10 +225,12 @@ class UserProfile(CommonModel):
 
 class Post(CommonModel):
   subContractor = models.ForeignKey(Company, related_name='subContractor', verbose_name='Société sous-traitante', on_delete=models.PROTECT, null=True, default=None) 
-  Company = models.ForeignKey(Company, related_name='Company', verbose_name='Société demandeuse', on_delete=models.PROTECT, blank=False, default=None) 
+  Company = models.ForeignKey(Company, related_name='Company', verbose_name='Société demandeuse', on_delete=models.PROTECT, null=True, default=None) 
   Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
   numberOfPeople = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
   address = models.CharField("Adresse du chantier", max_length=1024, null=True, default=None)
+  latitude = models.FloatField("Latitude", null=False, default=None)
+  longitude = models.FloatField("Latitude", null=False, default=None)
   contactName = models.CharField("Nom du contact responsable de l’app", max_length=256, null=True, default=None)
   draft = models.BooleanField("Brouillon ou validé", null=False, default=True)
   manPower = models.BooleanField("Main d'oeuvre ou fourniture et pose", null=False, default=True)

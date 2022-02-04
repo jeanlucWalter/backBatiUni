@@ -140,7 +140,7 @@ class DataAccessor():
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
     kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
-    print("__uploadPost", listObject)
+    print("__uploadPost", dictData)
     if "uploadPost" in kwargs and kwargs["uploadPost"] == "Error":
       return kwargs
     objectPost = Post.objects.create(**kwargs)
@@ -153,7 +153,7 @@ class DataAccessor():
 
   @classmethod
   def __getGeoCoordinates(cls, objectPost):
-    print(objectPost.latitude, objectPost.longitude, objectPost.address)
+    print("__getGeoCoordinates", objectPost.latitude, objectPost.longitude, objectPost.address)
 
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):

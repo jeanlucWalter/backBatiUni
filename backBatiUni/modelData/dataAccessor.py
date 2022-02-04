@@ -144,7 +144,7 @@ class DataAccessor():
     if "uploadPost" in kwargs and kwargs["uploadPost"] == "Error":
       return kwargs
     objectPost = Post.objects.create(**kwargs)
-    cls.__getGeoCoordonates(objectPost)
+    cls.__getGeoCoordinates(objectPost)
     if listObject:
       for subObject in listObject:
         subObject.Post = objectPost
@@ -152,8 +152,8 @@ class DataAccessor():
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 
   @classmethod
-  def __getGeoCoordonates(cls, objectPost):
-    print(objectPost.latitude, objectPost.longitude)
+  def __getGeoCoordinates(cls, objectPost):
+    print(objectPost.latitude, objectPost.longitude, objectPost.address)
 
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):

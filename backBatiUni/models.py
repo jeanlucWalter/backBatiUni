@@ -241,6 +241,7 @@ class Post(CommonModel):
   hourlyEnd = models.CharField("Horaire de fin de chantier", max_length=128, null=True, default=None)
   amount = models.FloatField("Montant du chantier", null=False, default=0.0)
   currency = models.CharField("Unité monétaire", max_length=128, null=True, default="€")
+  unitOfTime = models.CharField("Unité de temps", max_length=128, null=True, default="Prix Journalier")
   counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
   manyToManyObject = ["DetailedPost", "Files"]

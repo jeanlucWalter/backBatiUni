@@ -199,6 +199,11 @@ class CreateNewDataBase:
     return self.fillupDataBase(answer)
 
   def emptyDataBase (self):
+    for dir in ['./files/admin/', './files/avatars/', './files/labels/', './files/posts/']:
+      print(dir, os.listdir(dir))
+      for file in os.listdir(dir):
+        print("file :", os.path.join(dir, file))
+        os.remove(os.path.join(dir, file))
     for table in CreateNewDataBase.listTable.values():
       table.objects.all().delete()
       tableName = table.objects.model._meta.db_table

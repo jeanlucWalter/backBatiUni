@@ -196,7 +196,7 @@ class DataAccessor():
       kwargs, _ = cls.__createPostKwargs(dictData, currentUser, subObject=False)
       for key, value in kwargs.items():
         print("__modifyPost", key, value)
-        if getattr(post, key, "empty field") == "empty field":
+        if getattr(post, key, "empty field") != "empty field":
           setattr(post, key, value)
           print("follow", key, value, getattr(post, key, "empty field"))
       post.save()

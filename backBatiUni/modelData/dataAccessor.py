@@ -154,6 +154,7 @@ class DataAccessor():
   @classmethod
   def __getGeoCoordinates(cls, objectPost):
     dictCoord = getCoordinatesFrom(objectPost.address)
+    print(dictCoord)
     if dictCoord["getCoordinatesFrom"] == "OK":
       objectPost.address = dictCoord["address"]
       objectPost.lattitude = dictCoord["x"]

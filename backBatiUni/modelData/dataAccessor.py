@@ -160,7 +160,7 @@ class DataAccessor():
       objectPost.lattitude = dictCoord["lattitude"]
       objectPost.longitude = dictCoord["longitude"]
       objectPost.save()
-      print("getGeoCoordinates", objectPost.latitude, objectPost.longitude, objectPost.address)
+      print("getGeoCoordinates", objectPost.lattitude, objectPost.longitude, objectPost.address)
       return
     print("getGeoCoordinates error")
 
@@ -208,7 +208,7 @@ class DataAccessor():
         if getattr(post, key, "empty field") != "empty field" and getattr(post, key, "empty field") != value:
           setattr(post, key, value)
           if key == "address":
-            cls.__getGeoCoordinates(cls, post)
+            cls.__getGeoCoordinates(post)
       post.save()
       if dictData["DetailedPost"]:
         DetailedPost.objects.filter(Post=post).delete()

@@ -199,6 +199,7 @@ class CreateNewDataBase:
     return self.fillupDataBase(answer)
 
   def emptyDataBase (self):
+    print("empty base", os.getcwd())
     for dir in ['./files/admin/', './files/avatars/', './files/labels/', './files/posts/']:
       print(dir, os.listdir(dir))
       for file in os.listdir(dir):

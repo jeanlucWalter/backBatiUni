@@ -198,6 +198,7 @@ class DataAccessor():
         print("__modifyPost", key, value)
         if getattr(post, key, False):
           setattr(post, key, value)
+          print("follow", key, value, getattr(post, key, False))
       post.save()
       if dictData["DetailedPost"]:
         DetailedPost.objects.filter(Post=post).delete()

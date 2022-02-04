@@ -157,8 +157,8 @@ class DataAccessor():
     print(dictCoord)
     if dictCoord["getCoordinatesFrom"] == "OK":
       objectPost.address = dictCoord["address"]
-      objectPost.lattitude = dictCoord["x"]
-      objectPost.longitude = dictCoord["y"]
+      objectPost.lattitude = dictCoord["lattitude"]
+      objectPost.longitude = dictCoord["longitude"]
       objectPost.save()
       print("getGeoCoordinates", objectPost.latitude, objectPost.longitude, objectPost.address)
       return

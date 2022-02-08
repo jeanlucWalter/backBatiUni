@@ -133,7 +133,7 @@ class DataAccessor():
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + dictData['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
-    return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)[1]}
+    return {"changeUserImage":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)}
 
   @classmethod
   def __uploadPost(cls, dictData, currentUser):

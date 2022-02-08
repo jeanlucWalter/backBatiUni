@@ -166,11 +166,11 @@ class JobForCompany(CommonModel):
     superList.remove("Company")
     return superList
 
-  @classmethod
-  def filter(cls, user):
-    userProfile = UserProfile.objects.get(userNameInternal=user)
-    Company = userProfile.Company
-    return cls.objects.filter(Company=Company)
+  # @classmethod
+  # def filter(cls, user):
+  #   userProfile = UserProfile.objects.get(userNameInternal=user)
+  #   Company = userProfile.Company
+  #   return cls.objects.filter(Company=Company)
 
 class LabelForCompany(CommonModel):
   Label = models.ForeignKey(Label, on_delete=models.PROTECT, blank=False, null=False)

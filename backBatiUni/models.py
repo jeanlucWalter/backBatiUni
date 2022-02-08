@@ -186,11 +186,11 @@ class LabelForCompany(CommonModel):
     superList.remove("Company")
     return superList
 
-  @classmethod
-  def filter(cls, user):
-    userProfile = UserProfile.objects.get(userNameInternal=user)
-    company = userProfile.Company
-    return cls.objects.filter(Company=company)
+  # @classmethod
+  # def filter(cls, user):
+  #   userProfile = UserProfile.objects.get(userNameInternal=user)
+  #   company = userProfile.Company
+  #   return cls.objects.filter(Company=company)
 
 class UserProfile(CommonModel):
   userNameInternal = models.ForeignKey(User, on_delete=models.PROTECT, null=True, default=None)

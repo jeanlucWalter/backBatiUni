@@ -340,13 +340,13 @@ class Files(CommonModel):
   dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/", "supervision":"./files/supervision/"}
 
   class Meta:
-    unique_together = ('nature', 'name', 'Company', "Post", "Supervision")
+    unique_together = ('nature', 'name', 'Company', "Post", "Mission", "Supervision")
     verbose_name = "Files"
 
   @classmethod
   def listFields(cls):
     superList = super().listFields()
-    for fieldName in ["path", "Company", "Post", "Supervision"]:
+    for fieldName in ["path", "Company", "Post", "Mission", "Supervision"]:
       index = superList.index(fieldName)
       del superList[index]
     superList.append("content")

@@ -222,14 +222,14 @@ class DataAccessor():
     post = Post.objects.get(id=postId)
     company = post.Company
     if subContractor == company:
-      return {"modifyPost":"Warning", "messages":f"Le sous-traitant {subContractor.name} ne peut pas être l'entreprise commanditaire."}
+      return {"applyPost":"Warning", "messages":f"Le sous-traitant {subContractor.name} ne peut pas être l'entreprise commanditaire."}
     if subContractor.role.id == 1:
-      return {"modifyPost":"Warning", "messages":f"La société {subContractor.name} n'est pas sous-traitante."}
+      return {"applyPost":"Warning", "messages":f"La société {subContractor.name} n'est pas sous-traitante."}
     if post.Job not in subContractor.jobs:
-      return {"modifyPost":"Warning", "messages":f"La métier {post.Job.name} n'est pas une compétence du sous-traitant {subContractor.name}."}
+      return {"applyPost":"Warning", "messages":f"La métier {post.Job.name} n'est pas une compétence du sous-traitant {subContractor.name}."}
     candidate = Candidate.objects.create(Post=post, Company=subContractor)
     print(candidate, candidate.listFields())
-    return {"modifyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
+    return {"applyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
 
 
 
@@ -252,8 +252,8 @@ class DataAccessor():
     return {"deletePost":"Error", "messages":f"{id} does not exist"}
 
   @classmethod
-  def createMissionFromPost(cls, id):
-    return {"createMissionFromPost":"Error", "messages":f"{id} does not exist"}
+  def createMissionFromPost(cls, postId, candidateId, currentUser):
+    return {"createMissionFromPost":"Error", "messages":f"{postId} does not exist"}
 
   @classmethod
   def switchDraft(cls, id, currentUser):

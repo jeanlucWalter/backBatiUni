@@ -260,9 +260,6 @@ class Post(CommonModel):
 
   @classmethod
   def filter(cls, user):
-    for candidate in Candidate.objects.all():
-      print(candidate, candidate.Post)
-    print("candidate filter", )
     return {candidate.Post for candidate in Candidate.objects.all() if candidate.Post != None}
 
 class Mission(Post):

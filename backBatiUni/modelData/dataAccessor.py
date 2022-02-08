@@ -227,6 +227,9 @@ class DataAccessor():
       return {"applyPost":"Warning", "messages":f"La société {subContractor.name} n'est pas sous-traitante."}
     if post.Job not in subContractor.jobs:
       return {"applyPost":"Warning", "messages":f"La métier {post.Job.name} n'est pas une compétence du sous-traitant {subContractor.name}."}
+    exists = Candidate.objects.filter(Post=post, Company=subContractor)
+    if exists:
+      return {"applyPost":"Warning", "messages":f"La sous-traitant {subContractor.name} a déjà postulé."}
     candidate = Candidate.objects.create(Post=post, Company=subContractor)
     print(candidate, candidate.listFields())
     return {"applyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
@@ -253,7 +256,16 @@ class DataAccessor():
 
   @classmethod
   def createMissionFromPost(cls, postId, candidateId, currentUser):
-    return {"createMissionFromPost":"Error", "messages":f"{postId} does not exist"}
+    candidate = Candidate.objects.get(id=candidateId)
+    post = Post.objects.get(id=postId)
+    if candidate.Post != post:
+      return {"createMissionFromPost":"Error", "messages":f"{candidate.Company.name} has not applied for post id = {postId}"}
+    candidate.isChoosen = True
+    candidate.Post = None
+    candidate.Mission = Mission.objects.get(id=postId)
+    candidate.save()
+    mission = candidate.Mission
+    return {"createMissionFromPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
 
   @classmethod
   def switchDraft(cls, id, currentUser):

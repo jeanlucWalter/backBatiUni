@@ -282,11 +282,11 @@ class Mission(Post):
 class Candidate(CommonModel):
   Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.CASCADE, null=True, default=None)
   Mission = models.ForeignKey(Mission, verbose_name='Mission associée', related_name='selectedMission', on_delete=models.CASCADE, null=True, default=None)
-  Company = models.ForeignKey(Company, verbose_name='Sous-Traitant', on_delete=models.PROTECT, null=True, default=None)
+  Company = models.ForeignKey(Company, verbose_name='Sous-Traitant', related_name='selecteCompany', on_delete=models.PROTECT, null=True, default=None)
   isChoosen = models.BooleanField("Sous traitant selectionné", null=False, default=False)
 
   class Meta:
-    unique_together = ('Post', 'Mission', 'Company', "Company")
+    unique_together = ('Post', 'Mission', 'Company')
 
   @classmethod
   def listFields(cls):

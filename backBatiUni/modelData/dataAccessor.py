@@ -150,7 +150,7 @@ class DataAccessor():
         subObject.Post = objectPost
         subObject.save()
     print(objectPost.id, objectPost.computeValues(objectPost.listFields(), currentUser, True))
-    return {"uploadPost":"OK", up.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
+    return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 
   @classmethod
   def __getGeoCoordinates(cls, objectPost):
@@ -258,10 +258,6 @@ class DataAccessor():
   def createMissionFromPost(cls, candidateId, currentUser):
     candidate = Candidate.objects.get(id=candidateId)
     postId = candidate.Post.id
-    # post = Post.objects.get(id=postId)
-    print(candidate.Post, candidate.id, candidate.Post.id)
-    # if candidate.Post != post:
-    #   return {"createMissionFromPost":"Error", "messages":f"{candidate.Company.name} has not applied for post id = {postId}"}
     candidate.isChoosen = True
     candidate.Post = None
     candidate.Mission = Mission.objects.get(id=postId)

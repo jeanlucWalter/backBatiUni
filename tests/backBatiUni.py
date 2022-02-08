@@ -81,12 +81,12 @@ def executeQuery():
     elif query == "uploadPost":
       post1 = {'action':"uploadPost", "longitude":2.237779 , "latitude":48.848776, "address":"128 rue de Paris 92100 Boulogne", "Job":5, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
       post2 = {'action':"uploadPost", "longitude":2.324877 , "latitude":48.841625, "address":"106 rue du Cherche-Midi 75006 Paris", "Job":5, "numberOfPeople":1, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":23456.10, "DetailedPost":["radiateur", "Chaudière"]}
-      post3 = {'action':"uploadPost", "longitude":2.324877 , "latitude":48.841625, "address":"106 rue du Cherche-Midi 75006 Paris", "Job":9, "numberOfPeople":1, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":True, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"troisième description d'un chantier", "amount":12345.10, "DetailedPost":["doublage", "cloison"]}
+      post3 = {'action':"uploadPost", "longitude":2.324877 , "latitude":48.841625, "address":"36 rue Dauphine 75006 Paris", "Job":9, "numberOfPeople":1, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":True, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"troisième description d'un chantier", "amount":12345.10, "DetailedPost":["doublage", "cloison"]}
       for post in [post1, post2, post3]:
         response = requests.post(url, headers=headers, json=post)
     elif query == "modifyPost":
       print("modifyPost")
-      post = {'action':"modifyPost", "id":1, "address":"156 rue du Cherche-Midi 75006 Paris", "Job":6, "numberOfPeople":2, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":24456.10, "DetailedPost":["radiateur", "cloison", "doublage"]}
+      post = {'action':"modifyPost", "id":1, "address":"156 rue du Cherche-Midi 75006 Paris", "Job":6, "numberOfPeople":2, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":24456.10, "DetailedPost":["salle de bain", "douche"]}
       response = requests.post(url, headers=headers, json=post)
     # elif query == "deletePost":
     #   print("deletePost")
@@ -102,10 +102,11 @@ def executeQuery():
       post = {'action':"modifyDisponibility", "disponibility":[["2022-02-13", "Disponible"], ["2022-02-14", "Disponible Sous Conditions"], ["2022-02-15", "Non Disponible"]]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
-      post1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(1), "nature":"labels", "expirationDate":"2022-01-12"}
-      post2 = {'action':"uploadFile", "ext":"png", "name":"Kbis", "fileBase64":getDocStr(1), "nature":"admin", "expirationDate":"2022-01-12"}
-      requests.post(url, headers=headers, json=post2)
-      response = requests.post(url, headers=headers, json=post1)
+      file1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(1), "nature":"labels", "expirationDate":"2022-01-12"}
+      file2 = {'action':"uploadFile", "ext":"png", "name":"Kbis", "fileBase64":getDocStr(1), "nature":"admin", "expirationDate":"2022-01-12"}
+      file3 = {'action':"uploadFile", "ext":"pdf", "name":"Plan", "fileBase64":getDocStr(2), "nature":"post", "post":2}
+      for file in [file1, file2, file3]:
+        response = requests.post(url, headers=headers, json=file)
     elif query == "applyPost":
       response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})
       requests.get(url, headers=headers, params={'action':"applyPost", "Post":2})

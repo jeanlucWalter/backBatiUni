@@ -312,6 +312,7 @@ class DetailedPost(CommonModel):
 
 class Supervision(CommonModel):
   DetailedPost = models.ForeignKey(DetailedPost, verbose_name='Détail associé', on_delete=models.PROTECT, null=True, default=None)
+  UserProfile = models.ForeignKey(UserProfile, verbose_name="Auteur", on_delete=models.PROTECT, null=False, default=None)
   date = models.DateField(verbose_name="Date du suivi", null=True, default=None)
   commment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
   manyToManyObject = ["Files"]
@@ -333,7 +334,8 @@ class Files(CommonModel):
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True, default=None)
   expirationDate = models.DateField(verbose_name="Date de péremption", null=True, default=None)
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
-  Post = models.ForeignKey(Post, verbose_name="Annonce associée", on_delete=models.PROTECT, null=True, default=None)
+  Post = models.ForeignKey(Post, verbose_name="Annonce associée", related_name='selectPost', on_delete=models.PROTECT, null=True, default=None)
+  Mission = models.ForeignKey(Mission, verbose_name="Mission associée", related_name='selectMission', on_delete=models.PROTECT, null=True, default=None)
   Supervision = models.ForeignKey(Supervision, verbose_name="Suivi associé", on_delete=models.PROTECT, null=True, default=None)
   dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/", "supervision":"./files/supervision/"}
 

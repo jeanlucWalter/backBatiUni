@@ -41,7 +41,6 @@ class DataAccessor():
   def register(cls, data):
     message = cls.__registerCheck(data, {})
     if message:
-      print("register message", message)
       return {"register":"Warning", "messages":message}
     token = SmtpConnector(cls.portSmtp).register(data["firstname"], data["lastname"], data["email"])
     if token != "token not received" or data["email"] == "walter.jeanluc@gmail.com":
@@ -72,7 +71,6 @@ class DataAccessor():
     companyData = data['company']
     company = Company.objects.filter(name=companyData['name'])
     if company:
-      print("__registerCheck", companyData['name'], company)
       message["company"] = "Le nom de l'entreprise est déjà utilisé."
     return message
 
@@ -149,18 +147,17 @@ class DataAccessor():
       for subObject in listObject:
         subObject.Post = objectPost
         subObject.save()
-    print(objectPost.id, objectPost.computeValues(objectPost.listFields(), currentUser, True))
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 
   @classmethod
   def __getGeoCoordinates(cls, objectPost):
-    dictCoord = getCoordinatesFrom(objectPost.address)
-    if dictCoord["getCoordinatesFrom"] == "OK":
-      objectPost.address = dictCoord["address"]
-      objectPost.latitude = dictCoord["latitude"]
-      objectPost.longitude = dictCoord["longitude"]
-      objectPost.save()
-      return
+    if os.getenv('PATH_MIDDLE'):
+      dictCoord = getCoordinatesFrom(objectPost.address)
+      if dictCoord["getCoordinatesFrom"] == "OK":
+        objectPost.address = dictCoord["address"]
+        objectPost.latitude = dictCoord["latitude"]
+        objectPost.longitude = dictCoord["longitude"]
+        objectPost.save()
 
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):
@@ -231,7 +228,6 @@ class DataAccessor():
     if exists:
       return {"applyPost":"Warning", "messages":f"La sous-traitant {subContractor.name} a déjà postulé."}
     candidate = Candidate.objects.create(Post=post, Company=subContractor)
-    print(candidate, candidate.listFields())
     return {"applyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
 
 
@@ -263,6 +259,12 @@ class DataAccessor():
     candidate.Mission = Mission.objects.get(id=postId)
     candidate.save()
     mission = candidate.Mission
+    for model in [DetailedPost, Files]:
+      for modelObject in model.objects.all():
+        if modelObject.Post and modelObject.Post.id == postId:
+          modelObject.Post = None
+          modelObject.Mission = mission
+          modelObject.save()
     return {"createMissionFromPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
 
   @classmethod
@@ -333,8 +335,8 @@ class DataAccessor():
       message["fileBase64"] = "field fileBase64 is empty"
     if message:
       return {"uploadFile":"Error", "messages":message}
-    expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if data["expirationDate"] else None
-    post = Post.objects.get(id=data["Post"]) if "Post" in data else None
+    expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if "expirationDate" in data and data["expirationDate"] else None
+    post = Post.objects.get(id=data["post"]) if "post" in data else None
     objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
     file = None
     try:

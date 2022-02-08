@@ -312,9 +312,9 @@ class DetailedPost(CommonModel):
 
 class Supervision(CommonModel):
   DetailedPost = models.ForeignKey(DetailedPost, verbose_name='Détail associé', on_delete=models.PROTECT, null=True, default=None)
-  UserProfile = models.ForeignKey(UserProfile, verbose_name="Auteur", on_delete=models.PROTECT, null=False, default=None)
-  date = models.DateField(verbose_name="Date du suivi", null=True, default=None)
-  commment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
+  author = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
+  date = models.DateField(verbose_name="Date du suivi", null=False, default=datetime.datetime.now())
+  comment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
   manyToManyObject = ["Files"]
 
   @classmethod
@@ -369,6 +369,7 @@ class Files(CommonModel):
 
   @classmethod
   def createFile(cls, nature, name, ext, user, expirationDate = None, post=None, supervision=None):
+    print("createFile", nature, post)
     userProfile = UserProfile.objects.get(userNameInternal=user)
     objectFile = None
     if nature == "userImage":

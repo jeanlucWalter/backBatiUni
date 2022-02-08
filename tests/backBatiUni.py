@@ -112,6 +112,8 @@ def executeQuery():
       requests.get(url, headers=headers, params={'action':"applyPost", "Post":2})
     elif query == "createMissionFromPost":
       response = requests.get(url, headers=headers, params={'action':"createMissionFromPost", "Candidate":1})
+    elif query == "uploadSupervision":
+      response = requests.get(url, headers=headers, params={'action':"uploadSupervision", "detailedPost":3, "comment":"Le travail est fini, Youpi."})
     elif query == "switchDraft":
       print("switchDraft")
       response = requests.get(url, headers=headers, params={"action":"switchDraft", "id":1})
@@ -130,7 +132,7 @@ def executeQuery():
     print("no answer")
 
 if query == "all":
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "uploadFile", "modifyDisponibility", "applyPost", "createMissionFromPost"]:
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "uploadFile", "modifyDisponibility", "applyPost", "createMissionFromPost", "uploadSupervision"]:
       query = key
       executeQuery()
 else:

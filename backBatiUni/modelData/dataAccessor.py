@@ -268,6 +268,16 @@ class DataAccessor():
     return {"createMissionFromPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
 
   @classmethod
+  def uploadSupervision(cls, detailedPostId, comment, currentUser):
+    detailed = DetailedPost.objects.get(id=detailedPostId)
+    userProfile = UserProfile.objects.get(userNameInternal=currentUser)
+    author = f'{userProfile.firstName} {userProfile.lastName}'
+    if detailed.Post:
+      return {"uploadSuperVision":"Error", "messages":"associated Post is not a mission"}
+    supervision = Supervision.objects.create(DetailedPost=detailed, author=author, comment=comment)
+    return {"uploadSupervision":"OK", supervision.id:supervision.computeValues(supervision.listFields(), currentUser, dictFormat=True)}
+
+  @classmethod
   def switchDraft(cls, id, currentUser):
     company = UserProfile.objects.get(userNameInternal=currentUser).Company
     post = Post.objects.filter(id=id)

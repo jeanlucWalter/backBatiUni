@@ -1,3 +1,4 @@
+from calendar import c
 from django.db import models
 from django.contrib.auth.models import User
 import os
@@ -136,6 +137,10 @@ class Company(CommonModel):
   #   userProfile = UserProfile.objects.get(userNameInternal=user)
   #   return [userProfile.Company]
 
+  @property
+  def jobs(self):
+    return [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company=self)]
+
 class Disponibility(CommonModel):
   Company = models.ForeignKey(Company, on_delete=models.PROTECT, blank=False, null=False)
   date = models.DateField(verbose_name="Date de disponibilité", null=True, default=None)
@@ -224,7 +229,6 @@ class UserProfile(CommonModel):
     return [UserProfile.objects.get(userNameInternal=user)]
 
 class Post(CommonModel):
-  subContractor = models.ForeignKey(Company, related_name='subContractor', verbose_name='Société sous-traitante', on_delete=models.PROTECT, null=True, default=None) 
   Company = models.ForeignKey(Company, related_name='Company', verbose_name='Société demandeuse', on_delete=models.PROTECT, null=True, default=None) 
   Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 
   numberOfPeople = models.IntegerField("Nombre de personne(s) demandées", blank=False, null=False, default=1)
@@ -244,19 +248,22 @@ class Post(CommonModel):
   unitOfTime = models.CharField("Unité de temps", max_length=128, null=True, default="Prix Journalier")
   counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
-  manyToManyObject = ["DetailedPost", "Files"]
+  manyToManyObject = ["DetailedPost", "Files", "Candidate"]
 
   @classmethod
   def listFields(cls):
       superList = super().listFields()
-      for fieldName in ["Company", "subContractor"]:
+      for fieldName in ["Company"]:
         index = superList.index(fieldName)
         del superList[index]
       return superList
 
   @classmethod
   def filter(cls, user):
-    return Post.objects.filter(subContractor__isnull=True)
+    for candidate in Candidate.objects.all():
+      print(candidate, candidate.Post)
+    print("candidate filter", )
+    return {candidate.Post for candidate in Candidate.objects.all() if candidate.Post != None}
 
 class Mission(Post):
   class Meta:
@@ -265,14 +272,28 @@ class Mission(Post):
   @classmethod
   def listFields(cls):
       superList = [field.name.replace("Internal", "") for field in cls._meta.fields][1:] + cls.manyToManyObject
-      for fieldName in ["Company"]:
+      for fieldName in ["Company", "Candidate"]:
         index = superList.index(fieldName)
         del superList[index]
       return superList
 
   @classmethod
   def filter(cls, user):
-    return Mission.objects.filter(subContractor__isnull=False)
+    return {candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None}
+
+class Candidate(CommonModel):
+  Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.CASCADE, null=True, default=None)
+  Mission = models.ForeignKey(Mission, verbose_name='Mission associée', related_name='selectedMission', on_delete=models.CASCADE, null=True, default=None)
+  Company = models.ForeignKey(Company, verbose_name='Sous-Traitant', on_delete=models.PROTECT, null=True, default=None)
+  isChoosen = models.BooleanField("Sous traitant selectionné", null=False, default=False)
+
+  @classmethod
+  def listFields(cls):
+      superList = super().listFields()
+      for fieldName in ["Post", "Mission"]:
+        index = superList.index(fieldName)
+        del superList[index]
+      return superList
 
 class DetailedPost(CommonModel):
   Post = models.ForeignKey(Post, related_name='Post', verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)

@@ -22,7 +22,7 @@ if os.getenv('PATH_MIDDLE'):
   from profileScraping import getEnterpriseDataFrom
   from geocoding import getCoordinatesFrom # argument str address
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, DetailedPost, Mission, Disponibility], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, Candidate, DetailedPost, Mission, Disponibility], "general":[Job, Role, Label]}
   dictTable = {}
   portSmtp = os.getenv('PORT_SMTP')
 
@@ -149,20 +149,18 @@ class DataAccessor():
       for subObject in listObject:
         subObject.Post = objectPost
         subObject.save()
+    print(objectPost.id, objectPost.computeValues(objectPost.listFields(), currentUser, True))
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 
   @classmethod
   def __getGeoCoordinates(cls, objectPost):
     dictCoord = getCoordinatesFrom(objectPost.address)
-    print(dictCoord)
     if dictCoord["getCoordinatesFrom"] == "OK":
       objectPost.address = dictCoord["address"]
       objectPost.latitude = dictCoord["latitude"]
       objectPost.longitude = dictCoord["longitude"]
       objectPost.save()
-      print("getGeoCoordinates", objectPost.latitude, objectPost.longitude, objectPost.address)
       return
-    print("getGeoCoordinates error")
 
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):
@@ -216,6 +214,23 @@ class DataAccessor():
           DetailedPost.objects.create(Post=post, content=content)
       return {"modifyPost":"OK", post.id:post.computeValues(post.listFields(), currentUser, True)}
     return {"modifyPost":"Error", "messages":f"{dictData['id']} is not a Post id"}
+
+  @classmethod
+  def applyPost(cls, postId, currentUser):
+    userProfile = UserProfile.objects.get(userNameInternal=currentUser)
+    subContractor = userProfile.Company
+    post = Post.objects.get(id=postId)
+    company = post.Company
+    if subContractor == company:
+      return {"modifyPost":"Warning", "messages":f"Le sous-traitant {subContractor.name} ne peut pas être l'entreprise commanditaire."}
+    if subContractor.role.id == 1:
+      return {"modifyPost":"Warning", "messages":f"La société {subContractor.name} n'est pas sous-traitante."}
+    if post.Job not in subContractor.jobs:
+      return {"modifyPost":"Warning", "messages":f"La métier {post.Job.name} n'est pas une compétence du sous-traitant {subContractor.name}."}
+    candidate = Candidate.objects.create(Post=post, Company=subContractor)
+    print(candidate, candidate.listFields())
+    return {"modifyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
+
 
 
   @classmethod

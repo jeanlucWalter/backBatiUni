@@ -31,6 +31,7 @@ class Data(DefaultView):
       if action == "createMissionFromPost": return Response(DataAccessor.createMissionFromPost(request.GET["id"], currentUser))
       if action == "switchDraft": return Response(DataAccessor.switchDraft(request.GET["id"], currentUser))
       if action == "duplicatePost": return Response(DataAccessor.duplicatePost(request.GET["id"], currentUser))
+      if action == "applyPost": return Response(DataAccessor.applyPost(request.GET["Post"], currentUser))
       return Response({"data GET":"Error", "messages":{"action":action}})
     return Response({"data GET":"Warning", "messages":"La confirmation par mail n'est pas réalisée."})
 

@@ -57,7 +57,7 @@ def executeQuery():
   elif query == "forgetPassword":
       response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"walter.jeanluc@gmail.com"})
   else:
-    token = queryForToken("jlw", "pwd") if query in ["buildDB","uploadPost"] else queryForToken(userName, password)
+    token = queryForToken("jlw", "pwd") if query in ["buildDB","uploadPost", "modifyPost"] else queryForToken(userName, password)
     if query == "token":
       print("token", token)
     url = f'{address}/data/'
@@ -110,16 +110,13 @@ def executeQuery():
       response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})
       requests.get(url, headers=headers, params={'action':"applyPost", "Post":2})
     elif query == "createMissionFromPost":
-      response = requests.get(url, headers=headers, params={'action':"createMissionFromPost", "Post":1, "Candidate":1})
-      requests.get(url, headers=headers, params={'action':"applyPost", "Post":2})
+      response = requests.get(url, headers=headers, params={'action':"createMissionFromPost", "Candidate":1})
     elif query == "switchDraft":
       print("switchDraft")
       response = requests.get(url, headers=headers, params={"action":"switchDraft", "id":1})
     elif query == "duplicatePost":
       print("duplicatePost")
       response = requests.get(url, headers=headers, params={"action":"duplicatePost", "id":1})
-    elif query == "createMissionFromPost":
-      response = requests.get(url, headers=headers, params={"action":"createMissionFromPost", "id":1})
     elif query == "getPost":
       response = requests.get(url, headers=headers, params={"action":"getPost"})
     elif query == "buildDB":

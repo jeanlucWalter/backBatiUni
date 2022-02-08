@@ -28,7 +28,7 @@ class Data(DefaultView):
       if action == "deletePost": return Response(DataAccessor.deletePost(request.GET["id"]))
       if action == "deleteFile": return Response(DataAccessor.deleteFile(request.GET["id"]))
       if action == "getPost": return Response(DataAccessor.getPost(currentUser))
-      if action == "createMissionFromPost": return Response(DataAccessor.createMissionFromPost(request.GET["Post"], request.GET["Candidate"], currentUser))
+      if action == "createMissionFromPost": return Response(DataAccessor.createMissionFromPost(request.GET["Candidate"], currentUser))
       if action == "switchDraft": return Response(DataAccessor.switchDraft(request.GET["id"], currentUser))
       if action == "duplicatePost": return Response(DataAccessor.duplicatePost(request.GET["id"], currentUser))
       if action == "applyPost": return Response(DataAccessor.applyPost(request.GET["Post"], currentUser))

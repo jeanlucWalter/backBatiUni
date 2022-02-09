@@ -391,7 +391,8 @@ class DataAccessor():
       message["general"] = "Aucun champ n'a été modifié" 
     if message:
       return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
-    return {"modifyUser":"OK", "valueModified": valueModified}
+    company = userProfile.Company
+    return {"modifyUser":"OK","UserProfile":{userProfile.id:userProfile.computeValues(userProfile.listFields(), user, True)}, "Company":{company.id:company.computeValues(company.listFields(), user, True)}}
 
   @classmethod
   def __setValues(cls, dictValue, user, message, valueModified, objectInstance, flagModified):

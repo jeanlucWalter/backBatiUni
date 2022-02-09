@@ -1,6 +1,7 @@
 from calendar import c
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 import os
 import base64
 from io import BytesIO
@@ -284,6 +285,7 @@ class Candidate(CommonModel):
   Mission = models.ForeignKey(Mission, verbose_name='Mission associée', related_name='selectedMission', on_delete=models.CASCADE, null=True, default=None)
   Company = models.ForeignKey(Company, verbose_name='Sous-Traitant', related_name='selecteCompany', on_delete=models.PROTECT, null=True, default=None)
   isChoosen = models.BooleanField("Sous traitant selectionné", null=False, default=False)
+  date = models.DateField(verbose_name="Date de candidateur ou date d'acceptation", null=False, default=timezone.now)
 
   class Meta:
     unique_together = ('Post', 'Mission', 'Company')
@@ -299,7 +301,7 @@ class Candidate(CommonModel):
 class DetailedPost(CommonModel):
   Post = models.ForeignKey(Post, related_name='Post', verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)
   Mission = models.ForeignKey(Mission, related_name='Mission', verbose_name='Mission associée', on_delete=models.PROTECT, null=True, default=None)
-  content = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
+  content = models.CharField("Détail de la prescription", max_length=256, null=True, default=None)
   manyToManyObject = ["Supervision"]
 
   @classmethod
@@ -313,7 +315,7 @@ class DetailedPost(CommonModel):
 class Supervision(CommonModel):
   DetailedPost = models.ForeignKey(DetailedPost, verbose_name='Détail associé', on_delete=models.PROTECT, null=True, default=None)
   author = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
-  date = models.DateField(verbose_name="Date du suivi", null=False, default=datetime.datetime.now())
+  date = models.DateField(verbose_name="Date du suivi", null=False, default=timezone.now)
   comment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
   manyToManyObject = ["Files"]
 

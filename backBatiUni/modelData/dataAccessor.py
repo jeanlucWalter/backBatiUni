@@ -3,6 +3,7 @@ from re import sub
 from ..models import *
 from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.hashers import check_password, make_password
+from django.utils import timezone
 from django.apps import apps
 from operator import attrgetter
 import sys
@@ -257,6 +258,7 @@ class DataAccessor():
     candidate.isChoosen = True
     candidate.Post = None
     candidate.Mission = Mission.objects.get(id=postId)
+    candidate.date = timezone.now
     candidate.save()
     mission = candidate.Mission
     for model in [DetailedPost, Files]:

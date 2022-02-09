@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 class CreateNewDataBase:
-  listTable = {"UserProfile":UserProfile, "JobForCompany":JobForCompany, "LabelForCompany":LabelForCompany, "Disponibility":Disponibility,"Candidate":Candidate, "Supervision":Supervision,"DetailedPost":DetailedPost, "Files":Files, "Post":Post,  "Company":Company, "Job":Job, "Role":Role, "Label":Label}
+  listTable = {"UserProfile":UserProfile, "JobForCompany":JobForCompany, "LabelForCompany":LabelForCompany, "Disponibility":Disponibility,"Candidate":Candidate, "Supervision":Supervision,"DetailedPost":DetailedPost, "File":File, "Post":Post,  "Company":Company, "Job":Job, "Role":Role, "Label":Label}
   dictLabels = {
     "Qualibat":["Cet organisme apporte des réponses précises aux maitres d’œuvre et aux clients sur la capacité professionnelle de l’entreprise en explorant trois domaines précis : la situation administrative, l’envergure financière et les compétences techniques. Il délivre plusieurs certifications.","https://www.qualibat.com/",True],
     "Qualif'elec":["Si vous relevez du génie électrique et énergétique, Qualifelec est la certification qu’il vous faut obtenir absolument. Elle couvre 8 domaines d’activités précis : installations électriques., chauffage, ventilation, climatisation., branchements et réseaux., bâtiment communicant., éclairage public, courant faible., maintenance d’installations électriques., antenne.",	"https://www.qualifelec.fr/", True],
@@ -230,7 +230,7 @@ class CreateNewDataBase:
     return {}
   def fillupLabelForCompany(self, table): return {} 
   def fillupJobForCompany(self, table):return {}
-  def fillupFiles(self, table):return {}
+  def fillupFile(self, table):return {}
   def fillupPost(self, table): return {}
   def fillupDetailedPost(self, table): return {}
   def fillupCandidate(self, table): return {} 

@@ -29,7 +29,7 @@
    },
    "CompanyFields": [
       "name",
-      "role",
+      "Role",
       "siret",
       "address",
       "activity",
@@ -42,7 +42,7 @@
       "companyPhone",
       "JobForCompany",
       "LabelForCompany",
-      "Files",
+      "File",
       "Post",
       "Disponibility"
    ],
@@ -76,7 +76,7 @@
       ],
       "2": [
          "CARREFOUR",
-         3,
+         2,
          "40422352100018",
          "QUARTIER PEROU, 97230 SAINTE-MARIE",
          "Activit\u00e9 inconnue",
@@ -136,7 +136,7 @@
          "2022-01-12"
       ]
    },
-   "FilesFields": [
+   "FileFields": [
       "nature",
       "name",
       "ext",
@@ -144,13 +144,13 @@
       "timestamp",
       "content"
    ],
-   "FilesValues": {
+   "FileValues": {
       "1": [
          "userImage",
          "Fantasiapp_1",
          "png",
          "",
-         1644426373.752007,
+         1644426908.636485,
          ""
       ]
    },
@@ -174,7 +174,7 @@
       "counterOffer",
       "description",
       "DetailedPost",
-      "Files",
+      "File",
       "Candidate"
    ],
    "PostIndices": [
@@ -221,7 +221,7 @@
       "counterOffer",
       "description",
       "DetailedPost",
-      "Files"
+      "File"
    ],
    "MissionIndices": [
       0,

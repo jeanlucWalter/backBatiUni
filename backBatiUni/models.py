@@ -120,7 +120,7 @@ class Job(CommonModel):
 
 class Company(CommonModel):
   name = models.CharField('Nom de la société', unique=True, max_length=128, null=False, blank=False)
-  role = models.ForeignKey(Role, on_delete=models.PROTECT, blank=False, null=False, default=3)
+  Role = models.ForeignKey(Role, on_delete=models.PROTECT, blank=False, null=False, default=3)
   siret = models.CharField('Numéro de Siret', unique=True, max_length=32, null=True, default=None)
   address = models.CharField("Adresse de l'entreprise", unique=True, max_length=256, null=True, default=None)
   activity = models.CharField("Activite principale de l'entreprise", unique=False, max_length=256, null=True, default=None)
@@ -131,7 +131,7 @@ class Company(CommonModel):
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
   stars = models.IntegerField("Notation sous forme d'étoile", null=True, default=None)
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
-  manyToManyObject = ["JobForCompany", "LabelForCompany", "Files", "Post", "Disponibility"]
+  manyToManyObject = ["JobForCompany", "LabelForCompany", "File", "Post", "Disponibility"]
 
   # @classmethod
   # def filter(cls, user):
@@ -249,7 +249,7 @@ class Post(CommonModel):
   unitOfTime = models.CharField("Unité de temps", max_length=128, null=True, default="Prix Journalier")
   counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
-  manyToManyObject = ["DetailedPost", "Files", "Candidate"]
+  manyToManyObject = ["DetailedPost", "File", "Candidate"]
 
   @classmethod
   def listFields(cls):
@@ -317,7 +317,7 @@ class Supervision(CommonModel):
   author = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
   date = models.DateField(verbose_name="Date du suivi", null=False, default=timezone.now)
   comment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
-  manyToManyObject = ["Files"]
+  manyToManyObject = ["File"]
 
   @classmethod
   def listFields(cls):
@@ -328,7 +328,7 @@ class Supervision(CommonModel):
       return superList
 
 
-class Files(CommonModel):
+class File(CommonModel):
   nature = models.CharField('nature du fichier', max_length=128, null=False, default=False, blank=False)
   name = models.CharField('Nom du fichier pour le front', max_length=128, null=False, default=False, blank=False)
   path = models.CharField('path', max_length=256, null=False, default=False, blank=False)
@@ -343,7 +343,7 @@ class Files(CommonModel):
 
   class Meta:
     unique_together = ('nature', 'name', 'Company', "Post", "Mission", "Supervision")
-    verbose_name = "Files"
+    verbose_name = "File"
 
   @classmethod
   def listFields(cls):
@@ -383,7 +383,7 @@ class Files(CommonModel):
     if nature == "supervision":
       path = cls.dictPath[nature] + name + '_' + str(supervision.id) + '.' + ext
     company = userProfile.Company if not post and not supervision else None
-    objectFile = Files.objects.filter(nature=nature, name=name, Company=company, Post=post, Supervision=supervision)
+    objectFile = File.objects.filter(nature=nature, name=name, Company=company, Post=post, Supervision=supervision)
     if objectFile:
       objectFile = objectFile[0]
       oldPath = objectFile.path

@@ -23,7 +23,7 @@ if os.getenv('PATH_MIDDLE'):
   from profileScraping import getEnterpriseDataFrom
   from geocoding import getCoordinatesFrom # argument str address
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, Files, Post, Candidate, DetailedPost, Mission, Disponibility], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, File, Post, Candidate, DetailedPost, Mission, Disponibility], "general":[Job, Role, Label]}
   dictTable = {}
   portSmtp = os.getenv('PORT_SMTP')
 
@@ -80,7 +80,7 @@ class DataAccessor():
     print("registerAction", data)
     companyData = data['company']
     company = Company.objects.create(name=companyData['name'], address=companyData['address'], activity=companyData['activitePrincipale'], ntva=companyData['NTVAI'], siret=companyData['siret'])
-    company.Role = Role.objects.get(id=data['role'])
+    company.Role = Role.objects.get(id=data['Role'])
     company.save()
     proposer = None
     if data['proposer'] and User.objects.get(id=data['proposer']):
@@ -130,7 +130,7 @@ class DataAccessor():
     fileStr = dictData["imageBase64"]
     if not dictData["name"]:
       return {"changeUserImage":"Error", "messages":"field name is empty"}
-    objectFile = Files.createFile("userImage", dictData["name"], dictData['ext'], currentUser)
+    objectFile = File.createFile("userImage", dictData["name"], dictData['ext'], currentUser)
     file = ContentFile(base64.b64decode(fileStr), name=objectFile.path + dictData['ext'])
     with open(objectFile.path, "wb") as outfile:
         outfile.write(file.file.getbuffer())
@@ -221,7 +221,7 @@ class DataAccessor():
     company = post.Company
     if subContractor == company:
       return {"applyPost":"Warning", "messages":f"Le sous-traitant {subContractor.name} ne peut pas être l'entreprise commanditaire."}
-    if subContractor.role.id == 1:
+    if subContractor.Role.id == 1:
       return {"applyPost":"Warning", "messages":f"La société {subContractor.name} n'est pas sous-traitante."}
     if post.Job not in subContractor.jobs:
       return {"applyPost":"Warning", "messages":f"La métier {post.Job.name} n'est pas une compétence du sous-traitant {subContractor.name}."}
@@ -244,7 +244,7 @@ class DataAccessor():
     if post:
       for detail in DetailedPost.objects.filter(Post=post[0]):
         detail.delete()
-      for file in Files.objects.filter(Post=post[0]):
+      for file in File.objects.filter(Post=post[0]):
         file.delete()
         
       post.delete()
@@ -261,7 +261,7 @@ class DataAccessor():
     candidate.date = timezone.now
     candidate.save()
     mission = candidate.Mission
-    for model in [DetailedPost, Files]:
+    for model in [DetailedPost, File]:
       for modelObject in model.objects.all():
         if modelObject.Post and modelObject.Post.id == postId:
           modelObject.Post = None
@@ -304,12 +304,12 @@ class DataAccessor():
         duplicate = Post.objects.create(**kwargs)
         for detailPost in DetailedPost.objects.filter(Post=post):
           DetailedPost.objects.create(Post=duplicate, content=detailPost.content)
-        for file in Files.objects.filter(Post=post):
-          kwargs =  {field.name:getattr(file, field.name) for field in Files._meta.fields[1:]}
-          newName = Files.dictPath["post"] + kwargs["name"] + '_' + str(duplicate.id) + '.' + kwargs["ext"]
+        for file in File.objects.filter(Post=post):
+          kwargs =  {field.name:getattr(file, field.name) for field in File._meta.fields[1:]}
+          newName = File.dictPath["post"] + kwargs["name"] + '_' + str(duplicate.id) + '.' + kwargs["ext"]
           shutil.copy(kwargs["path"], newName)
-          kwargs["path"] = Files.dictPath["post"] + kwargs["name"] + '_' + str(duplicate.id) + '.' + kwargs["ext"]
-          newFile= Files.objects.create(**kwargs)
+          kwargs["path"] = File.dictPath["post"] + kwargs["name"] + '_' + str(duplicate.id) + '.' + kwargs["ext"]
+          newFile= File.objects.create(**kwargs)
           newFile.Post = duplicate
           newFile.save()
         return {"duplicatePost":"OK", duplicate.id:duplicate.computeValues(duplicate.listFields(), currentUser, dictFormat=True)}
@@ -318,7 +318,7 @@ class DataAccessor():
 
   @classmethod
   def downloadFile(cls, id, currentUser):
-    file = Files.objects.get(id=id)
+    file = File.objects.get(id=id)
     content = file.getAttr("file")
     listFields = file.listFields()
     fileList = file.computeValues(listFields, currentUser)
@@ -328,7 +328,7 @@ class DataAccessor():
 
   @classmethod
   def deleteFile(cls, id, currentUser):
-    file = Files.objects.filter(id=id)
+    file = File.objects.filter(id=id)
     if file:
       file = file[0]
       os.remove(file.path)
@@ -349,7 +349,7 @@ class DataAccessor():
       return {"uploadFile":"Error", "messages":message}
     expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if "expirationDate" in data and data["expirationDate"] else None
     post = Post.objects.get(id=data["post"]) if "post" in data else None
-    objectFile = Files.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
+    objectFile = File.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
     file = None
     try:
       file = ContentFile(base64.urlsafe_b64decode(fileStr), name=objectFile.path + data['ext']) if data['ext'] != "txt" else fileStr
@@ -466,7 +466,7 @@ class DataAccessor():
   @classmethod
   def __modifyDisponibility(cls, listValue, user):
     company, messages = UserProfile.objects.get(userNameInternal=user).Company, {}
-    if company.role.id == 1:
+    if company.Role.id == 1:
       return {"modifyDisponibility":"Error", "messages":f"User company is not sub contractor {company.name}"}
     Disponibility.objects.all().delete()
     for date, nature in listValue:

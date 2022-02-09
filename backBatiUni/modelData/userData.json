@@ -71,10 +71,7 @@
          [],
          [],
          [],
-         [
-            1,
-            3
-         ],
+         [],
          []
       ],
       "2": [
@@ -99,16 +96,10 @@
             2
          ],
          [
-            1,
-            2,
-            3
+            1
          ],
          [],
-         [
-            1,
-            2,
-            3
-         ]
+         []
       ]
    },
    "JobForCompanyFields": [
@@ -159,31 +150,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1644339303.5839,
-         ""
-      ],
-      "2": [
-         "labels",
-         "NF",
-         "png",
-         "2022-01-12",
-         1644339303.5839,
-         ""
-      ],
-      "3": [
-         "admin",
-         "Kbis",
-         "png",
-         "2022-01-12",
-         1644339303.5839,
-         ""
-      ],
-      "4": [
-         "post",
-         "Plan",
-         "pdf",
-         "",
-         1644339303.5839,
+         1644426373.752007,
          ""
       ]
    },
@@ -216,73 +183,16 @@
       19,
       20
    ],
-   "PostValues": {
-      "1": [
-         6,
-         2,
-         "156 rue du Cherche-Midi 75006 Paris",
-         48.848776,
-         2.237779,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         24456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            7,
-            8
-         ],
-         [],
-         []
-      ],
-      "3": [
-         9,
-         1,
-         "36 rue Dauphine 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         true,
-         true,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         12345.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "troisi\u00e8me description d'un chantier",
-         [
-            5,
-            6
-         ],
-         [],
-         []
-      ]
-   },
+   "PostValues": {},
    "CandidateFields": [
       "Company",
-      "isChoosen"
+      "isChoosen",
+      "date"
    ],
    "CandidateIndices": [
       0
    ],
-   "CandidateValues": {
-      "1": [
-         2,
-         true
-      ]
-   },
+   "CandidateValues": {},
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -290,34 +200,7 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {
-      "3": [
-         "radiateur",
-         [
-            3
-         ]
-      ],
-      "4": [
-         "Chaudi\u00e8re",
-         []
-      ],
-      "5": [
-         "doublage",
-         []
-      ],
-      "6": [
-         "cloison",
-         []
-      ],
-      "7": [
-         "salle de bain",
-         []
-      ],
-      "8": [
-         "douche",
-         []
-      ]
-   },
+   "DetailedPostValues": {},
    "MissionFields": [
       "Job",
       "numberOfPeople",
@@ -345,51 +228,10 @@
       18,
       19
    ],
-   "MissionValues": {
-      "2": [
-         5,
-         1,
-         "106 rue du Cherche-Midi 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         23456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            3,
-            4
-         ],
-         [
-            4
-         ]
-      ]
-   },
+   "MissionValues": {},
    "DisponibilityFields": [
       "date",
       "nature"
    ],
-   "DisponibilityValues": {
-      "1": [
-         "2022-02-13",
-         "Disponible"
-      ],
-      "2": [
-         "2022-02-14",
-         "Disponible Sous Conditions"
-      ],
-      "3": [
-         "2022-02-15",
-         "Non Disponible"
-      ]
-   }
+   "DisponibilityValues": {}
 }

@@ -203,7 +203,6 @@ class CreateNewDataBase:
       for file in os.listdir(dir):
         os.remove(os.path.join(dir, file))
     for table in CreateNewDataBase.listTable.values():
-      print("empty", table)
       table.objects.all().delete()
       tableName = table.objects.model._meta.db_table
       self.cursor.execute(f"ALTER TABLE {tableName} AUTO_INCREMENT=1;")
@@ -213,12 +212,14 @@ class CreateNewDataBase:
     self.cursor.execute("ALTER TABLE auth_user AUTO_INCREMENT=1;")
     return {"emptyDataBase":"OK"}
 
-  def fillupDataBase (self, response= {}):
+  def fillupDataBase (self, response={}):
     for function in reversed(CreateNewDataBase.listTable):
       table = CreateNewDataBase.listTable[function]
       for key, value in getattr(self, "fillup" + function)(table).items():
         response[key] = value
-    self.connection.close() 
+        print("fillupDataBase", key, value, response[key])
+    self.connection.close()
+    print(response)
     return response
 
   def fillupUserProfile(self, table):

@@ -109,15 +109,15 @@ def executeQuery():
       file3 = {'action':"uploadFile", "ext":"pdf", "name":"Plan", "fileBase64":getDocStr(2), "nature":"post", "post":2}
       for file in [file1, file2, file3]:
         response = requests.post(url, headers=headers, json=file)
-    elif query == "downloadFile":
-      requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})
     elif query == "applyPost":
-      response = requests.get(url, headers=headers, params={'action':"downloadFile", "Post":1})
+      response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})
+    elif query == "downloadFile":
+      response = requests.get(url, headers=headers, params={'action':"downloadFile", "id":1})
       requests.get(url, headers=headers, params={'action':"applyPost", "Post":2})
     elif query == "createMissionFromPost":
       response = requests.get(url, headers=headers, params={'action':"createMissionFromPost", "Candidate":1})
     elif query == "uploadSupervision":
-      response = requests.get(url, headers=headers, params={'action':"uploadSupervision", "detailedPost":3, "comment":"Le travail est fini, Youpi."})
+      response = requests.get(url, headers=headers, params={'action':"uploadSupervision", "detailedPost":7, "comment":"Le travail est fini, Youpi."})
     elif query == "switchDraft":
       print("switchDraft")
       response = requests.get(url, headers=headers, params={"action":"switchDraft", "id":1})
@@ -129,9 +129,11 @@ def executeQuery():
     elif query == "buildDB":
       url = f'{address}/createBase/'
       response = requests.get(url, headers=headers, params={"action":"reload"})
-  if response:
+  if response and query != "downloadFile":
     data = json.loads(response.text)
     print("data", data)
+  elif query == "downloadFile":
+    print("downloadFile: not checked")
   else:
     print("no answer")
 if query == "all":

@@ -239,7 +239,6 @@ class DataAccessor():
 
   @classmethod
   def deletePost(cls, id):
-    print("deletePost", id)
     post = Post.objects.filter(id=id)
     if post:
       for detail in DetailedPost.objects.filter(Post=post[0]):
@@ -253,7 +252,6 @@ class DataAccessor():
 
   @classmethod
   def createMissionFromPost(cls, candidateId, currentUser):
-    print("create mission", timezone.now())
     candidate = Candidate.objects.get(id=candidateId)
     postId = candidate.Post.id
     candidate.isChoosen = True
@@ -484,7 +482,6 @@ class DataAccessor():
 
   @classmethod
   def forgetPassword(cls, email):
-    print("forgetPassword", email)
     user = User.objects.filter(username=email)
     if user:
       userProfile = UserProfile.objects.get(userNameInternal=user[0])
@@ -495,7 +492,6 @@ class DataAccessor():
 
   @classmethod
   def newPassword(cls, data):
-    print("newPassword", data)
     for key in ["token", "password"]:
       if not key in data:
         return {"newPassword":"Error", "messages":f"no {key} in post"}

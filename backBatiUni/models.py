@@ -384,7 +384,7 @@ class File(CommonModel):
     superList.append("content")
     return superList
 
-  # from pdf2image import convert_from_path
+  from pdf2image import convert_from_path
 
   def getAttr(self, fieldName, answer=False):
     if fieldName == "file":

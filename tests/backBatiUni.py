@@ -65,7 +65,9 @@ def executeQuery():
     if query == "getUserData":
       response = requests.get(url, headers=headers, params={"action":"getUserData"})
     elif query == "downloadFile":
-      response = requests.get(url, headers=headers, params={"action":"downloadFile", "id":1})
+      requests.get(url, headers=headers, params={"action":"downloadFile", "id":1})
+      # response.text = json.dumps({"downloadFile":"OK", "id":1})
+      response = None
     elif query == "postModifyPwd":
       print("postModifyPwd")
       post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}
@@ -107,8 +109,10 @@ def executeQuery():
       file3 = {'action':"uploadFile", "ext":"pdf", "name":"Plan", "fileBase64":getDocStr(2), "nature":"post", "post":2}
       for file in [file1, file2, file3]:
         response = requests.post(url, headers=headers, json=file)
+    elif query == "downloadFile":
+      requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})
     elif query == "applyPost":
-      response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})
+      response = requests.get(url, headers=headers, params={'action':"downloadFile", "Post":1})
       requests.get(url, headers=headers, params={'action':"applyPost", "Post":2})
     elif query == "createMissionFromPost":
       response = requests.get(url, headers=headers, params={'action':"createMissionFromPost", "Candidate":1})

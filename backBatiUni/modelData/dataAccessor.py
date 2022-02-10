@@ -253,12 +253,13 @@ class DataAccessor():
 
   @classmethod
   def createMissionFromPost(cls, candidateId, currentUser):
+    print("create mission", timezone.now())
     candidate = Candidate.objects.get(id=candidateId)
     postId = candidate.Post.id
     candidate.isChoosen = True
     candidate.Post = None
     candidate.Mission = Mission.objects.get(id=postId)
-    candidate.date = timezone.now
+    candidate.date = timezone.now()
     candidate.save()
     mission = candidate.Mission
     for model in [DetailedPost, File]:
@@ -387,8 +388,8 @@ class DataAccessor():
 
   @classmethod
   def __updateUserInfo(cls, data, user):
-    message, valueModified, userProfile = {}, {"Userprofile":{}}, UserProfile.objects.get(id=data["Userprofile"]["id"])
-    flagModified = cls.__setValues(data["Userprofile"], user, message, valueModified["Userprofile"], userProfile, False)
+    message, valueModified, userProfile = {}, {"UserProfile":{}}, UserProfile.objects.get(id=data["UserProfile"]["id"])
+    flagModified = cls.__setValues(data["UserProfile"], user, message, valueModified["UserProfile"], userProfile, False)
     if not flagModified:
       message["general"] = "Aucun champ n'a été modifié" 
     if message:

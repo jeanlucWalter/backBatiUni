@@ -227,9 +227,14 @@ class CreateNewDataBase:
 
   def fillupCompany(self, table):
     Company.objects.create(name="BatiUni", siret="123456789", capital=123456, revenue=654321.22, webSite="https://stackoverflow.com")
-    return {}
+    return {"create company":"OK"}
   def fillupLabelForCompany(self, table): return {} 
-  def fillupJobForCompany(self, table):return {}
+  def fillupJobForCompany(self, table):
+    job = Job.objects.get(id=5)
+    company = Company.objects.get(id=1)
+    JobForCompany.objects.create(Job=job, number=2, Company=company)
+    return {"create user JobForCompany":"OK"}
+
   def fillupFile(self, table):return {}
   def fillupPost(self, table): return {}
   def fillupDetailedPost(self, table): return {}

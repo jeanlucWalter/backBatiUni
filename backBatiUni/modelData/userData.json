@@ -1,6 +1,6 @@
 {
    "currentUser": 2,
-   "UserprofileFields": [
+   "UserProfileFields": [
       "userName",
       "Company",
       "firstName",
@@ -11,10 +11,10 @@
       "email",
       "password"
    ],
-   "UserprofileIndices": [
+   "UserProfileIndices": [
       1
    ],
-   "UserprofileValues": {
+   "UserProfileValues": {
       "2": [
          "walter.jeanluc@gmail.com",
          2,
@@ -73,7 +73,10 @@
          ],
          [],
          [],
-         [],
+         [
+            2,
+            3
+         ],
          []
       ],
       "2": [
@@ -90,18 +93,24 @@
          null,
          null,
          [
+            9,
+            10
+         ],
+         [
             5,
             6
          ],
          [
             1,
-            2
-         ],
-         [
-            1
+            2,
+            3
          ],
          [],
-         []
+         [
+            1,
+            2,
+            3
+         ]
       ]
    },
    "JobForCompanyFields": [
@@ -116,11 +125,11 @@
          5,
          2
       ],
-      "5": [
+      "9": [
          4,
          2
       ],
-      "6": [
+      "10": [
          5,
          3
       ]
@@ -133,11 +142,11 @@
       0
    ],
    "LabelForCompanyValues": {
-      "1": [
+      "5": [
          1,
          "2022-01-12"
       ],
-      "2": [
+      "6": [
          2,
          "2022-01-12"
       ]
@@ -155,6 +164,30 @@
          "userImage",
          "Fantasiapp_1",
          "png",
+         "",
+         1644429549.850305,
+         ""
+      ],
+      "2": [
+         "labels",
+         "NF",
+         "png",
+         "2022-01-12",
+         1644429549.850305,
+         ""
+      ],
+      "3": [
+         "admin",
+         "Kbis",
+         "png",
+         "2022-01-12",
+         1644429549.850305,
+         ""
+      ],
+      "4": [
+         "post",
+         "Plan",
+         "pdf",
          "",
          1644429549.850305,
          ""
@@ -189,7 +222,64 @@
       19,
       20
    ],
-   "PostValues": {},
+   "PostValues": {
+      "2": [
+         5,
+         1,
+         "106 rue du Cherche-Midi 75006 Paris",
+         48.841625,
+         2.324877,
+         "Eric Walter",
+         true,
+         false,
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         23456.1,
+         "\u20ac",
+         "Prix Journalier",
+         false,
+         "Deuxi\u00e8me description d'un chantier",
+         [
+            3,
+            4
+         ],
+         [
+            4
+         ],
+         [
+            2
+         ]
+      ],
+      "3": [
+         9,
+         1,
+         "36 rue Dauphine 75006 Paris",
+         48.841625,
+         2.324877,
+         "Eric Walter",
+         true,
+         true,
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         12345.1,
+         "\u20ac",
+         "Prix Journalier",
+         false,
+         "troisi\u00e8me description d'un chantier",
+         [
+            5,
+            6
+         ],
+         [],
+         []
+      ]
+   },
    "CandidateFields": [
       "Company",
       "isChoosen",
@@ -198,7 +288,18 @@
    "CandidateIndices": [
       0
    ],
-   "CandidateValues": {},
+   "CandidateValues": {
+      "1": [
+         2,
+         true,
+         "2022-02-09"
+      ],
+      "2": [
+         2,
+         false,
+         "2022-02-09"
+      ]
+   },
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -206,7 +307,32 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {},
+   "DetailedPostValues": {
+      "3": [
+         "radiateur",
+         []
+      ],
+      "4": [
+         "Chaudi\u00e8re",
+         []
+      ],
+      "5": [
+         "doublage",
+         []
+      ],
+      "6": [
+         "cloison",
+         []
+      ],
+      "7": [
+         "salle de bain",
+         []
+      ],
+      "8": [
+         "douche",
+         []
+      ]
+   },
    "MissionFields": [
       "Job",
       "numberOfPeople",
@@ -234,10 +360,49 @@
       18,
       19
    ],
-   "MissionValues": {},
+   "MissionValues": {
+      "1": [
+         5,
+         2,
+         "126 rue de Paris 92100 Boulogne",
+         48.848776,
+         2.237779,
+         "Eric Walter",
+         true,
+         false,
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         24456.1,
+         "\u20ac",
+         "Prix Journalier",
+         false,
+         "Deuxi\u00e8me description d'un chantier",
+         [
+            7,
+            8
+         ],
+         []
+      ]
+   },
    "DisponibilityFields": [
       "date",
       "nature"
    ],
-   "DisponibilityValues": {}
+   "DisponibilityValues": {
+      "1": [
+         "2022-02-13",
+         "Disponible"
+      ],
+      "2": [
+         "2022-02-14",
+         "Disponible Sous Conditions"
+      ],
+      "3": [
+         "2022-02-15",
+         "Non Disponible"
+      ]
+   }
 }

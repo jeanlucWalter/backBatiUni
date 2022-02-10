@@ -17,7 +17,8 @@ class CommonModel(models.Model):
   @classmethod
   def dumpStructure(cls, user):
     dictAnswer = {}
-    tableName = cls._meta.verbose_name.title().replace(" ", "")
+    tableName = cls._meta.verbose_name
+    print("dumpStructure", cls, tableName)
     if len(cls.listFields()) > 1:
       dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
@@ -112,11 +113,20 @@ class Label(CommonModel):
   # description = models.CharField('Description du métier', unique=False, null=True, max_length=2048, default=None)
   # site = models.CharField('Site internet', unique=False, null=True, max_length=256, default=None)
 
+  class Meta:
+    verbose_name = "Label"
+
 class Role(CommonModel):
   name = models.CharField('Profil du compte', unique=True, max_length=128)
 
+  class Meta:
+    verbose_name = "Role"
+
 class Job(CommonModel):
   name = models.CharField('Nom du métier', unique=True, max_length=128)
+
+  class Meta:
+    verbose_name = "Job"
 
 class Company(CommonModel):
   name = models.CharField('Nom de la société', unique=True, max_length=128, null=False, blank=False)
@@ -133,6 +143,9 @@ class Company(CommonModel):
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
   manyToManyObject = ["JobForCompany", "LabelForCompany", "File", "Post", "Disponibility"]
 
+  class Meta:
+    verbose_name = "Company"
+
   # @classmethod
   # def filter(cls, user):
   #   userProfile = UserProfile.objects.get(userNameInternal=user)
@@ -147,6 +160,9 @@ class Disponibility(CommonModel):
   date = models.DateField(verbose_name="Date de disponibilité", null=True, default=None)
   nature = models.CharField('Disponibilité', unique=False, max_length=32, null=True, default="Disponible")
 
+  class Meta:
+    verbose_name = "Disponibility"
+
   @classmethod
   def listFields(cls):
     superList = super().listFields()
@@ -160,6 +176,7 @@ class JobForCompany(CommonModel):
 
   class Meta:
     unique_together = ('Job', 'Company')
+    verbose_name = "JobForCompany"
 
   @classmethod
   def listFields(cls):
@@ -180,6 +197,7 @@ class LabelForCompany(CommonModel):
 
   class Meta:
     unique_together = ('Label', 'Company')
+    verbose_name = "LabelForCompany"
 
   @classmethod
   def listFields(cls):
@@ -251,6 +269,9 @@ class Post(CommonModel):
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
   manyToManyObject = ["DetailedPost", "File", "Candidate"]
 
+  class Meta:
+    verbose_name = "Post"
+
   @classmethod
   def listFields(cls):
       superList = super().listFields()
@@ -267,6 +288,7 @@ class Post(CommonModel):
 class Mission(Post):
   class Meta:
     proxy = True
+    verbose_name = "Mission"
 
   @classmethod
   def listFields(cls):
@@ -289,6 +311,7 @@ class Candidate(CommonModel):
 
   class Meta:
     unique_together = ('Post', 'Mission', 'Company')
+    verbose_name = "Candidate"
 
   @classmethod
   def listFields(cls):
@@ -304,6 +327,10 @@ class DetailedPost(CommonModel):
   content = models.CharField("Détail de la prescription", max_length=256, null=True, default=None)
   manyToManyObject = ["Supervision"]
 
+  class Meta:
+    verbose_name = "DetailedPost"
+
+
   @classmethod
   def listFields(cls):
       superList = super().listFields()
@@ -318,6 +345,9 @@ class Supervision(CommonModel):
   date = models.DateField(verbose_name="Date du suivi", null=False, default=timezone.now)
   comment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
   manyToManyObject = ["File"]
+
+  class Meta:
+    verbose_name = "Supervision"
 
   @classmethod
   def listFields(cls):
@@ -354,10 +384,13 @@ class File(CommonModel):
     superList.append("content")
     return superList
 
+  # from pdf2image import convert_from_path
+
   def getAttr(self, fieldName, answer=False):
     if fieldName == "file":
       with open(self.path, "rb") as fileData:
         encoded_string = base64.b64encode(fileData.read())
+
         return encoded_string.decode("utf-8")
     return getattr(self, fieldName, answer)
 

@@ -18,7 +18,6 @@ class CommonModel(models.Model):
   def dumpStructure(cls, user):
     dictAnswer = {}
     tableName = cls._meta.verbose_name
-    print("dumpStructure", cls, tableName)
     if len(cls.listFields()) > 1:
       dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
@@ -76,7 +75,7 @@ class CommonModel(models.Model):
         model = apps.get_model(app_label='backBatiUni', model_name=field)
         listFieldsModel = model.listFields()
         if dictFormat:
-          listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.objects.all() if getattr(objectModel, self.__class__.__name__, False) == self}
+          listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self}
           listModel = {key:valueList if len(valueList) != 1 else valueList[0] for key, valueList in listModel.items()}
         else:
           listModel = [objectModel.id for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self]
@@ -141,7 +140,7 @@ class Company(CommonModel):
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
   stars = models.IntegerField("Notation sous forme d'étoile", null=True, default=None)
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
-  manyToManyObject = ["JobForCompany", "LabelForCompany", "File", "Post", "Disponibility"]
+  manyToManyObject = ["JobForCompany", "LabelForCompany", "File", "Post", "Mission", "Disponibility"]
 
   class Meta:
     verbose_name = "Company"

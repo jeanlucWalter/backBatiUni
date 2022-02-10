@@ -444,9 +444,7 @@ class DataAccessor():
     jobForCompany = JobForCompany.objects.filter(Company=company)
     if jobForCompany:
       jobForCompany.delete()
-    print("__setValuesJob", JobForCompany.objects.filter(Company=company))
     for listValue in dictValue:
-      print("__setValuesJob", listValue)
       if listValue[1]:
         job = Job.objects.get(id=listValue[0])
         jobForCompany = JobForCompany.objects.create(Job=job, number=listValue[1], Company=company)

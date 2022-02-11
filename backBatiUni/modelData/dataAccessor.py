@@ -253,6 +253,8 @@ class DataAccessor():
   @classmethod
   def createMissionFromPost(cls, candidateId, currentUser):
     candidate = Candidate.objects.get(id=candidateId)
+    if candidate.Mission:
+      return {"createMissionFromPost":"Error", "messages":f"The post of id {candidate.Mission.id} is allready a mission"}
     postId = candidate.Post.id
     candidate.isChoosen = True
     candidate.Post = None
@@ -338,6 +340,8 @@ class DataAccessor():
 
   @classmethod
   def __uploadFile(cls, data, currentUser):
+    if not data['ext'] in File.authorizedExtention:
+      return {"uploadFile":"Warning", "messages":f"L'extention {data['ext']} n'est pas traitée"}
     fileStr, message = data["fileBase64"], {}
     for field in ["name", "ext", "nature"]:
       if not data[field]:

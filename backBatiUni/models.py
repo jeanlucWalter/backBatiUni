@@ -1,12 +1,20 @@
 from calendar import c
+from logging.config import listen
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 import os
 import base64
-from io import BytesIO
 import datetime
 from django.apps import apps
+from pdf2image import convert_from_path
+
+import io
+import whatimage
+import pyheif
+from PIL import Image
+from cairosvg import svg2png
+
 
 class CommonModel(models.Model):
   manyToManyObject = []
@@ -369,6 +377,7 @@ class File(CommonModel):
   Mission = models.ForeignKey(Mission, verbose_name="Mission associée", related_name='selectMission', on_delete=models.PROTECT, null=True, default=None)
   Supervision = models.ForeignKey(Supervision, verbose_name="Suivi associé", on_delete=models.PROTECT, null=True, default=None)
   dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/", "supervision":"./files/supervisions/"}
+  authorizedExtention = ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "svg", "SVG", "pdf", "HEIC", "heic"]
 
   class Meta:
     unique_together = ('nature', 'name', 'Company', "Post", "Mission", "Supervision")
@@ -383,15 +392,56 @@ class File(CommonModel):
     superList.append("content")
     return superList
 
-  from pdf2image import convert_from_path
-
   def getAttr(self, fieldName, answer=False):
     if fieldName == "file":
-      with open(self.path, "rb") as fileData:
-        encoded_string = base64.b64encode(fileData.read())
-
-        return encoded_string.decode("utf-8")
+      if self.ext == "pdf":
+        return self.encodedStringListForPdf()
+      if self.ext.lower() == "heic":
+        return self.decodeHeic()
+      if self.ext.lower() == "svg":
+        return self.decodeSvg()
+      return self.readFile(self.path)
     return getattr(self, fieldName, answer)
+
+  def readFile(self, path):
+    with open(path, "rb") as fileData:
+        encoded_string = base64.b64encode(fileData.read())
+        return encoded_string.decode("utf-8")
+
+
+  def encodedStringListForPdf(self):
+    path = self.path.replace(".pdf", "/")
+    if not os.path.isdir(path):
+      os.mkdir(path)
+      images = convert_from_path(self.path)
+      for index in range(len(images)):
+        # Save pages as images in the pdf
+        images[index].save(f'{path}page_{str(index)}.jpg', 'JPEG')
+    listFiles, listEncode  = [os.path.join(path, file) for file in os.listdir(path)], []
+    for file in listFiles:
+      with open(file, "rb") as fileData:
+        listEncode.append(base64.b64encode(fileData.read()))
+    return [encodedString.decode("utf-8") for encodedString in listEncode]
+
+  def decodeHeic(self):
+    equivJpg = self.path.replace(f"{self.ext}", "jpg")
+    if not os.path.exists(equivJpg):
+      with open(self.path, "rb") as fileData:
+        bytesIo = fileData.read()
+        imageType = whatimage.identify_image(bytesIo)
+        if imageType in ['heic', 'avif']:
+          image = pyheif.read_heif(bytesIo)
+          picture = Image.frombytes(mode=image.mode, size=image.size, data=image.data)
+          picture.save(equivJpg, format="jpeg")
+    return self.readFile(equivJpg)
+
+  def decodeSvg(self):
+    equivJpg = self.path.replace(f"{self.ext}", "png")
+    if not os.path.exists(equivJpg):
+      with open(self.path, "rb") as fileData:
+        bytesIo = fileData.read()
+        svg2png(bytestring=bytesIo, write_to=equivJpg)
+    return self.readFile(equivJpg)
 
   @classmethod
   def findAvatar(cls, user):
@@ -403,7 +453,6 @@ class File(CommonModel):
 
   @classmethod
   def createFile(cls, nature, name, ext, user, expirationDate = None, post=None, supervision=None):
-    print("createFile", nature, post)
     userProfile = UserProfile.objects.get(userNameInternal=user)
     objectFile = None
     if nature == "userImage":

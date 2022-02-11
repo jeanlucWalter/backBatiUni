@@ -201,7 +201,13 @@ class CreateNewDataBase:
   def emptyDataBase (self):
     for dir in ['./files/admin/', './files/avatars/', './files/labels/', './files/posts/']:
       for file in os.listdir(dir):
-        os.remove(os.path.join(dir, file))
+        if os.path.isdir(os.path.join(dir, file)):
+          newPath = os.path.join(dir, file)
+          for file in os.listdir(newPath):
+            os.remove(os.path.join(newPath, file))
+          os.rmdir(os.path.join(newPath))
+        else:
+          os.remove(os.path.join(dir, file))
     for table in CreateNewDataBase.listTable.values():
       table.objects.all().delete()
       tableName = table.objects.model._meta.db_table
@@ -217,9 +223,7 @@ class CreateNewDataBase:
       table = CreateNewDataBase.listTable[function]
       for key, value in getattr(self, "fillup" + function)(table).items():
         response[key] = value
-        print("fillupDataBase", key, value, response[key])
     self.connection.close()
-    print(response)
     return response
 
   def fillupUserProfile(self, table):

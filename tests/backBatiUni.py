@@ -36,7 +36,7 @@ def queryForToken(userName, password):
   return dictResponse['token']
 
 def getDocStr(index = 0):
-  file = ["./files/documents/logoFantasiapp.png", "./files/documents/test_1.pdf", "./files/documents/test_2.pdf"]
+  file = ["./files/documents/logoFantasiapp.png", "./files/documents/test_1.pdf", "./files/documents/test_2.pdf", "./files/documents/IMG_2465.HEIC", "./files/documents/etex.svg"]
   with open(file[index], "rb") as fileData:
     encoded_string = base64.b64encode(fileData.read())
   return encoded_string.decode("utf-8")
@@ -57,17 +57,13 @@ def executeQuery():
   elif query == "forgetPassword":
       response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"walter.jeanluc@gmail.com"})
   else:
-    token = queryForToken("jlw", "pwd") if query in ["buildDB","uploadPost", "modifyPost"] else queryForToken(userName, password)
+    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost"] else queryForToken(userName, password)
     if query == "token":
       print("token", token)
     url = f'{address}/data/'
     headers = {'Authorization': f'Token {token}'}
     if query == "getUserData":
       response = requests.get(url, headers=headers, params={"action":"getUserData"})
-    elif query == "downloadFile":
-      requests.get(url, headers=headers, params={"action":"downloadFile", "id":1})
-      # response.text = json.dumps({"downloadFile":"OK", "id":1})
-      response = None
     elif query == "postModifyPwd":
       print("postModifyPwd")
       post = {"action":"modifyPwd", "oldPwd":"pwd", "newPwd":"pwd"}
@@ -104,16 +100,18 @@ def executeQuery():
       post = {'action':"modifyDisponibility", "disponibility":[["2022-02-13", "Disponible"], ["2022-02-14", "Disponible Sous Conditions"], ["2022-02-15", "Non Disponible"]]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
-      file1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(1), "nature":"labels", "expirationDate":"2022-01-12"}
-      file2 = {'action':"uploadFile", "ext":"png", "name":"Kbis", "fileBase64":getDocStr(1), "nature":"admin", "expirationDate":"2022-01-12"}
-      file3 = {'action':"uploadFile", "ext":"pdf", "name":"Plan", "fileBase64":getDocStr(2), "nature":"post", "post":2}
-      for file in [file1, file2, file3]:
+      file1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(1), "nature":"labels", "expirationDate":"2022-02-12"}
+      file2 = {'action':"uploadFile", "ext":"png", "name":"Kbis", "fileBase64":getDocStr(1), "nature":"admin", "expirationDate":"2022-02-12"}
+      file3 = {'action':"uploadFile", "ext":"HEIC", "name":"URSSAF", "fileBase64":getDocStr(3), "nature":"admin", "expirationDate":"2022-02-12"}
+      file4 = {'action':"uploadFile", "ext":"svg", "name":"Document technique", "fileBase64":getDocStr(4), "nature":"post", "post":2}
+      file5 = {'action':"uploadFile", "ext":"pdf", "name":"Plan", "fileBase64":getDocStr(2), "nature":"post", "post":2}
+      for file in [file1, file2, file3, file4, file5]:
         response = requests.post(url, headers=headers, json=file)
+    elif query == "downloadFile":
+      requests.get(url, headers=headers, params={"action":"downloadFile", "id":6})
+      response = None
     elif query == "applyPost":
       response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})
-    elif query == "downloadFile":
-      response = requests.get(url, headers=headers, params={'action':"downloadFile", "id":1})
-      requests.get(url, headers=headers, params={'action':"applyPost", "Post":2})
     elif query == "createMissionFromPost":
       response = requests.get(url, headers=headers, params={'action':"createMissionFromPost", "Candidate":1})
     elif query == "uploadSupervision":
@@ -129,6 +127,10 @@ def executeQuery():
     elif query == "buildDB":
       url = f'{address}/createBase/'
       response = requests.get(url, headers=headers, params={"action":"reload"})
+    elif query == "emptyDB":
+      url = f'{address}/createBase/'
+      print(headers)
+      response = requests.get(url, headers=headers, params={"action":"emptyDB"})
   if response and query != "downloadFile":
     data = json.loads(response.text)
     print("data", data)

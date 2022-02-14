@@ -329,7 +329,7 @@ class DataAccessor():
     return {"downloadFile":"OK", id:fileList}
 
   @classmethod
-  def deleteFile(cls, id, currentUser):
+  def deleteFile(cls, id):
     file = File.objects.filter(id=id)
     if file:
       file = file[0]

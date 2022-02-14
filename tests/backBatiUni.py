@@ -57,7 +57,7 @@ def executeQuery():
   elif query == "forgetPassword":
       response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"walter.jeanluc@gmail.com"})
   else:
-    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost"] else queryForToken(userName, password)
+    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
     if query == "token":
       print("token", token)
     url = f'{address}/data/'
@@ -120,7 +120,7 @@ def executeQuery():
       response = requests.get(url, headers=headers, params={'action':"uploadSupervision", "detailedPost":7, "comment":"Le travail est fini, Youpi."})
     elif query == "switchDraft":
       print("switchDraft")
-      response = requests.get(url, headers=headers, params={"action":"switchDraft", "id":1})
+      response = requests.get(url, headers=headers, params={"action":"switchDraft", "id":2})
     elif query == "duplicatePost":
       print("duplicatePost")
       response = requests.get(url, headers=headers, params={"action":"duplicatePost", "id":1})
@@ -141,7 +141,7 @@ def executeQuery():
   else:
     print("no answer")
 if query == "all":
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "uploadFile", "modifyDisponibility", "applyPost", "createMissionFromPost", "uploadSupervision"]:
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "modifyDisponibility", "applyPost", "createMissionFromPost", "uploadSupervision"]:
       query = key
       executeQuery()
 else:

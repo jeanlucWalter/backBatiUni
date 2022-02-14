@@ -227,11 +227,12 @@ class CreateNewDataBase:
     return response
 
   def fillupUserProfile(self, table):
-    UserProfile.objects.create(userNameInternal=User.objects.get(username="jlw"), Company=Company.objects.get(name="BatiUni"), firstName="Eric", lastName="Walter", cellPhone="06 34 09 06 95", token=None, Role=2)
+    UserProfile.objects.create(userNameInternal=User.objects.get(username="jlw"), Company=Company.objects.get(name="BatiUni"), firstName="Eric", lastName="Walter", cellPhone="06 34 09 06 95", token=None)
     return {"create user profile":"OK"}
 
   def fillupCompany(self, table):
-    Company.objects.create(name="BatiUni", siret="123456789", capital=123456, revenue=654321.22, webSite="https://stackoverflow.com")
+    role = Role.objects.get(id=2)
+    Company.objects.create(name="BatiUni", siret="123456789", capital=123456, revenue=654321.22, webSite="https://stackoverflow.com", Role=role)
     return {"create company":"OK"}
   def fillupLabelForCompany(self, table): return {} 
   def fillupJobForCompany(self, table):

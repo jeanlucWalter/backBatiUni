@@ -59,7 +59,7 @@
    "CompanyValues": {
       "1": [
          "BatiUni",
-         3,
+         2,
          "123456789",
          null,
          null,
@@ -81,7 +81,7 @@
       ],
       "2": [
          "CARREFOUR",
-         2,
+         3,
          "40422352100018",
          "QUARTIER PEROU, 97230 SAINTE-MARIE",
          "Activit\u00e9 inconnue",
@@ -160,7 +160,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1644587734.594082,
+         1644835154.173611,
          ""
       ]
    },

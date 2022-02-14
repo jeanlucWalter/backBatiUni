@@ -25,7 +25,7 @@ class Data(DefaultView):
         return Response(DataAccessor.getData("user", currentUser))
       if action == "getEnterpriseDataFrom": return Response(DataAccessor.getEnterpriseDataFrom(request, currentUser))
       if action == "deletePost": return Response(DataAccessor.deletePost(request.GET["id"]))
-      if action == "downloadFile": return Response(DataAccessor.downloadFile(request.GET["id"]))
+      if action == "downloadFile": return Response(DataAccessor.downloadFile(request.GET["id"], currentUser))
       if action == "deleteFile": return Response(DataAccessor.deleteFile(request.GET["id"]))
       if action == "getPost": return Response(DataAccessor.getPost(currentUser))
       if action == "createMissionFromPost": return Response(DataAccessor.createMissionFromPost(request.GET["Candidate"], currentUser))

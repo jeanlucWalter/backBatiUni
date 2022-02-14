@@ -75,12 +75,8 @@
          ],
          [],
          [],
-         [
-            2
-         ],
-         [
-            1
-         ],
+         [],
+         [],
          []
       ],
       "2": [
@@ -105,18 +101,11 @@
             2
          ],
          [
-            1,
-            2,
-            3,
-            4
+            1
          ],
          [],
          [],
-         [
-            1,
-            2,
-            3
-         ]
+         []
       ]
    },
    "JobForCompanyFields": [
@@ -171,51 +160,12 @@
          "Fantasiapp_1",
          "png",
          "",
-         1644837487.354803,
-         ""
-      ],
-      "2": [
-         "labels",
-         "NF",
-         "png",
-         "2022-02-12",
-         1644837487.354803,
-         ""
-      ],
-      "3": [
-         "admin",
-         "Kbis",
-         "png",
-         "2022-02-12",
-         1644837487.354803,
-         ""
-      ],
-      "4": [
-         "admin",
-         "URSSAF",
-         "HEIC",
-         "2022-02-12",
-         1644837487.354803,
-         ""
-      ],
-      "5": [
-         "post",
-         "Document technique",
-         "svg",
-         "",
-         1644837487.354803,
-         ""
-      ],
-      "6": [
-         "post",
-         "Plan",
-         "pdf",
-         "",
-         1644837487.354803,
+         1644851446.723421,
          ""
       ]
    },
    "PostFields": [
+      "Company",
       "Job",
       "numberOfPeople",
       "address",
@@ -240,41 +190,12 @@
    ],
    "PostIndices": [
       0,
-      18,
+      1,
       19,
-      20
+      20,
+      21
    ],
-   "PostValues": {
-      "2": [
-         5,
-         1,
-         "106 rue du Cherche-Midi 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         23456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            3,
-            4
-         ],
-         [
-            5,
-            6
-         ],
-         []
-      ]
-   },
+   "PostValues": {},
    "CandidateFields": [
       "Company",
       "isChoosen",
@@ -283,13 +204,7 @@
    "CandidateIndices": [
       0
    ],
-   "CandidateValues": {
-      "1": [
-         2,
-         true,
-         "2022-02-14"
-      ]
-   },
+   "CandidateValues": {},
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -297,34 +212,7 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {
-      "3": [
-         "radiateur",
-         []
-      ],
-      "4": [
-         "Chaudi\u00e8re",
-         []
-      ],
-      "5": [
-         "doublage",
-         []
-      ],
-      "6": [
-         "cloison",
-         []
-      ],
-      "7": [
-         "salle de bain",
-         [
-            1
-         ]
-      ],
-      "8": [
-         "douche",
-         []
-      ]
-   },
+   "DetailedPostValues": {},
    "MissionFields": [
       "Job",
       "numberOfPeople",
@@ -352,49 +240,10 @@
       18,
       19
    ],
-   "MissionValues": {
-      "1": [
-         5,
-         2,
-         "126 rue de Paris 92100 Boulogne",
-         48.848776,
-         2.237779,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         24456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            7,
-            8
-         ],
-         []
-      ]
-   },
+   "MissionValues": {},
    "DisponibilityFields": [
       "date",
       "nature"
    ],
-   "DisponibilityValues": {
-      "1": [
-         "2022-02-13",
-         "Disponible"
-      ],
-      "2": [
-         "2022-02-14",
-         "Disponible Sous Conditions"
-      ],
-      "3": [
-         "2022-02-15",
-         "Non Disponible"
-      ]
-   }
+   "DisponibilityValues": {}
 }

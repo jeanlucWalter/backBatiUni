@@ -279,20 +279,20 @@ class Post(CommonModel):
   class Meta:
     verbose_name = "Post"
 
-  @classmethod
-  def listFields(cls):
-      superList = super().listFields()
-      for fieldName in ["Company"]:
-        index = superList.index(fieldName)
-        del superList[index]
-      return superList
+  # @classmethod
+  # def listFields(cls):
+  #     superList = super().listFields()
+  #     for fieldName in ["Company"]:
+  #       index = superList.index(fieldName)
+  #       del superList[index]
+  #     return superList
 
   @classmethod
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
-    listMission = {candidate.Mission.id for candidate in Candidate.objects.all() if candidate.Mission != None}
-    return {post for post in Post.objects.all() if not post.id in listMission if post.Company == userProfile.Company or post.Job in jobList}
+    listPost = {candidate.Mission.id for candidate in Candidate.objects.all() if candidate.Mission != None}
+    return {post for post in Post.objects.all() if not post.id in listPost if post.Company == userProfile.Company or post.Job in jobList}
 
 class Mission(Post):
   class Meta:
@@ -311,7 +311,6 @@ class Mission(Post):
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
-    listMission = {candidate.Mission.id for candidate in Candidate.objects.all() if candidate.Mission != None}
     return {candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None and (candidate.Company == userProfile.Company or candidate.Mission.Job in jobList)}
 
 class Candidate(CommonModel):

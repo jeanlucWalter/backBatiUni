@@ -290,7 +290,7 @@ class DataAccessor():
       if company == post.Company:
         post.draft = not post.draft
         post.save()
-        return {"switchDraft":"OK"}
+        return {"switchDraft":"OK", post.id:post.computeValues(post.listFields(), currentUser, dictFormat=True)}
       return {"switchDraft":"Error", "messages":f"{currentUser.username} does not belongs to {company.name}"}
     return {"switchDraft":"Error", "messages":f"{id} does not exist"}
 

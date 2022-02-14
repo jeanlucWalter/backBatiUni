@@ -83,19 +83,15 @@
          ],
          [],
          [],
-         [
-            2
-         ],
-         [
-            1
-         ],
+         [],
+         [],
          []
       ],
       "2": [
          "MONOPRIX",
          3,
          "40422352100018",
-         "2 Rue du Commerce 75015 Paris",
+         "2 rue du Commerce Paris 15",
          "Activit\u00e9 inconnue",
          "FR49404223521",
          null,
@@ -106,8 +102,8 @@
          null,
          null,
          null,
-         48.848865,
-         2.297551,
+         null,
+         null,
          [
             5,
             6
@@ -117,18 +113,11 @@
             2
          ],
          [
-            1,
-            2,
-            3,
-            4
+            1
          ],
          [],
          [],
-         [
-            1,
-            2,
-            3
-         ]
+         []
       ]
    },
    "JobForCompanyFields": [
@@ -183,47 +172,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1644854721.933956,
-         ""
-      ],
-      "2": [
-         "labels",
-         "NF",
-         "png",
-         "2022-02-12",
-         1644854721.933956,
-         ""
-      ],
-      "3": [
-         "admin",
-         "Kbis",
-         "png",
-         "2022-02-12",
-         1644854721.933956,
-         ""
-      ],
-      "4": [
-         "admin",
-         "URSSAF",
-         "HEIC",
-         "2022-02-12",
-         1644854721.933956,
-         ""
-      ],
-      "5": [
-         "post",
-         "Document technique",
-         "svg",
-         "",
-         1644854721.933956,
-         ""
-      ],
-      "6": [
-         "post",
-         "Plan",
-         "pdf",
-         "",
-         1644854721.933956,
+         1644857072.473836,
          ""
       ]
    },
@@ -258,38 +207,7 @@
       20,
       21
    ],
-   "PostValues": {
-      "2": [
-         1,
-         5,
-         1,
-         "106 Rue du Cherche-Midi 75006 Paris",
-         48.846822,
-         2.321208,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         23456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            3,
-            4
-         ],
-         [
-            5,
-            6
-         ],
-         []
-      ]
-   },
+   "PostValues": {},
    "CandidateFields": [
       "Company",
       "isChoosen",
@@ -298,13 +216,7 @@
    "CandidateIndices": [
       0
    ],
-   "CandidateValues": {
-      "1": [
-         2,
-         true,
-         "2022-02-14"
-      ]
-   },
+   "CandidateValues": {},
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -312,34 +224,7 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {
-      "3": [
-         "radiateur",
-         []
-      ],
-      "4": [
-         "Chaudi\u00e8re",
-         []
-      ],
-      "5": [
-         "doublage",
-         []
-      ],
-      "6": [
-         "cloison",
-         []
-      ],
-      "7": [
-         "salle de bain",
-         [
-            1
-         ]
-      ],
-      "8": [
-         "douche",
-         []
-      ]
-   },
+   "DetailedPostValues": {},
    "MissionFields": [
       "Company",
       "Job",
@@ -369,50 +254,10 @@
       19,
       20
    ],
-   "MissionValues": {
-      "1": [
-         1,
-         5,
-         2,
-         "126 Rue de Paris 92100 Boulogne-Billancourt",
-         48.841608,
-         2.23792,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         24456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            7,
-            8
-         ],
-         []
-      ]
-   },
+   "MissionValues": {},
    "DisponibilityFields": [
       "date",
       "nature"
    ],
-   "DisponibilityValues": {
-      "1": [
-         "2022-02-13",
-         "Disponible"
-      ],
-      "2": [
-         "2022-02-14",
-         "Disponible Sous Conditions"
-      ],
-      "3": [
-         "2022-02-15",
-         "Non Disponible"
-      ]
-   }
+   "DisponibilityValues": {}
 }

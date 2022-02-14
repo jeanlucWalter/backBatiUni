@@ -289,8 +289,10 @@ class Post(CommonModel):
 
   @classmethod
   def filter(cls, user):
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
     listMission = {candidate.Mission.id for candidate in Candidate.objects.all() if candidate.Mission != None}
-    return {post for post in Post.objects.all() if not post.id in listMission}
+    return {post for post in Post.objects.all() if not post.id in listMission if post.Company == userProfile.Company or post.Job in jobList}
 
 class Mission(Post):
   class Meta:
@@ -307,7 +309,10 @@ class Mission(Post):
 
   @classmethod
   def filter(cls, user):
-    return {candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None}
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
+    listMission = {candidate.Mission.id for candidate in Candidate.objects.all() if candidate.Mission != None}
+    return {candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None and (candidate.Company == userProfile.Company or candidate.Mission.Job in jobList)}
 
 class Candidate(CommonModel):
   Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.CASCADE, null=True, default=None)

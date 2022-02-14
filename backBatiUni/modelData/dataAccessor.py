@@ -351,8 +351,13 @@ class DataAccessor():
     if message:
       return {"uploadFile":"Error", "messages":message}
     expirationDate = datetime.strptime(data["expirationDate"], "%Y-%m-%d") if "expirationDate" in data and data["expirationDate"] else None
-    post = Post.objects.get(id=data["Post"]) if "Post" in data else None
-    print("__uploadFile", post)
+    post = None
+    if "Post" in data:
+      post = Post.objects.filter(id=data["Post"])
+      if not post:
+        return {"uploadFile":"Error", "messages":f"no post with id {data['Post']}"}
+      else:
+        post = post[0]
     objectFile = File.createFile(data["nature"], data["name"], data['ext'], currentUser, expirationDate=expirationDate, post=post)
     file = None
     try:

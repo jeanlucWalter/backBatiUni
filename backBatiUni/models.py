@@ -148,6 +148,10 @@ class Company(CommonModel):
   webSite = models.CharField("Url du site Web", max_length=256, null=True, default=None)
   stars = models.IntegerField("Notation sous forme d'étoile", null=True, default=None)
   companyPhone = models.CharField("Téléphone du standard", max_length=128, blank=False, null=True, default=None)
+  amount = models.FloatField("Montant sous-traitant", null=True, default=None)
+  unity = models.CharField("Unité du montant", max_length=64, null=True, default=None)
+  latitude = models.FloatField("Latitude", null=True, default=None)
+  longitude = models.FloatField("Longitude", null=True, default=None)
   manyToManyObject = ["JobForCompany", "LabelForCompany", "File", "Post", "Mission", "Disponibility"]
 
   class Meta:
@@ -302,7 +306,7 @@ class Mission(Post):
   @classmethod
   def listFields(cls):
       superList = [field.name.replace("Internal", "") for field in cls._meta.fields][1:] + cls.manyToManyObject
-      for fieldName in ["Company", "Candidate"]:
+      for fieldName in ["Candidate"]: #"Company", 
         index = superList.index(fieldName)
         del superList[index]
       return superList

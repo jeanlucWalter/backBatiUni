@@ -40,6 +40,10 @@
       "webSite",
       "stars",
       "companyPhone",
+      "amount",
+      "unity",
+      "latitude",
+      "longitude",
       "JobForCompany",
       "LabelForCompany",
       "File",
@@ -49,12 +53,12 @@
    ],
    "CompanyIndices": [
       1,
-      12,
-      13,
-      14,
-      15,
       16,
-      17
+      17,
+      18,
+      19,
+      20,
+      21
    ],
    "CompanyValues": {
       "1": [
@@ -70,6 +74,10 @@
          "https://stackoverflow.com",
          null,
          "01 23 45 67 88",
+         null,
+         null,
+         null,
+         null,
          [
             1
          ],
@@ -86,6 +94,10 @@
          "QUARTIER PEROU, 97230 SAINTE-MARIE",
          "Activit\u00e9 inconnue",
          "FR49404223521",
+         null,
+         null,
+         null,
+         null,
          null,
          null,
          null,
@@ -160,7 +172,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1644851446.723421,
+         1644854654.878285,
          ""
       ]
    },
@@ -214,6 +226,7 @@
    ],
    "DetailedPostValues": {},
    "MissionFields": [
+      "Company",
       "Job",
       "numberOfPeople",
       "address",
@@ -237,8 +250,9 @@
    ],
    "MissionIndices": [
       0,
-      18,
-      19
+      1,
+      19,
+      20
    ],
    "MissionValues": {},
    "DisponibilityFields": [

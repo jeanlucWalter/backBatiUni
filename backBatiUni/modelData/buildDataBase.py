@@ -227,7 +227,7 @@ class CreateNewDataBase:
     return response
 
   def fillupUserProfile(self, table):
-    UserProfile.objects.create(userNameInternal=User.objects.get(username="jlw"), Company=Company.objects.get(name="BatiUni"), firstName="Eric", lastName="Walter", cellPhone="06 34 09 06 95", token=None)
+    UserProfile.objects.create(userNameInternal=User.objects.get(username="jlw"), Company=Company.objects.get(name="BatiUni"), firstName="Eric", lastName="Walter", cellPhone="06 34 09 06 95", token=None, Role=2)
     return {"create user profile":"OK"}
 
   def fillupCompany(self, table):

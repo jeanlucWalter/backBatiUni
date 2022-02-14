@@ -107,8 +107,10 @@ def executeQuery():
       file5 = {'action':"uploadFile", "ext":"pdf", "name":"Plan", "fileBase64":getDocStr(2), "nature":"post", "post":2}
       for file in [file1, file2, file3, file4, file5]:
         response = requests.post(url, headers=headers, json=file)
+        data = json.loads(response.text)
+        print("uploadFile", data.keys())
     elif query == "downloadFile":
-      requests.get(url, headers=headers, params={"action":"downloadFile", "id":6})
+      requests.get(url, headers=headers, params={"action":"downloadFile", "id":1})
       response = None
     elif query == "applyPost":
       response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})

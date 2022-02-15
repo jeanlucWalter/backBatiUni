@@ -47,7 +47,7 @@ def executeQuery():
   if query == "register":
     print("query", query, url)
     headers = {}
-    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"walter.jeanluc@gmail.com","password":"pwd","company":{'id': 2, 'name': 'MONOPRIX', 'address': '2 rue du Commerce Paris 15', 'activitePrincipale': 'Activité inconnue', 'siret': '40422352100018', 'NTVAI': 'FR49404223521'},"Role":3,"proposer":"","jobs":[1,2,3]}
+    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"walter.jeanluc@gmail.com","password":"pwd","company":{'id': 2, 'name': 'MONOPRIX', 'address': '2 rue du Commerce Paris 15', 'activity': 'Activité inconnue', 'siret': '40422352100018', 'ntva': 'FR49404223521'},"Role":3,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
   elif query == "registerConfirm":
       print("registerConfirm", url)

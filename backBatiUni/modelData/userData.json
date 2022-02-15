@@ -172,7 +172,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1644939122.991887,
+         1644944312.696978,
          ""
       ]
    },
@@ -259,5 +259,15 @@
       "date",
       "nature"
    ],
-   "DisponibilityValues": {}
+   "DisponibilityValues": {},
+   "SupervisionFields": [
+      "author",
+      "date",
+      "comment",
+      "File"
+   ],
+   "SupervisionIndices": [
+      3
+   ],
+   "SupervisionValues": {}
 }

@@ -79,7 +79,7 @@ class DataAccessor():
   def __registerAction(cls, data, token):
     print("registerAction", data)
     companyData = data['company']
-    company = Company.objects.create(name=companyData['name'], address=companyData['address'], activity=companyData['activitePrincipale'], ntva=companyData['NTVAI'], siret=companyData['siret'])
+    company = Company.objects.create(name=companyData['name'], address=companyData['address'], activity=companyData['activity'], ntva=companyData['ntva'], siret=companyData['siret'])
     cls.__getGeoCoordinates(company)
     company.Role = Role.objects.get(id=data['Role'])
     company.save()
@@ -225,10 +225,10 @@ class DataAccessor():
     if subContractor.Role.id == 1:
       return {"applyPost":"Warning", "messages":f"La société {subContractor.name} n'est pas sous-traitante."}
     if post.Job not in subContractor.jobs:
-      return {"applyPost":"Warning", "messages":f"La métier {post.Job.name} n'est pas une compétence du sous-traitant {subContractor.name}."}
+      return {"applyPost":"Warning", "messages":f"Le métier {post.Job.name} n'est pas une compétence du sous-traitant {subContractor.name}."}
     exists = Candidate.objects.filter(Post=post, Company=subContractor)
     if exists:
-      return {"applyPost":"Warning", "messages":f"La sous-traitant {subContractor.name} a déjà postulé."}
+      return {"applyPost":"Warning", "messages":f"Le sous-traitant {subContractor.name} a déjà postulé."}
     candidate = Candidate.objects.create(Post=post, Company=subContractor)
     return {"applyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
 
@@ -404,6 +404,8 @@ class DataAccessor():
     if message:
       return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
     company = userProfile.Company
+    values = userProfile.computeValues(userProfile.listFields(), user, True)
+    print(values)
     return {"modifyUser":"OK","UserProfile":{userProfile.id:userProfile.computeValues(userProfile.listFields(), user, True)}, "Company":{company.id:company.computeValues(company.listFields(), user, True)}}
 
   @classmethod

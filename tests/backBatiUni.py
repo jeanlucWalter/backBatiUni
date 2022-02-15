@@ -100,7 +100,7 @@ def executeQuery():
       post = {'action':"modifyDisponibility", "disponibility":[["2022-02-13", "Disponible"], ["2022-02-14", "Disponible Sous Conditions"], ["2022-02-15", "Non Disponible"]]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadFile":
-      file1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(1), "nature":"labels", "expirationDate":"2022-02-12"}
+      file1 = {'action':"uploadFile", "ext":"png", "name":"NF", "fileBase64":getDocStr(0), "nature":"labels", "expirationDate":"2022-02-12"}
       file2 = {'action':"uploadFile", "ext":"png", "name":"Kbis", "fileBase64":getDocStr(1), "nature":"admin", "expirationDate":"2022-02-12"}
       file3 = {'action':"uploadFile", "ext":"HEIC", "name":"URSSAF", "fileBase64":getDocStr(3), "nature":"admin", "expirationDate":"2022-02-12"}
       file4 = {'action':"uploadFile", "ext":"svg", "name":"Document technique", "fileBase64":getDocStr(4), "nature":"post", "Post":2}
@@ -121,7 +121,6 @@ def executeQuery():
     elif query == "uploadSupervision":
       response = requests.get(url, headers=headers, params={'action':"uploadSupervision", "detailedPost":7, "comment":"Le travail est fini, Youpi."})
     elif query == "switchDraft":
-      print("switchDraft")
       response = requests.get(url, headers=headers, params={"action":"switchDraft", "id":2})
     elif query == "duplicatePost":
       print("duplicatePost")
@@ -133,7 +132,6 @@ def executeQuery():
       response = requests.get(url, headers=headers, params={"action":"reload"})
     elif query == "emptyDB":
       url = f'{address}/createBase/'
-      print(headers)
       response = requests.get(url, headers=headers, params={"action":"emptyDB"})
   if response and query != "downloadFile":
     data = json.loads(response.text)
@@ -143,7 +141,7 @@ def executeQuery():
   else:
     print("no answer")
 if query == "all":
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "deleteFile", "modifyDisponibility", "applyPost", "createMissionFromPost", "uploadSupervision"]:
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "applyPost", "createMissionFromPost", "uploadSupervision"]:
       query = key
       executeQuery()
 else:

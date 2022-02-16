@@ -141,6 +141,7 @@ class DataAccessor():
 
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
+    print("__uploadPost start", dictData)
     kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
     if "uploadPost" in kwargs and kwargs["uploadPost"] == "Error":
       return kwargs
@@ -150,6 +151,8 @@ class DataAccessor():
       for subObject in listObject:
         subObject.Post = objectPost
         subObject.save()
+    print("__uploadPost start", objectPost.id, objectPost.computeValues(objectPost.listFields(), currentUser, True))
+    print()
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 
   @classmethod

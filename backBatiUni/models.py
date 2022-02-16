@@ -295,8 +295,12 @@ class Post(CommonModel):
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
-    listPost = {candidate.Mission.id for candidate in Candidate.objects.all() if candidate.Mission != None}
-    return {post for post in Post.objects.all() if not post.id in listPost if post.Company == userProfile.Company or post.Job in jobList}
+    listMission = {candidate.Mission.id for candidate in Candidate.objects.all() if candidate.Mission != None}
+    tce = Job.objects.get(name = "TCE (Tout Corps d'Etat)")
+    if tce in jobList:
+      return [post for post in Post.objects.all() if not post.id in listMission]
+    else:
+      return [post for post in Post.objects.all() if not post.id in listMission if post.Company == userProfile.Company or post.Job in jobList]
 
 class Mission(Post):
   class Meta:
@@ -315,7 +319,11 @@ class Mission(Post):
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
-    return {candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None and (candidate.Company == userProfile.Company or candidate.Mission.Job in jobList)}
+    tce = Job.objects.get(name = "TCE (Tout Corps d'Etat)")
+    if tce in jobList:
+      return [candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None]
+    else:
+      return [candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None and (candidate.Company == userProfile.Company or candidate.Mission.Job in jobList)]
 
 class DatePost(CommonModel):
   Post = models.ForeignKey(Post, verbose_name='Annonce associée', related_name='PostDate', on_delete=models.CASCADE, null=True, default=None)
@@ -329,9 +337,6 @@ class DatePost(CommonModel):
   @classmethod
   def listFields(cls):
     return super().listFields()
-
-  # def create(self, content):
-  #   date = datetime.strptime(content, "%Y-%m-%d")
 
 
 class Candidate(CommonModel):

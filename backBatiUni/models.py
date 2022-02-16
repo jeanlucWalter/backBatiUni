@@ -63,7 +63,6 @@ class CommonModel(models.Model):
     return dictResult
 
   def computeValues(self, listFields, user, dictFormat=False):
-    print("computeValues", self)
     values, listIndices = [], self.listIndices()
     for index in range(len(listFields)):
       field = listFields[index]
@@ -90,8 +89,6 @@ class CommonModel(models.Model):
           listModel = [objectModel.date.strftime("%Y-%m-%d") for objectModel in model.filter(user)]
         else:
           listModel = [objectModel.id for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self]
-        # if field == "DatePost":
-        #   print("type", listModel)
         values.append(listModel)
       else:
         value = getattr(self, field, "")
@@ -354,6 +351,8 @@ class Candidate(CommonModel):
   Company = models.ForeignKey(Company, verbose_name='Sous-Traitant', related_name='selecteCompany', on_delete=models.PROTECT, null=True, default=None)
   isChoosen = models.BooleanField("Sous traitant selectionné", null=True, default=None)
   date = models.DateField(verbose_name="Date de candidature ou date d'acceptation", null=False, default=timezone.now)
+  amount = models.FloatField("Prix unitaire", null=False, default=0.0)
+  unitOfTime = models.CharField("Unité de temps", max_length=128, null=True, default="Prix Journalier")
 
   class Meta:
     unique_together = ('Post', 'Mission', 'Company')

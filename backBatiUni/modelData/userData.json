@@ -172,7 +172,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1645021251.549307,
+         1645022262.789381,
          ""
       ]
    },
@@ -213,7 +213,9 @@
    "CandidateFields": [
       "Company",
       "isChoosen",
-      "date"
+      "date",
+      "amount",
+      "unitOfTime"
    ],
    "CandidateIndices": [
       0

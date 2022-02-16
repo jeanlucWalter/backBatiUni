@@ -37,7 +37,7 @@ class DataAccessor():
     for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
-        json.dump(dictAnswer, jsonFile, indent = 3)
+      json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer
 
   @classmethod
@@ -192,7 +192,10 @@ class DataAccessor():
         if fieldName in Post.manyToManyObject and subObject:
           modelObject = apps.get_model(app_label='backBatiUni', model_name=fieldName)
           for content in value:
-            listObject.append(modelObject.objects.create(content=content))
+            if fieldName == "DatePost":
+              listObject.append(modelObject.objects.create(date=content))
+            else:
+              listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
     return kwargs, listObject
 
@@ -410,7 +413,6 @@ class DataAccessor():
       return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
     company = userProfile.Company
     values = userProfile.computeValues(userProfile.listFields(), user, True)
-    print(values)
     return {"modifyUser":"OK","UserProfile":{userProfile.id:userProfile.computeValues(userProfile.listFields(), user, True)}, "Company":{company.id:company.computeValues(company.listFields(), user, True)}}
 
   @classmethod

@@ -63,6 +63,7 @@ class CommonModel(models.Model):
     return dictResult
 
   def computeValues(self, listFields, user, dictFormat=False):
+    print("computeValues", self)
     values, listIndices = [], self.listIndices()
     for index in range(len(listFields)):
       field = listFields[index]
@@ -85,8 +86,12 @@ class CommonModel(models.Model):
         if dictFormat:
           listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self}
           listModel = {key:valueList if len(valueList) != 1 else valueList[0] for key, valueList in listModel.items()}
+        elif field == "DatePost":
+          listModel = [objectModel.date.strftime("%Y-%m-%d") for objectModel in model.filter(user)]
         else:
           listModel = [objectModel.id for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self]
+        # if field == "DatePost":
+        #   print("type", listModel)
         values.append(listModel)
       else:
         value = getattr(self, field, "")
@@ -328,15 +333,19 @@ class Mission(Post):
 class DatePost(CommonModel):
   Post = models.ForeignKey(Post, verbose_name='Annonce associée', related_name='PostDate', on_delete=models.CASCADE, null=True, default=None)
   Mission = models.ForeignKey(Mission, verbose_name='Mission associée', related_name='MissionDate', on_delete=models.CASCADE, null=True, default=None)
-  content = models.DateField(verbose_name="Date du chantier", null=False, default=timezone.now)
+  date = models.DateField(verbose_name="Date du chantier", null=False, default=timezone.now)
 
   class Meta:
-    unique_together = ('Post', 'Mission', 'content')
+    unique_together = ('Post', 'Mission', 'date')
     verbose_name = "DatePost"
 
   @classmethod
   def listFields(cls):
-    return super().listFields()
+    superList= super().listFields()
+    for fieldName in ["Post", "Mission"]: #"Company", 
+        index = superList.index(fieldName)
+        del superList[index]
+    return superList
 
 
 class Candidate(CommonModel):

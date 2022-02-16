@@ -141,7 +141,7 @@ def executeQuery():
   else:
     print("no answer")
 if query == "all":
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "applyPost", "createMissionFromPost", "uploadSupervision"]:
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "applyPost", "handleCandidateForPost", "uploadSupervision"]:
       query = key
       executeQuery()
 else:

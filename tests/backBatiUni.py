@@ -77,7 +77,7 @@ def executeQuery():
       post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr(0)}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadPost":
-      post1 = {'action':"uploadPost", "longitude":2.237779 , "latitude":48.848776, "address":"128 rue de Paris 92100 Boulogne", "Job":6, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
+      post1 = {'action':"uploadPost", "longitude":2.237779 , "latitude":48.848776, "address":"128 rue de Paris 92100 Boulogne", "Job":6, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "DatePost":["2022-03-16", "2022-03-17", "2022-02-18"], "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
       post2 = {'action':"uploadPost", "longitude":2.324877 , "latitude":48.841625, "address":"106 rue du Cherche-Midi 75006 Paris", "Job":5, "numberOfPeople":1, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":23456.10, "DetailedPost":["radiateur", "Chaudière"]}
       post3 = {'action':"uploadPost", "longitude":2.324877 , "latitude":48.841625, "address":"36 rue Dauphine 75006 Paris", "Job":9, "numberOfPeople":1, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":True, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"troisième description d'un chantier", "amount":12345.10, "DetailedPost":["doublage", "cloison"]}
       for post in [post1, post2, post3]:
@@ -116,8 +116,8 @@ def executeQuery():
       response = requests.get(url, headers=headers, params={"action":"deleteFile", "id":3})
     elif query == "applyPost":
       response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})
-    elif query == "createMissionFromPost":
-      response = requests.get(url, headers=headers, params={'action':"createMissionFromPost", "Candidate":1})
+    elif query == "handleCandidateForPost":
+      response = requests.get(url, headers=headers, params={'action':"handleCandidateForPost", "Candidate":1, "response":True})
     elif query == "uploadSupervision":
       response = requests.get(url, headers=headers, params={'action':"uploadSupervision", "detailedPost":7, "comment":"Le travail est fini, Youpi."})
     elif query == "switchDraft":

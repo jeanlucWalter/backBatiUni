@@ -172,7 +172,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1645001405.181379,
+         1645005736.741956,
          ""
       ]
    },
@@ -198,14 +198,16 @@
       "description",
       "DetailedPost",
       "File",
-      "Candidate"
+      "Candidate",
+      "DatePost"
    ],
    "PostIndices": [
       0,
       1,
       19,
       20,
-      21
+      21,
+      22
    ],
    "PostValues": {},
    "CandidateFields": [
@@ -225,6 +227,16 @@
       1
    ],
    "DetailedPostValues": {},
+   "DatePostFields": [
+      "Post",
+      "Mission",
+      "content"
+   ],
+   "DatePostIndices": [
+      0,
+      1
+   ],
+   "DatePostValues": {},
    "MissionFields": [
       "Company",
       "Job",
@@ -246,13 +258,15 @@
       "counterOffer",
       "description",
       "DetailedPost",
-      "File"
+      "File",
+      "DatePost"
    ],
    "MissionIndices": [
       0,
       1,
       19,
-      20
+      20,
+      21
    ],
    "MissionValues": {},
    "DisponibilityFields": [

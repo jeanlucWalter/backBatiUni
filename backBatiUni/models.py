@@ -278,7 +278,7 @@ class Post(CommonModel):
   unitOfTime = models.CharField("Unité de temps", max_length=128, null=True, default="Prix Journalier")
   counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
-  manyToManyObject = ["DetailedPost", "File", "Candidate"]
+  manyToManyObject = ["DetailedPost", "File", "Candidate", "DatePost"]
 
   class Meta:
     verbose_name = "Post"
@@ -317,12 +317,29 @@ class Mission(Post):
     jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
     return {candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None and (candidate.Company == userProfile.Company or candidate.Mission.Job in jobList)}
 
+class DatePost(CommonModel):
+  Post = models.ForeignKey(Post, verbose_name='Annonce associée', related_name='PostDate', on_delete=models.CASCADE, null=True, default=None)
+  Mission = models.ForeignKey(Mission, verbose_name='Mission associée', related_name='MissionDate', on_delete=models.CASCADE, null=True, default=None)
+  content = models.DateField(verbose_name="Date du chantier", null=False, default=timezone.now)
+
+  class Meta:
+    unique_together = ('Post', 'Mission', 'content')
+    verbose_name = "DatePost"
+
+  @classmethod
+  def listFields(cls):
+    return super().listFields()
+
+  # def create(self, content):
+  #   date = datetime.strptime(content, "%Y-%m-%d")
+
+
 class Candidate(CommonModel):
   Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.CASCADE, null=True, default=None)
   Mission = models.ForeignKey(Mission, verbose_name='Mission associée', related_name='selectedMission', on_delete=models.CASCADE, null=True, default=None)
   Company = models.ForeignKey(Company, verbose_name='Sous-Traitant', related_name='selecteCompany', on_delete=models.PROTECT, null=True, default=None)
   isChoosen = models.BooleanField("Sous traitant selectionné", null=True, default=None)
-  date = models.DateField(verbose_name="Date de candidateur ou date d'acceptation", null=False, default=timezone.now)
+  date = models.DateField(verbose_name="Date de candidature ou date d'acceptation", null=False, default=timezone.now)
 
   class Meta:
     unique_together = ('Post', 'Mission', 'Company')

@@ -22,8 +22,10 @@ if os.getenv('PATH_MIDDLE'):
   sys.path.append(os.getenv('PATH_MIDDLE'))
   from profileScraping import getEnterpriseDataFrom
   from geocoding import getCoordinatesFrom # argument str address
+
+
 class DataAccessor():
-  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, File, Post, Candidate, DetailedPost, Mission, Disponibility, Supervision], "general":[Job, Role, Label]}
+  loadTables = {"user":[UserProfile, Company, JobForCompany, LabelForCompany, File, Post, Candidate, DetailedPost, DatePost, Mission, Disponibility, Supervision], "general":[Job, Role, Label]}
   dictTable = {}
   portSmtp = os.getenv('PORT_SMTP')
 
@@ -140,7 +142,6 @@ class DataAccessor():
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
     kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
-    print("__uploadPost", dictData)
     if "uploadPost" in kwargs and kwargs["uploadPost"] == "Error":
       return kwargs
     objectPost = Post.objects.create(**kwargs)
@@ -164,7 +165,7 @@ class DataAccessor():
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
-    kwargs, listFields, listObject = {"Company":userProfile.Company}, Post.listFields(), None
+    kwargs, listFields, listObject = {"Company":userProfile.Company}, Post.listFields(), []
     for fieldName, value in dictData.items():
       fieldObject = None
       try:
@@ -189,7 +190,7 @@ class DataAccessor():
         if fieldObject and isinstance(fieldObject, models.BooleanField) or isinstance(fieldObject, models.CharField) :
           kwargs[fieldName]= dictData[fieldName]
         if fieldName in Post.manyToManyObject and subObject:
-          modelObject, listObject = apps.get_model(app_label='backBatiUni', model_name=fieldName), []
+          modelObject = apps.get_model(app_label='backBatiUni', model_name=fieldName)
           for content in value:
             listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
@@ -252,24 +253,27 @@ class DataAccessor():
     return {"deletePost":"Error", "messages":f"{id} does not exist"}
 
   @classmethod
-  def createMissionFromPost(cls, candidateId, currentUser):
+  def handleCandidateForPost(cls, candidateId, status, currentUser):
     candidate = Candidate.objects.get(id=candidateId)
     if candidate.Mission:
-      return {"createMissionFromPost":"Error", "messages":f"The post of id {candidate.Mission.id} is allready a mission"}
+      return {"handleCandidateForPost":"Error", "messages":f"The post of id {candidate.Mission.id} is allready a mission"}
     postId = candidate.Post.id
-    candidate.isChoosen = True
-    candidate.Post = None
-    candidate.Mission = Mission.objects.get(id=postId)
-    candidate.date = timezone.now()
-    candidate.save()
-    mission = candidate.Mission
-    for model in [DetailedPost, File]:
-      for modelObject in model.objects.all():
-        if modelObject.Post and modelObject.Post.id == postId:
-          modelObject.Post = None
-          modelObject.Mission = mission
-          modelObject.save()
-    return {"createMissionFromPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
+    candidate.isChoosen = status
+    if status:
+      candidate.Post = None
+      candidate.Mission = Mission.objects.get(id=postId)
+      candidate.date = timezone.now()
+      candidate.save()
+      mission = candidate.Mission
+      for model in [DetailedPost, File]:
+        for modelObject in model.objects.all():
+          if modelObject.Post and modelObject.Post.id == postId:
+            modelObject.Post = None
+            modelObject.Mission = mission
+            modelObject.save()
+      return {"handleCandidateForPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
+    post = candidate.Post
+    return {"handleCandidateForPost":"OK", post.id:post.computeValues(post.listFields(), currentUser, dictFormat=True)}
 
   @classmethod
   def uploadSupervision(cls, detailedPostId, comment, currentUser):

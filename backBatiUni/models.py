@@ -321,7 +321,7 @@ class Candidate(CommonModel):
   Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.CASCADE, null=True, default=None)
   Mission = models.ForeignKey(Mission, verbose_name='Mission associée', related_name='selectedMission', on_delete=models.CASCADE, null=True, default=None)
   Company = models.ForeignKey(Company, verbose_name='Sous-Traitant', related_name='selecteCompany', on_delete=models.PROTECT, null=True, default=None)
-  isChoosen = models.BooleanField("Sous traitant selectionné", null=False, default=False)
+  isChoosen = models.BooleanField("Sous traitant selectionné", null=True, default=None)
   date = models.DateField(verbose_name="Date de candidateur ou date d'acceptation", null=False, default=timezone.now)
 
   class Meta:

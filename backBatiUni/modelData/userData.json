@@ -83,14 +83,8 @@
          ],
          [],
          [],
-         [
-            2,
-            5,
-            8
-         ],
-         [
-            1
-         ],
+         [],
+         [],
          []
       ],
       "2": [
@@ -119,17 +113,11 @@
             2
          ],
          [
-            1,
-            2,
-            4
+            1
          ],
          [],
          [],
-         [
-            1,
-            2,
-            3
-         ]
+         []
       ]
    },
    "JobForCompanyFields": [
@@ -184,39 +172,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1645022262.789381,
-         ""
-      ],
-      "2": [
-         "labels",
-         "NF",
-         "png",
-         "2022-02-12",
-         1645022262.789381,
-         ""
-      ],
-      "4": [
-         "admin",
-         "URSSAF",
-         "HEIC",
-         "2022-02-12",
-         1645022262.789381,
-         ""
-      ],
-      "5": [
-         "post",
-         "Document technique",
-         "svg",
-         "",
-         1645022262.789381,
-         ""
-      ],
-      "6": [
-         "post",
-         "Plan",
-         "pdf",
-         "",
-         1645022262.789381,
+         1645103622.757953,
          ""
       ]
    },
@@ -253,97 +209,7 @@
       21,
       22
    ],
-   "PostValues": {
-      "2": [
-         1,
-         5,
-         1,
-         "106 rue du Cherche-Midi 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         false,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         23456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            3,
-            4
-         ],
-         [
-            5,
-            6
-         ],
-         [],
-         [
-            "2022-03-17"
-         ]
-      ],
-      "5": [
-         1,
-         5,
-         1,
-         "106 rue du Cherche-Midi 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         23456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            11,
-            12
-         ],
-         [],
-         [],
-         []
-      ],
-      "8": [
-         1,
-         5,
-         1,
-         "106 rue du Cherche-Midi 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         23456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            17,
-            18
-         ],
-         [],
-         [],
-         []
-      ]
-   },
+   "PostValues": {},
    "CandidateFields": [
       "Company",
       "isChoosen",
@@ -354,15 +220,7 @@
    "CandidateIndices": [
       0
    ],
-   "CandidateValues": {
-      "1": [
-         2,
-         true,
-         "2022-02-16",
-         0.0,
-         "Prix Journalier"
-      ]
-   },
+   "CandidateValues": {},
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -370,93 +228,8 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {
-      "3": [
-         "radiateur",
-         []
-      ],
-      "4": [
-         "Chaudi\u00e8re",
-         []
-      ],
-      "5": [
-         "doublage",
-         []
-      ],
-      "6": [
-         "cloison",
-         []
-      ],
-      "7": [
-         "salle de bain",
-         [
-            1
-         ]
-      ],
-      "8": [
-         "douche",
-         []
-      ],
-      "9": [
-         "lavabo",
-         []
-      ],
-      "10": [
-         "baignoire",
-         []
-      ],
-      "11": [
-         "radiateur",
-         []
-      ],
-      "12": [
-         "Chaudi\u00e8re",
-         []
-      ],
-      "13": [
-         "doublage",
-         []
-      ],
-      "14": [
-         "cloison",
-         []
-      ],
-      "15": [
-         "lavabo",
-         []
-      ],
-      "16": [
-         "baignoire",
-         []
-      ],
-      "17": [
-         "radiateur",
-         []
-      ],
-      "18": [
-         "Chaudi\u00e8re",
-         []
-      ],
-      "19": [
-         "doublage",
-         []
-      ],
-      "20": [
-         "cloison",
-         []
-      ]
-   },
-   "DatePostValues": {
-      "3": "2022-02-18",
-      "1": "2022-03-16",
-      "2": "2022-03-17",
-      "6": "2022-02-18",
-      "4": "2022-03-16",
-      "5": "2022-03-17",
-      "9": "2022-02-18",
-      "7": "2022-03-16",
-      "8": "2022-03-17"
-   },
+   "DetailedPostValues": {},
+   "DatePostValues": {},
    "MissionFields": [
       "Company",
       "Job",
@@ -488,56 +261,12 @@
       20,
       21
    ],
-   "MissionValues": {
-      "1": [
-         1,
-         5,
-         2,
-         "126 rue de Paris 92100 Boulogne",
-         48.848776,
-         2.237779,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         24456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            7,
-            8
-         ],
-         [],
-         [
-            "2022-02-18",
-            "2022-03-16"
-         ]
-      ]
-   },
+   "MissionValues": {},
    "DisponibilityFields": [
       "date",
       "nature"
    ],
-   "DisponibilityValues": {
-      "1": [
-         "2022-02-13",
-         "Disponible"
-      ],
-      "2": [
-         "2022-02-14",
-         "Disponible Sous Conditions"
-      ],
-      "3": [
-         "2022-02-15",
-         "Non Disponible"
-      ]
-   },
+   "DisponibilityValues": {},
    "SupervisionFields": [
       "author",
       "date",
@@ -547,12 +276,5 @@
    "SupervisionIndices": [
       3
    ],
-   "SupervisionValues": {
-      "1": [
-         "Jean-Luc Walter",
-         "2022-02-16",
-         "Le travail est fini, Youpi.",
-         []
-      ]
-   }
+   "SupervisionValues": {}
 }

@@ -265,6 +265,9 @@ class DataAccessor():
     if candidate.Mission:
       return {"handleCandidateForPost":"Error", "messages":f"The post of id {candidate.Mission.id} is allready a mission"}
     postId = candidate.Post.id
+    print("handleCandidateForPost", status, type(status))
+    status = True if status == "true" else status
+    status = False if status == "false" else status
     candidate.isChoosen = status
     if status:
       candidate.Post = None

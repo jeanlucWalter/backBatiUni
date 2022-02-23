@@ -29,11 +29,11 @@ class Data(DefaultView):
       if action == "deleteFile": return Response(DataAccessor.deleteFile(request.GET["id"]))
       if action == "getPost": return Response(DataAccessor.getPost(currentUser))
       if action == "handleCandidateForPost": return Response(DataAccessor.handleCandidateForPost(request.GET["Candidate"], request.GET["response"], currentUser))
-      if action == "uploadSupervision": return Response(DataAccessor.uploadSupervision(request.GET["detailedPost"], request.GET["comment"], currentUser))
       if action == "switchDraft": return Response(DataAccessor.switchDraft(request.GET["id"], currentUser))
       if action == "duplicatePost": return Response(DataAccessor.duplicatePost(request.GET["id"], currentUser))
       if action == "applyPost": return Response(DataAccessor.applyPost(request.GET["Post"], currentUser))
       if action == "setFavorite": return Response(DataAccessor.setFavorite(request.GET["Post"], request.GET["value"], currentUser))
+      if action == "isViewed": return Response(DataAccessor.isViewed(request.GET["Post"], currentUser))
       return Response({"data GET":"Error", "messages":{"action":action}})
     return Response({"data GET":"Warning", "messages":"La confirmation par mail n'est pas réalisée."})
 

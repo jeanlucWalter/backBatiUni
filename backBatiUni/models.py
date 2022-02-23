@@ -277,21 +277,18 @@ class FavoritePost(CommonModel):
 
   @classmethod
   def dictValues(cls, user):
+    print("dictValues", cls)
     return [favorite.postId for favorite in cls.filter(user)]
 
   @classmethod
   def filter(cls, user):
+    print("filter", cls)
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    return [favorite for favorite in FavoritePost.objects.filter(UserProfile=userProfile)]
+    return [favorite for favorite in cls.objects.filter(UserProfile=userProfile)]
 
 class ViewPost(FavoritePost):
   class Meta:
     verbose_name = "ViewPost"
-
-  @classmethod
-  def filter(cls, user):
-    userProfile = UserProfile.objects.get(userNameInternal=user)
-    return [favorite for favorite in FavoritePost.objects.filter(UserProfile=userProfile)]
 
 class Post(CommonModel):
   Company = models.ForeignKey(Company, related_name='Company', verbose_name='Société demandeuse', on_delete=models.PROTECT, null=True, default=None) 

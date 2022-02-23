@@ -127,6 +127,7 @@ class DataAccessor():
       elif data["action"] == "modifyPost": return cls.__modifyPost(data, currentUser)
       elif data["action"] == "uploadFile": return cls.__uploadFile(data, currentUser)
       elif data["action"] == "modifyDisponibility": return cls.__modifyDisponibility(data["disponibility"], currentUser)
+      if data["action"] == "uploadSupervision": return cls.uploadSupervision(data["detailedPost"], data["comment"], currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 
@@ -251,6 +252,17 @@ class DataAccessor():
     elif value == "true" and not favorite:
       FavoritePost.objects.create(UserProfile=userProfile, postId=postId)
     return {"setFavorite":"OK"}
+
+  @classmethod
+  def isViewed(cls, postId, currentUser):
+    print("isViewed")
+    userProfile = UserProfile.objects.get(userNameInternal=currentUser)
+    viewPost = ViewPost.objects.filter(UserProfile=userProfile, postId=postId)
+    print(viewPost)
+    if not viewPost:
+      print("create")
+      ViewPost.objects.create(UserProfile=userProfile, postId=postId)
+    return {"isViewed":"OK"}
 
   @classmethod
   def getPost(cls, currentUser):

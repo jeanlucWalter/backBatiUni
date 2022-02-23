@@ -91,7 +91,7 @@ def executeQuery():
       response = requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":2})
     elif query == "removeFavorite":
       print("setFavorite")
-      requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":1})
+      requests.get(url, headers=headers, params={'action':"setFavorite", "value":"false", "Post":1})
     elif query == "isViewed":
       print("isViewed")
       response = requests.get(url, headers=headers, params={'action':"isViewed", "Post":1})

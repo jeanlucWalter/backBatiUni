@@ -264,7 +264,7 @@ class UserProfile(CommonModel):
     return [UserProfile.objects.get(userNameInternal=user)]
 
 class FavoritePost(CommonModel):
-  UserProfile = models.ForeignKey(UserProfile, related_name='relatedUserProfile', on_delete=models.PROTECT, null=True, default=None)
+  UserProfile = models.ForeignKey(UserProfile, related_name='UserProfileforFavorite', on_delete=models.PROTECT, null=True, default=None)
   postId = models.IntegerField("id du Post", blank=True, null=True, default=None)
 
   class Meta:
@@ -286,9 +286,28 @@ class FavoritePost(CommonModel):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     return [favorite for favorite in cls.objects.filter(UserProfile=userProfile)]
 
-class ViewPost(FavoritePost):
+class ViewPost(CommonModel):
+  UserProfile = models.ForeignKey(UserProfile, related_name='UserProfileforView', on_delete=models.PROTECT, null=True, default=None)
+  postId = models.IntegerField("id du Post", blank=True, null=True, default=None)
+
   class Meta:
     verbose_name = "ViewPost"
+    unique_together = ('UserProfile', 'postId')
+
+  @classmethod
+  def listFields(cls):
+    return ["Post"]
+
+  @classmethod
+  def dictValues(cls, user):
+    print("dictValues", cls)
+    return [favorite.postId for favorite in cls.filter(user)]
+
+  @classmethod
+  def filter(cls, user):
+    print("filter", cls)
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    return [favorite for favorite in cls.objects.filter(UserProfile=userProfile)]
 
 class Post(CommonModel):
   Company = models.ForeignKey(Company, related_name='Company', verbose_name='Société demandeuse', on_delete=models.PROTECT, null=True, default=None) 

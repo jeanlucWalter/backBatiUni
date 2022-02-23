@@ -56,7 +56,7 @@ def executeQuery():
       response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"walter.jeanluc@gmail.com"})
   else:
     print("execute", query, query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"])
-    token = queryForToken("jlw", "Angular01") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
+    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
     if query == "token":
       print("token", token)
     url = f'{address}/data/'
@@ -85,6 +85,14 @@ def executeQuery():
       print("modifyPost")
       post = {'action':"modifyPost", "id":1, "address":"126 rue de Paris 92100 Boulogne", "Job":5, "numberOfPeople":2, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":24456.10, "DetailedPost":["salle de bain", "douche"]}
       response = requests.post(url, headers=headers, json=post)
+    elif query == "setFavorite":
+      print("setFavorite")
+      requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":1})
+      response = requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":2})
+    elif query == "removeFavorite":
+      print("setFavorite")
+      requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":1})
+      response = requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":2})
     # elif query == "deletePost":
     #   print("deletePost")
     #   post = {'action':"uploadPost", "address":"129 rue de Paris 92100 Boulogne", "Job":9, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
@@ -140,7 +148,7 @@ def executeQuery():
   else:
     print("no answer")
 if query == "all":
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "applyPost", "handleCandidateForPost", "uploadSupervision"]:
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "setFavorite", "applyPost", "handleCandidateForPost", "uploadSupervision"]:
       query = key
       executeQuery()
 else:

@@ -1,4 +1,5 @@
 from asyncio import subprocess
+from asyncio.unix_events import _UnixSelectorEventLoop
 from re import sub
 from ..models import *
 from django.contrib.auth.models import User, UserManager
@@ -100,6 +101,7 @@ class DataAccessor():
   @classmethod
   def registerConfirm(cls, token):
     userProfile = UserProfile.objects.filter(token=token)
+    print("registerConfirm token", token, userProfile)
     if userProfile:
       userProfile = userProfile[0]
       user = User.objects.create(username=userProfile.email, email=userProfile.email)
@@ -240,7 +242,15 @@ class DataAccessor():
     candidate = Candidate.objects.create(Post=post, Company=subContractor)
     return {"applyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
 
-
+  @classmethod
+  def setFavorite(cls, postId, value, currentUser):
+    userProfile = UserProfile.objects.get(userNameInternal=currentUser)
+    favorite = FavoritePost.objects.filter(UserProfile=userProfile, postId=postId)
+    if favorite and value == "false":
+        favorite[0].delete()
+    elif value == "true" and not favorite:
+      FavoritePost.objects.create(UserProfile=userProfile, postId=postId)
+    return {"setFavorite":"OK"}
 
   @classmethod
   def getPost(cls, currentUser):

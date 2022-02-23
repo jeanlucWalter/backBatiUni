@@ -26,6 +26,7 @@ class CommonModel(models.Model):
   def dumpStructure(cls, user):
     dictAnswer = {}
     tableName = cls._meta.verbose_name
+    print("dumpStructure", cls, cls.listFields())
     if len(cls.listFields()) > 1:
       dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
@@ -234,8 +235,9 @@ class UserProfile(CommonModel):
   token = models.CharField("Token de validation", max_length=512, blank=True, null=True, default="empty token")
   email = models.CharField("Email", max_length=128, blank=True, null=True, default="Inconnu")
   password = models.CharField("Mot de passe", max_length=128, blank=True, null=True, default="Inconnu")
-  favorite = models.BooleanField("Favori", null=False, default=False)
-  nbViews = models.IntegerField("nb vues", blank=False, null=False, default=0)
+  manyToManyObject = ["FavoritePost"]
+
+
   class Meta:
     verbose_name = "UserProfile"
 
@@ -260,6 +262,27 @@ class UserProfile(CommonModel):
   @classmethod
   def filter(cls, user):
     return [UserProfile.objects.get(userNameInternal=user)]
+
+class FavoritePost(CommonModel):
+  UserProfile = models.ForeignKey(UserProfile, related_name='relatedUserProfile', on_delete=models.PROTECT, null=True, default=None)
+  postId = models.IntegerField("id du Post", blank=True, null=True, default=None)
+
+  class Meta:
+    verbose_name = "FavoritePost"
+    unique_together = ('UserProfile', 'postId')
+
+  @classmethod
+  def listFields(cls):
+    return ["Post"]
+
+  @classmethod
+  def dictValues(cls, user):
+    return [favorite.postId for favorite in cls.filter(user)]
+
+  @classmethod
+  def filter(cls, user):
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    return [favorite for favorite in FavoritePost.objects.filter(UserProfile=userProfile)]
 
 class Post(CommonModel):
   Company = models.ForeignKey(Company, related_name='Company', verbose_name='Société demandeuse', on_delete=models.PROTECT, null=True, default=None) 

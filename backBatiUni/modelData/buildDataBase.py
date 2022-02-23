@@ -200,6 +200,11 @@ class CreateNewDataBase:
     return self.fillupDataBase(answer)
 
   def emptyDataBase (self):
+    currentUser = User.objects.get(id=1)
+    # print(currentUser.username)
+    # currentUser.set_password('pwd')
+    # print("pwd changed")
+
     for dir in ['./files/admin/', './files/avatars/', './files/labels/', './files/posts/', './files/supervisions/']:
       for file in os.listdir(dir):
         if os.path.isdir(os.path.join(dir, file)):

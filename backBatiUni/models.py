@@ -235,7 +235,7 @@ class UserProfile(CommonModel):
   token = models.CharField("Token de validation", max_length=512, blank=True, null=True, default="empty token")
   email = models.CharField("Email", max_length=128, blank=True, null=True, default="Inconnu")
   password = models.CharField("Mot de passe", max_length=128, blank=True, null=True, default="Inconnu")
-  manyToManyObject = ["FavoritePost"]
+  manyToManyObject = ["FavoritePost", "ViewPost"]
 
 
   class Meta:
@@ -277,12 +277,10 @@ class FavoritePost(CommonModel):
 
   @classmethod
   def dictValues(cls, user):
-    print("dictValues", cls)
     return [favorite.postId for favorite in cls.filter(user)]
 
   @classmethod
   def filter(cls, user):
-    print("filter", cls)
     userProfile = UserProfile.objects.get(userNameInternal=user)
     return [favorite for favorite in cls.objects.filter(UserProfile=userProfile)]
 
@@ -300,12 +298,10 @@ class ViewPost(CommonModel):
 
   @classmethod
   def dictValues(cls, user):
-    print("dictValues", cls)
     return [favorite.postId for favorite in cls.filter(user)]
 
   @classmethod
   def filter(cls, user):
-    print("filter", cls)
     userProfile = UserProfile.objects.get(userNameInternal=user)
     return [favorite for favorite in cls.objects.filter(UserProfile=userProfile)]
 

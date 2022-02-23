@@ -284,6 +284,15 @@ class FavoritePost(CommonModel):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     return [favorite for favorite in FavoritePost.objects.filter(UserProfile=userProfile)]
 
+class ViewPost(FavoritePost):
+  class Meta:
+    verbose_name = "ViewPost"
+
+  @classmethod
+  def filter(cls, user):
+    userProfile = UserProfile.objects.get(userNameInternal=user)
+    return [favorite for favorite in FavoritePost.objects.filter(UserProfile=userProfile)]
+
 class Post(CommonModel):
   Company = models.ForeignKey(Company, related_name='Company', verbose_name='Société demandeuse', on_delete=models.PROTECT, null=True, default=None) 
   Job = models.ForeignKey(Job, verbose_name='Métier', on_delete=models.PROTECT, blank=False, default=None) 

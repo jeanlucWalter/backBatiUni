@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 class CreateNewDataBase:
-  listTable = {"Supervision":Supervision, "UserProfile":UserProfile, "JobForCompany":JobForCompany, "LabelForCompany":LabelForCompany, "Disponibility":Disponibility,"Candidate":Candidate, "Supervision":Supervision, "DetailedPost":DetailedPost, "DatePost":DatePost, "File":File, "Post":Post,  "Company":Company, "Job":Job, "Role":Role, "Label":Label}
+  listTable = {"Supervision":Supervision, "ViewPost":ViewPost, "FavoritePost":FavoritePost, "UserProfile":UserProfile, "JobForCompany":JobForCompany, "LabelForCompany":LabelForCompany, "Disponibility":Disponibility,"Candidate":Candidate, "DetailedPost":DetailedPost, "DatePost":DatePost, "File":File, "Supervision":Supervision, "Post":Post,  "Company":Company, "Job":Job, "Role":Role, "Label":Label}
   dictLabels = {
     "Qualibat":["Cet organisme apporte des réponses précises aux maitres d’œuvre et aux clients sur la capacité professionnelle de l’entreprise en explorant trois domaines précis : la situation administrative, l’envergure financière et les compétences techniques. Il délivre plusieurs certifications.","https://www.qualibat.com/",True],
     "Qualif'elec":["Si vous relevez du génie électrique et énergétique, Qualifelec est la certification qu’il vous faut obtenir absolument. Elle couvre 8 domaines d’activités précis : installations électriques., chauffage, ventilation, climatisation., branchements et réseaux., bâtiment communicant., éclairage public, courant faible., maintenance d’installations électriques., antenne.",	"https://www.qualifelec.fr/", True],
@@ -200,7 +200,7 @@ class CreateNewDataBase:
     return self.fillupDataBase(answer)
 
   def emptyDataBase (self):
-    currentUser = User.objects.get(id=1)
+    currentUser = User.objects.get(username="jlw")
     # print(currentUser.username)
     # currentUser.set_password('pwd')
     # print("pwd changed")
@@ -247,13 +247,14 @@ class CreateNewDataBase:
     JobForCompany.objects.create(Job=job, number=2, Company=company)
     return {"create user JobForCompany":"OK"}
 
-  def fillupSupervision(self, table):return {}
   def fillupFile(self, table):return {}
   def fillupPost(self, table): return {}
   def fillupDetailedPost(self, table): return {}
   def fillupCandidate(self, table): return {} 
   def fillupDisponibility(self, table): return {}
   def fillupSupervision(self, table): return {}
+  def fillupFavoritePost(self, table):return {}
+  def fillupViewPost(self, table):return {}
   def fillupDatePost(self, table): return {}
 
   def fillupJob(self, table):

@@ -42,10 +42,8 @@ def getDocStr(index = 0):
   return encoded_string.decode("utf-8")
 
 def executeQuery():
-  print("execute", query)
   now, data, response, url , headers = "2022/01/12", None, None, f'{address}/initialize/', {"content-type":"Application/Json"}
   if query == "register":
-    print("query", query, url)
     headers = {}
     post = {"firstname":"Jean-Luc","lastname":"Walter","email":"walter.jeanluc@gmail.com","password":"pwd","company":{'id': 2, 'name': 'MONOPRIX', 'address': '2 rue du Commerce Paris 15', 'activity': 'Activité inconnue', 'siret': '40422352100018', 'ntva': 'FR49404223521'},"Role":3,"proposer":"","jobs":[1,2,3]}
     response = requests.post(url, headers=headers, json=post)
@@ -57,7 +55,8 @@ def executeQuery():
   elif query == "forgetPassword":
       response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"walter.jeanluc@gmail.com"})
   else:
-    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
+    print("execute", query, query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"])
+    token = queryForToken("jlw", "Angular01") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
     if query == "token":
       print("token", token)
     url = f'{address}/data/'
@@ -71,7 +70,7 @@ def executeQuery():
     elif query == "modifyUser":
       print("modifyUser")
       now = "2022-01-12"
-      post = {'action': 'modifyUser', 'UserProfile': {'id': 1, 'cellPhone': '0634090694', 'Company': {'capital': '12345', 'companyPhone': '01 23 45 67 88', 'JobForCompany':[[4,2], [5,3]], 'LabelForCompany':[[1,now], [2,now]]}}}
+      post = {'action': 'modifyUser', 'UserProfile': {'id': 1, 'cellPhone': '0634090694', 'Company': {'capital': '12345', 'companyPhone': '01 23 45 67 88', 'JobForCompany':[[4,2], [5,3], [6,3]], 'LabelForCompany':[[1,now], [2,now]]}}}
       response = requests.post(url, headers=headers, json=post)
     elif query == "changeUserImage":
       post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr(0)}

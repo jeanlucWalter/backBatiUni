@@ -234,7 +234,8 @@ class UserProfile(CommonModel):
   token = models.CharField("Token de validation", max_length=512, blank=True, null=True, default="empty token")
   email = models.CharField("Email", max_length=128, blank=True, null=True, default="Inconnu")
   password = models.CharField("Mot de passe", max_length=128, blank=True, null=True, default="Inconnu")
-
+  favorite = models.BooleanField("Favori", null=False, default=False)
+  nbViews = models.IntegerField("nb vues", blank=False, null=False, default=0)
   class Meta:
     verbose_name = "UserProfile"
 
@@ -386,7 +387,7 @@ class DetailedPost(CommonModel):
 
 class Supervision(CommonModel):
   DetailedPost = models.ForeignKey(DetailedPost, verbose_name='Détail associé', on_delete=models.PROTECT, null=True, default=None)
-  author = models.CharField("Détail de la presciption", max_length=256, null=True, default=None)
+  UserProfile = models.ForeignKey(UserProfile, related_name='UserProfile', on_delete=models.PROTECT, null=True, default=None)
   date = models.DateField(verbose_name="Date du suivi", null=False, default=timezone.now)
   comment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
   manyToManyObject = ["File"]

@@ -61,8 +61,7 @@ class Initialize(APIView):
   def post(self, request):
     jsonBin = request.body
     jsonString = jsonBin.decode("utf8")
-    data = json.loads(jsonString)
-    print(data)
+    data = json.loads(jsonString)  
     if "action" in data and data["action"] == "newPassword":  return Response(DataAccessor.newPassword(data))
     return Response(DataAccessor().register(data))
 
@@ -71,6 +70,7 @@ class CreateBase(DefaultView):
     if 'action' in request.GET:
       action = request.GET["action"]
       if action == "reload":
+        print("reload")
         return Response(CreateNewDataBase().reloadDataBase())
       if action == "emptyDB":
         return Response(CreateNewDataBase().emptyDataBase())

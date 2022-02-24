@@ -225,7 +225,7 @@ class DataAccessor():
     return {"modifyPost":"Error", "messages":f"{dictData['id']} is not a Post id"}
 
   @classmethod
-  def applyPost(cls, postId, currentUser):
+  def applyPost(cls, postId, amount, unitOfTime, currentUser):
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     subContractor = userProfile.Company
     post = Post.objects.get(id=postId)
@@ -240,7 +240,7 @@ class DataAccessor():
     exists = Candidate.objects.filter(Post=post, Company=subContractor)
     if exists:
       return {"applyPost":"Warning", "messages":f"Le sous-traitant {subContractor.name} a déjà postulé."}
-    candidate = Candidate.objects.create(Post=post, Company=subContractor)
+    candidate = Candidate.objects.create(Post=post, Company=subContractor, amount=amount, unitOfTime=unitOfTime)
     return {"applyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
 
   @classmethod

@@ -26,7 +26,6 @@ class CommonModel(models.Model):
   def dumpStructure(cls, user):
     dictAnswer = {}
     tableName = cls._meta.verbose_name
-    print("dumpStructure", cls, cls.listFields())
     if len(cls.listFields()) > 1:
       dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
@@ -560,7 +559,6 @@ class File(CommonModel):
         objectFile.expirationDate = expirationDate
       objectFile.save()
     else:
-      print("createfile", nature, name, path, ext, company, expirationDate, post, supervision)
       objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=company, expirationDate=expirationDate, Post=post, Supervision=supervision)
     return objectFile
 

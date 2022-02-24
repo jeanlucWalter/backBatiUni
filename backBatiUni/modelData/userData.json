@@ -29,13 +29,8 @@
          null,
          "walter.jeanluc@gmail.com",
          null,
-         [
-            3,
-            2
-         ],
-         [
-            1
-         ]
+         [],
+         []
       ]
    },
    "CompanyFields": [
@@ -94,14 +89,8 @@
          ],
          [],
          [],
-         [
-            2,
-            4,
-            5
-         ],
-         [
-            1
-         ],
+         [],
+         [],
          []
       ],
       "2": [
@@ -122,27 +111,20 @@
          null,
          null,
          [
-            8,
-            9,
-            10
-         ],
-         [
-            3,
-            4
+            5,
+            6,
+            7
          ],
          [
             1,
-            2,
-            4,
-            7
+            2
+         ],
+         [
+            1
          ],
          [],
          [],
-         [
-            4,
-            5,
-            6
-         ]
+         []
       ]
    },
    "JobForCompanyFields": [
@@ -157,15 +139,15 @@
          5,
          2
       ],
-      "8": [
+      "5": [
          4,
          2
       ],
-      "9": [
+      "6": [
          5,
          3
       ],
-      "10": [
+      "7": [
          6,
          3
       ]
@@ -178,11 +160,11 @@
       0
    ],
    "LabelForCompanyValues": {
-      "3": [
+      "1": [
          1,
          "2022-01-12"
       ],
-      "4": [
+      "2": [
          2,
          "2022-01-12"
       ]
@@ -201,47 +183,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1645630759.59679,
-         ""
-      ],
-      "2": [
-         "labels",
-         "NF",
-         "png",
-         "2022-02-12",
-         1645630761.062055,
-         ""
-      ],
-      "4": [
-         "admin",
-         "URSSAF",
-         "HEIC",
-         "2022-02-12",
-         1645630761.13548,
-         ""
-      ],
-      "5": [
-         "post",
-         "Document technique",
-         "svg",
-         "",
-         1645630761.158551,
-         ""
-      ],
-      "6": [
-         "post",
-         "Plan",
-         "pdf",
-         "",
-         1645630761.190883,
-         ""
-      ],
-      "7": [
-         "admin",
-         "Kbis",
-         "png",
-         "2022-02-12",
-         1645630682.592926,
+         1645710054.076548,
          ""
       ]
    },
@@ -278,99 +220,7 @@
       21,
       22
    ],
-   "PostValues": {
-      "2": [
-         1,
-         5,
-         1,
-         "106 rue du Cherche-Midi 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         23456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            3,
-            4
-         ],
-         [
-            5,
-            6
-         ],
-         [],
-         []
-      ],
-      "4": [
-         1,
-         6,
-         3,
-         "128 rue de Paris 92100 Boulogne",
-         48.848776,
-         2.237779,
-         "Eric Walter",
-         true,
-         true,
-         "2022-02-15",
-         "2022-02-16",
-         "2022-02-28",
-         "7:30",
-         "17:30",
-         65243.1,
-         "\u20ac",
-         "Prix Journalier",
-         true,
-         "Premi\u00e8re description d'un chantier",
-         [
-            9,
-            10
-         ],
-         [],
-         [],
-         [
-            "2022-02-18",
-            "2022-03-16",
-            "2022-03-17"
-         ]
-      ],
-      "5": [
-         1,
-         5,
-         1,
-         "106 rue du Cherche-Midi 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         23456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            11,
-            12
-         ],
-         [],
-         [],
-         []
-      ]
-   },
+   "PostValues": {},
    "CandidateFields": [
       "Company",
       "isChoosen",
@@ -381,22 +231,7 @@
    "CandidateIndices": [
       0
    ],
-   "CandidateValues": {
-      "1": [
-         2,
-         true,
-         "2022-02-23",
-         0.0,
-         "Prix Journalier"
-      ],
-      "2": [
-         2,
-         null,
-         "2022-02-23",
-         0.0,
-         "Prix Journalier"
-      ]
-   },
+   "CandidateValues": {},
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -404,74 +239,8 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {
-      "3": [
-         "radiateur",
-         []
-      ],
-      "4": [
-         "Chaudi\u00e8re",
-         []
-      ],
-      "5": [
-         "doublage",
-         []
-      ],
-      "6": [
-         "cloison",
-         []
-      ],
-      "7": [
-         "salle de bain",
-         [
-            1
-         ]
-      ],
-      "8": [
-         "douche",
-         []
-      ],
-      "9": [
-         "lavabo",
-         []
-      ],
-      "10": [
-         "baignoire",
-         []
-      ],
-      "11": [
-         "radiateur",
-         []
-      ],
-      "12": [
-         "Chaudi\u00e8re",
-         []
-      ],
-      "13": [
-         "doublage",
-         []
-      ],
-      "14": [
-         "cloison",
-         []
-      ],
-      "15": [
-         "salle de bain",
-         []
-      ],
-      "16": [
-         "douche",
-         []
-      ]
-   },
-   "DatePostValues": {
-      "3": "2022-02-18",
-      "1": "2022-03-16",
-      "2": "2022-03-17",
-      "6": "2022-02-18",
-      "4": "2022-03-16",
-      "5": "2022-03-17"
-   },
+   "DetailedPostValues": {},
+   "DatePostValues": {},
    "MissionFields": [
       "Company",
       "Job",
@@ -503,57 +272,12 @@
       20,
       21
    ],
-   "MissionValues": {
-      "1": [
-         1,
-         5,
-         2,
-         "126 rue de Paris 92100 Boulogne",
-         48.848776,
-         2.237779,
-         "Eric Walter",
-         true,
-         false,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         24456.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "Deuxi\u00e8me description d'un chantier",
-         [
-            7,
-            8
-         ],
-         [],
-         [
-            "2022-02-18",
-            "2022-03-16",
-            "2022-03-17"
-         ]
-      ]
-   },
+   "MissionValues": {},
    "DisponibilityFields": [
       "date",
       "nature"
    ],
-   "DisponibilityValues": {
-      "4": [
-         "2022-02-13",
-         "Disponible"
-      ],
-      "5": [
-         "2022-02-14",
-         "Disponible Sous Conditions"
-      ],
-      "6": [
-         "2022-02-15",
-         "Non Disponible"
-      ]
-   },
+   "DisponibilityValues": {},
    "SupervisionFields": [
       "UserProfile",
       "date",
@@ -564,12 +288,5 @@
       0,
       3
    ],
-   "SupervisionValues": {
-      "1": [
-         2,
-         "2022-02-23",
-         "Le travail est fini, Youpi.",
-         []
-      ]
-   }
+   "SupervisionValues": {}
 }

@@ -31,7 +31,7 @@ class Data(DefaultView):
       if action == "handleCandidateForPost": return Response(DataAccessor.handleCandidateForPost(request.GET["Candidate"], request.GET["response"], currentUser))
       if action == "switchDraft": return Response(DataAccessor.switchDraft(request.GET["id"], currentUser))
       if action == "duplicatePost": return Response(DataAccessor.duplicatePost(request.GET["id"], currentUser))
-      if action == "applyPost": return Response(DataAccessor.applyPost(request.GET["Post"], currentUser))
+      if action == "applyPost": return Response(DataAccessor.applyPost(request.GET["Post"], request.GET["amount"], request.GET["devis"], currentUser))
       if action == "setFavorite": return Response(DataAccessor.setFavorite(request.GET["Post"], request.GET["value"], currentUser))
       if action == "isViewed": return Response(DataAccessor.isViewed(request.GET["Post"], currentUser))
       return Response({"data GET":"Error", "messages":{"action":action}})

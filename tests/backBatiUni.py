@@ -124,7 +124,7 @@ def executeQuery():
     elif query == "deleteFile":
       response = requests.get(url, headers=headers, params={"action":"deleteFile", "id":3})
     elif query == "applyPost":
-      response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1})
+      response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1, "amount":1000, "devis":"Par Jour"})
     elif query == "handleCandidateForPost":
       response = requests.get(url, headers=headers, params={'action':"handleCandidateForPost", "Candidate":1, "response":True})
     elif query == "uploadSupervision":

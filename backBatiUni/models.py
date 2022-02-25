@@ -234,8 +234,7 @@ class UserProfile(CommonModel):
   token = models.CharField("Token de validation", max_length=512, blank=True, null=True, default="empty token")
   email = models.CharField("Email", max_length=128, blank=True, null=True, default="Inconnu")
   password = models.CharField("Mot de passe", max_length=128, blank=True, null=True, default="Inconnu")
-  manyToManyObject = ["FavoritePost", "ViewPost"]
-
+  # manyToManyObject = ["FavoritePost", "ViewPost"]
 
   class Meta:
     verbose_name = "UserProfile"
@@ -257,6 +256,11 @@ class UserProfile(CommonModel):
       user.save()
     else:
       super().setAttr(fieldName, value)
+
+  # def computeValues(self, listField, user , dictFormat=False):
+  #   valuesComputed = super().computeValues(listField, user, dictFormat)
+  #   for key in {"FavoritePost", "ViewPost"}:
+
   
   @classmethod
   def filter(cls, user):
@@ -282,6 +286,8 @@ class FavoritePost(CommonModel):
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
     return [favorite for favorite in cls.objects.filter(UserProfile=userProfile)]
+
+
 
 class ViewPost(CommonModel):
   UserProfile = models.ForeignKey(UserProfile, related_name='UserProfileforView', on_delete=models.PROTECT, null=True, default=None)

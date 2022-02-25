@@ -9,14 +9,10 @@
       "cellPhone",
       "token",
       "email",
-      "password",
-      "FavoritePost",
-      "ViewPost"
+      "password"
    ],
    "UserProfileIndices": [
-      1,
-      9,
-      10
+      1
    ],
    "UserProfileValues": {
       "2": [
@@ -28,9 +24,7 @@
          null,
          null,
          "walter.jeanluc@gmail.com",
-         null,
-         [],
-         []
+         null
       ]
    },
    "CompanyFields": [
@@ -85,12 +79,14 @@
          null,
          null,
          [
-            1
+            10
          ],
          [],
          [],
          [],
-         [],
+         [
+            1
+         ],
          []
       ],
       "2": [
@@ -111,20 +107,25 @@
          null,
          null,
          [
-            5,
-            6,
-            7
+            31,
+            32
          ],
          [
             1,
             2
          ],
          [
-            1
+            1,
+            2,
+            4
          ],
          [],
          [],
-         []
+         [
+            1,
+            2,
+            3
+         ]
       ]
    },
    "JobForCompanyFields": [
@@ -135,20 +136,16 @@
       0
    ],
    "JobForCompanyValues": {
-      "1": [
-         5,
-         2
+      "10": [
+         2,
+         1
       ],
-      "5": [
-         4,
-         2
+      "31": [
+         3,
+         1
       ],
-      "6": [
-         5,
-         3
-      ],
-      "7": [
-         6,
+      "32": [
+         2,
          3
       ]
    },
@@ -182,6 +179,38 @@
          "userImage",
          "Fantasiapp_1",
          "png",
+         "",
+         1645710054.076548,
+         ""
+      ],
+      "2": [
+         "labels",
+         "NF",
+         "png",
+         "2022-02-12",
+         1645710054.076548,
+         ""
+      ],
+      "4": [
+         "admin",
+         "URSSAF",
+         "HEIC",
+         "2022-02-12",
+         1645710054.076548,
+         ""
+      ],
+      "5": [
+         "post",
+         "Document technique",
+         "svg",
+         "",
+         1645710054.076548,
+         ""
+      ],
+      "6": [
+         "post",
+         "Plan",
+         "pdf",
          "",
          1645710054.076548,
          ""
@@ -231,7 +260,15 @@
    "CandidateIndices": [
       0
    ],
-   "CandidateValues": {},
+   "CandidateValues": {
+      "1": [
+         2,
+         true,
+         "2022-02-24",
+         1000.0,
+         "Par Jour"
+      ]
+   },
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -239,8 +276,39 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {},
-   "DatePostValues": {},
+   "DetailedPostValues": {
+      "3": [
+         "radiateur",
+         []
+      ],
+      "4": [
+         "Chaudi\u00e8re",
+         []
+      ],
+      "5": [
+         "doublage",
+         []
+      ],
+      "6": [
+         "cloison",
+         []
+      ],
+      "7": [
+         "salle de bain",
+         [
+            1
+         ]
+      ],
+      "8": [
+         "douche",
+         []
+      ]
+   },
+   "DatePostValues": {
+      "3": "2022-02-18",
+      "1": "2022-03-16",
+      "2": "2022-03-17"
+   },
    "MissionFields": [
       "Company",
       "Job",
@@ -272,12 +340,57 @@
       20,
       21
    ],
-   "MissionValues": {},
+   "MissionValues": {
+      "1": [
+         1,
+         5,
+         2,
+         "126 rue de Paris 92100 Boulogne",
+         48.848776,
+         2.237779,
+         "Eric Walter",
+         true,
+         false,
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         24456.1,
+         "\u20ac",
+         "Prix Journalier",
+         false,
+         "Deuxi\u00e8me description d'un chantier",
+         [
+            7,
+            8
+         ],
+         [],
+         [
+            "2022-02-18",
+            "2022-03-16",
+            "2022-03-17"
+         ]
+      ]
+   },
    "DisponibilityFields": [
       "date",
       "nature"
    ],
-   "DisponibilityValues": {},
+   "DisponibilityValues": {
+      "1": [
+         "2022-02-13",
+         "Disponible"
+      ],
+      "2": [
+         "2022-02-14",
+         "Disponible Sous Conditions"
+      ],
+      "3": [
+         "2022-02-15",
+         "Non Disponible"
+      ]
+   },
    "SupervisionFields": [
       "UserProfile",
       "date",
@@ -288,5 +401,12 @@
       0,
       3
    ],
-   "SupervisionValues": {}
+   "SupervisionValues": {
+      "1": [
+         2,
+         "2022-02-24",
+         "Le travail est fini, Youpi.",
+         []
+      ]
+   }
 }

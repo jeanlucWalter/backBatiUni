@@ -428,16 +428,18 @@ class DataAccessor():
 
   @classmethod
   def __updateUserInfo(cls, data, user):
-    message, valueModified, userProfile = {}, {"UserProfile":{}}, UserProfile.objects.get(id=data["UserProfile"]["id"])
-    flagModified = cls.__setValues(data["UserProfile"], user, message, valueModified["UserProfile"], userProfile, False)
-    if not flagModified:
-      message["general"] = "Aucun champ n'a été modifié" 
-    if message:
-      return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
-    company = userProfile.Company
-    values = userProfile.computeValues(userProfile.listFields(), user, True)
-    return {"modifyUser":"OK","UserProfile":{userProfile.id:userProfile.computeValues(userProfile.listFields(), user, True)}, "Company":{company.id:company.computeValues(company.listFields(), user, True)}}
-
+    print("update", data)
+    if "UserProfile" in data:
+      message, valueModified, userProfile = {}, {"UserProfile":{}}, UserProfile.objects.get(id=data["UserProfile"]["id"])
+      flagModified = cls.__setValues(data["UserProfile"], user, message, valueModified["UserProfile"], userProfile, False)
+      if not flagModified:
+        message["general"] = "Aucun champ n'a été modifié" 
+      if message:
+        return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
+      company = userProfile.Company
+      return {"modifyUser":"OK","UserProfile":{userProfile.id:userProfile.computeValues(userProfile.listFields(), user, True)}, "Company":{company.id:company.computeValues(company.listFields(), user, True)}}
+    return {"modifyUser":"Warning", "messages":"no data to update"}
+    
   @classmethod
   def __setValues(cls, dictValue, user, message, valueModified, objectInstance, flagModified):
     for fieldName, value in dictValue.items():

@@ -49,13 +49,13 @@ def executeQuery():
     response = requests.post(url, headers=headers, json=post)
   elif query == "registerConfirm":
       print("registerConfirm", url)
-      response = requests.get(f'{address}/initialize/', headers=headers, params={"action":"registerConfirm", "token":"A secret code to check 9243672519"})
+      response = requests.get(f'{address}/initialize/', headers={}, params={"action":"registerConfirm", "token":"A secret code to check 9243672519"})
   elif query == "getGeneralData":
     response = requests.get(url, headers=headers, params={"action":"getGeneralData"})
   elif query == "forgetPassword":
       response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"walter.jeanluc@gmail.com"})
   else:
-    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "registerConfirm", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
+    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
     if query == "token":
       print("token", token)
     url = f'{address}/data/'
@@ -69,7 +69,7 @@ def executeQuery():
     elif query == "modifyUser":
       print("modifyUser")
       now = "2022-01-12"
-      post = {'action': 'modifyUser', 'UserProfile': {'id': 1, 'cellPhone': '0634090694', 'Company': {'capital': '12345', 'companyPhone': '01 23 45 67 88', 'JobForCompany':[[4,2], [5,3], [6,3]], 'LabelForCompany':[[1,now], [2,now]]}}}
+      post = {'action': 'modifyUser', 'UserProfile': {'id': 2, 'cellPhone': '06 29 35 04 18', 'Company': {'capital': '307 130', 'companyPhone': '08 92 97 64 15', 'JobForCompany':[[4,2], [5,3], [80,3]], 'LabelForCompany':[[1,now], [2,now]]}}}
       response = requests.post(url, headers=headers, json=post)
     elif query == "changeUserImage":
       post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr(0)}

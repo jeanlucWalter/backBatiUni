@@ -45,7 +45,7 @@ def executeQuery():
   now, data, response, url , headers = "2022/01/12", None, None, f'{address}/initialize/', {"content-type":"Application/Json"}
   if query == "register":
     headers = {}
-    post = {"firstname":"Jean-Luc","lastname":"Walter","email":"walter.jeanluc@gmail.com","password":"pwd","company":{'id': 2, 'name': 'MONOPRIX', 'address': '2 rue du Commerce Paris 15', 'activity': 'Activité inconnue', 'siret': '40422352100018', 'ntva': 'FR49404223521'},"Role":3,"proposer":"","jobs":[1,2,3]}
+    post = {"firstname":"Augustin","lastname":"Alleaume","email":"walter.jeanluc@gmail.com","password":"pwd","company":{'id': 2, 'name': 'BATIUNI', 'address': '9 rue Vintimille Paris 75009', 'activity': 'Activité inconnue', 'siret': '40422352100018', 'ntva': 'FR49404223521'},"Role":3,"proposer":"","jobs":[1,2,80]}
     response = requests.post(url, headers=headers, json=post)
   elif query == "registerConfirm":
       print("registerConfirm", url)
@@ -55,7 +55,7 @@ def executeQuery():
   elif query == "forgetPassword":
       response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"walter.jeanluc@gmail.com"})
   else:
-    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
+    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "registerConfirm", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
     if query == "token":
       print("token", token)
     url = f'{address}/data/'

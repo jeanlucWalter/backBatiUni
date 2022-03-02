@@ -27,6 +27,12 @@ class CommonModel(models.Model):
     dictAnswer = {}
     tableName = cls._meta.verbose_name
     if len(cls.listFields()) > 1:
+      if cls == UserProfile:
+        newKey = {"FavoritePost":"favoritePosts", "ViewPost":"viewedPosts"}
+        listF = [key if not key in newKey else newKey[key] for key in cls.listFields()]
+        print(cls.listFields(), listF)
+      else:
+        dictAnswer[tableName + "Fields"] = cls.listFields()
       dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
         dictAnswer[tableName + "Indices"] = cls.listIndices()
@@ -234,7 +240,7 @@ class UserProfile(CommonModel):
   token = models.CharField("Token de validation", max_length=512, blank=True, null=True, default="empty token")
   email = models.CharField("Email", max_length=128, blank=True, null=True, default="Inconnu")
   password = models.CharField("Mot de passe", max_length=128, blank=True, null=True, default="Inconnu")
-  # manyToManyObject = ["FavoritePost", "ViewPost"]
+  manyToManyObject = ["FavoritePost", "ViewPost"]
 
   class Meta:
     verbose_name = "UserProfile"
@@ -257,10 +263,15 @@ class UserProfile(CommonModel):
     else:
       super().setAttr(fieldName, value)
 
-  # def computeValues(self, listField, user , dictFormat=False):
-  #   valuesComputed = super().computeValues(listField, user, dictFormat)
-  #   for key in {"FavoritePost", "ViewPost"}:
-
+  # @classmethod
+  # def dictValues (cls, user):
+  #   dictVal = super().dictValues(user)
+  #   for key, newKey in {"FavoritePost":"favoritePosts", "ViewPost":"viewedPosts"}.items():
+  #     if key in dictVal:
+  #       dictVal[newKey] = dictVal[key]
+  #       del dictVal[key]
+  #     print("dictValues, userProfile", type(dictVal), dictVal)
+  #   return dictVal 
   
   @classmethod
   def filter(cls, user):

@@ -38,6 +38,7 @@ class DataAccessor():
     for table in cls.loadTables[profile]:
       dictAnswer.update(table.dumpStructure(user))
     with open(f"./backBatiUni/modelData/{profile}Data.json", 'w') as jsonFile:
+      print(f"./backBatiUni/modelData/{profile}Data.json",dictAnswer["MissionFields"])
       json.dump(dictAnswer, jsonFile, indent = 3)
     return dictAnswer
 

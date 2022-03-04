@@ -10,8 +10,8 @@
       "token",
       "email",
       "password",
-      "FavoritePost",
-      "ViewPost"
+      "favoritePosts",
+      "viewedPosts"
    ],
    "UserProfileIndices": [
       1,
@@ -355,14 +355,16 @@
       "description",
       "DetailedPost",
       "File",
-      "DatePost"
+      "DatePost",
+      "subContractor"
    ],
    "MissionIndices": [
       0,
       1,
       19,
       20,
-      21
+      21,
+      22
    ],
    "MissionValues": {
       "1": [
@@ -394,7 +396,8 @@
             "2022-02-18",
             "2022-03-16",
             "2022-03-17"
-         ]
+         ],
+         2
       ],
       "2": [
          1,
@@ -424,7 +427,8 @@
             5,
             6
          ],
-         []
+         [],
+         2
       ]
    },
    "DisponibilityFields": [

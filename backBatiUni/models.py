@@ -30,12 +30,17 @@ class CommonModel(models.Model):
       if cls == UserProfile:
         newKey = {"FavoritePost":"favoritePosts", "ViewPost":"viewedPosts"}
         listF = [key if not key in newKey else newKey[key] for key in cls.listFields()]
-        print(cls.listFields(), listF)
+        dictAnswer[tableName + "Fields"] = listF
+      elif cls == Mission:
+        dictAnswer[tableName + "Fields"] = cls.listFields() + ["subContractor"]
+        print("Mission Fields", tableName,  dictAnswer["MissionFields"])
       else:
         dictAnswer[tableName + "Fields"] = cls.listFields()
-      dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
-        dictAnswer[tableName + "Indices"] = cls.listIndices()
+        if cls == Mission:
+          dictAnswer[tableName + "Indices"] = cls.listIndices() + [len(cls.listFields())]
+        else:
+          dictAnswer[tableName + "Indices"] = cls.listIndices()
     dictAnswer[tableName + "Values"] = cls.dictValues(user)
     return dictAnswer
 
@@ -377,6 +382,14 @@ class Mission(Post):
         index = superList.index(fieldName)
         del superList[index]
       return superList
+
+  def computeValues(self, listFields, user, dictFormat=False):
+    listV = super().computeValues(listFields, user, dictFormat)
+    print("Mission", listV)
+    cd = [candidate for candidate in Candidate.objects.filter(Mission=self) if candidate.isChoosen][0]
+    print("MissionValues", listV + [cd.Company.id])
+    return listV + [cd.Company.id]
+    return listV + [cd.computeValues(cd.listFields(), user, True)]
 
   @classmethod
   def filter(cls, user):

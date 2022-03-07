@@ -454,6 +454,7 @@ class DetailedPost(CommonModel):
   Post = models.ForeignKey(Post, related_name='Post', verbose_name='Annonce associée', on_delete=models.PROTECT, null=True, default=None)
   Mission = models.ForeignKey(Mission, related_name='Mission', verbose_name='Mission associée', on_delete=models.PROTECT, null=True, default=None)
   content = models.CharField("Détail de la prescription", max_length=256, null=True, default=None)
+  date = models.DateField(verbose_name="Date de la tâche", null=True, default=None)
   manyToManyObject = ["Supervision"]
 
   class Meta:

@@ -301,6 +301,7 @@ class DataAccessor():
             modelObject.save()
       contractImage = cls.createContract(candidate.Mission, currentUser)
       candidate.Mission.contract = contractImage.id
+      print("handleCandidateForPost", contractImage.id)
       candidate.Mission.save()
       return {"handleCandidateForPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
     post = candidate.Post

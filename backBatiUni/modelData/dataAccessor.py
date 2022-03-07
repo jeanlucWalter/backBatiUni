@@ -13,7 +13,7 @@ import shutil
 from datetime import datetime
 import base64
 from django.core.files.base import ContentFile
-from .smtpConnector import SmtpConnector
+from ..smtpConnector import SmtpConnector
 import json
 
 from dotenv import load_dotenv

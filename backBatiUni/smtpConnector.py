@@ -1,6 +1,6 @@
 import requests
 # import requests_async as reqsourceuestsAsync
-from ..models import *
+from .models import *
 import json
 
 class SmtpConnector:

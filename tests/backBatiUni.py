@@ -127,6 +127,8 @@ def executeQuery():
       response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":1, "amount":1000, "devis":"Par Jour"})
     elif query == "handleCandidateForPost":
       response = requests.get(url, headers=headers, params={'action':"handleCandidateForPost", "Candidate":1, "response":True})
+    elif query == "signContract":
+      response = requests.get(url, headers=headers, params={"action":"signContract", "missionId":1, "view":"PME"})
     elif query == "uploadSupervision":
       post = {'action':"uploadSupervision", "detailedPost":7, "comment":"Le travail est fini, Youpi."}
       response = requests.post(url, headers=headers, json=post)

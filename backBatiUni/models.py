@@ -346,18 +346,21 @@ class Post(CommonModel):
   unitOfTime = models.CharField("Unité de temps", max_length=128, null=True, default="Prix Journalier")
   counterOffer = models.BooleanField("Autoriser une contre offre", null=False, default=False)
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
+  signedByCompany = models.BooleanField("Signature de la PME", null=False, default=False)
+  signedBySubContractor = models.BooleanField("Signature du ST", null=False, default=False)
+  contract = models.IntegerField("Image du contrat", blank=False, null=True, default=None)
   manyToManyObject = ["DetailedPost", "File", "Candidate", "DatePost"]
 
   class Meta:
     verbose_name = "Post"
 
-  # @classmethod
-  # def listFields(cls):
-  #     superList = super().listFields()
-  #     for fieldName in ["Company"]:
-  #       index = superList.index(fieldName)
-  #       del superList[index]
-  #     return superList
+  @classmethod
+  def listFields(cls):
+      superList = super().listFields()
+      for fieldName in ["signedByCompany", "signedBySubContractor", "contract"]:
+        index = superList.index(fieldName)
+        del superList[index]
+      return superList
 
   @classmethod
   def filter(cls, user):
@@ -383,13 +386,20 @@ class Mission(Post):
         del superList[index]
       return superList
 
+  @classmethod
+  def listIndices(cls):
+    parentList = super().listIndices()
+    listFields = cls.listFields()
+    index = listFields.index("contract")
+    parentList.append(index)
+    parentList.sort()
+    return parentList
+
   def computeValues(self, listFields, user, dictFormat=False):
     listV = super().computeValues(listFields, user, dictFormat)
     print("Mission", listV)
     cd = [candidate for candidate in Candidate.objects.filter(Mission=self) if candidate.isChoosen][0]
-    print("MissionValues", listV + [cd.Company.id])
     return listV + [cd.Company.id]
-    return listV + [cd.computeValues(cd.listFields(), user, True)]
 
   @classmethod
   def filter(cls, user):
@@ -488,7 +498,7 @@ class File(CommonModel):
   Post = models.ForeignKey(Post, verbose_name="Annonce associée", related_name='selectPost', on_delete=models.PROTECT, null=True, default=None)
   Mission = models.ForeignKey(Mission, verbose_name="Mission associée", related_name='selectMission', on_delete=models.PROTECT, null=True, default=None)
   Supervision = models.ForeignKey(Supervision, verbose_name="Suivi associé", on_delete=models.PROTECT, null=True, default=None)
-  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/", "supervision":"./files/supervisions/"}
+  dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/", "supervision":"./files/supervisions/", "contract":"./files/contracts/"}
   authorizedExtention = ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "svg", "SVG", "pdf", "HEIC", "heic"]
 
   class Meta:
@@ -566,7 +576,7 @@ class File(CommonModel):
   @classmethod
   def createFile(cls, nature, name, ext, user, expirationDate = None, post=None, supervision=None):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    objectFile = None
+    objectFile, mission = None, None
     if nature == "userImage":
       path = cls.dictPath[nature] + userProfile.Company.name + '_' + str(userProfile.Company.id) + '.' + ext
     if nature in ["labels", "admin"]:
@@ -575,8 +585,12 @@ class File(CommonModel):
       path = cls.dictPath[nature] + name + '_' + str(post.id) + '.' + ext
     if nature == "supervision":
       path = cls.dictPath[nature] + name + '_' + str(supervision.id) + '.' + ext
+    if nature == "contract":
+      mission = post
+      post = None
+      path = cls.dictPath[nature] + name + '_' + str(mission.id) + '.' + ext
     company = userProfile.Company if not post and not supervision else None
-    objectFile = File.objects.filter(nature=nature, name=name, Company=company, Post=post, Supervision=supervision)
+    objectFile = File.objects.filter(nature=nature, name=name, Company=company, Post=post, Mission=mission, Supervision=supervision)
     if objectFile:
       objectFile = objectFile[0]
       oldPath = objectFile.path
@@ -589,7 +603,7 @@ class File(CommonModel):
         objectFile.expirationDate = expirationDate
       objectFile.save()
     else:
-      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=company, expirationDate=expirationDate, Post=post, Supervision=supervision)
+      objectFile = cls.objects.create(nature=nature, name=name, path=path, ext=ext, Company=company, expirationDate=expirationDate, Post=post, Mission=mission, Supervision=supervision)
     return objectFile
 
 # class FilesPost(CommonModel):

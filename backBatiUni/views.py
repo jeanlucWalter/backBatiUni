@@ -29,6 +29,7 @@ class Data(DefaultView):
       if action == "deleteFile": return Response(DataAccessor.deleteFile(request.GET["id"]))
       if action == "getPost": return Response(DataAccessor.getPost(currentUser))
       if action == "handleCandidateForPost": return Response(DataAccessor.handleCandidateForPost(request.GET["Candidate"], request.GET["response"], currentUser))
+      if action == "signContract": return Response(DataAccessor.signContract(request.GET["missionId"], request.GET["view"], currentUser))
       if action == "switchDraft": return Response(DataAccessor.switchDraft(request.GET["id"], currentUser))
       if action == "duplicatePost": return Response(DataAccessor.duplicatePost(request.GET["id"], currentUser))
       if action == "applyPost": return Response(DataAccessor.applyPost(request.GET["Post"], request.GET["amount"], request.GET["devis"], currentUser))

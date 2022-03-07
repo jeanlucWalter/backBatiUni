@@ -299,9 +299,38 @@ class DataAccessor():
             modelObject.Post = None
             modelObject.Mission = mission
             modelObject.save()
+      contractImage = cls.createContract(candidate.Mission, currentUser)
+      candidate.Mission.contract = contractImage.id
+      candidate.Mission.save()
       return {"handleCandidateForPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
     post = candidate.Post
     return {"handleCandidateForPost":"OK", post.id:post.computeValues(post.listFields(), currentUser, dictFormat=True)}
+
+
+  @classmethod
+  def createContract(cls, mission, user):
+    contractImage = File.createFile("contract", "contract", "png", user, post=mission)
+    source = "./files/documents/contratNonSigné.png"
+    dest = contractImage.path
+    shutil.copy2(source, dest)
+    return contractImage
+
+  @classmethod
+  def signContract(cls, missionId, view, currentUser):
+    mission = Mission.objects.get(id=missionId)
+    contractImage = File.objects.get(id=mission.contract)
+    source = "./files/documents/ContratSignéPME.png" if view == "PME" else "./files/documents/ContratSignéST.png"
+    dest = contractImage.path
+    print("signContract", source, dest)
+    shutil.copy2(source, dest)
+    contractImage.timestamp = datetime.now().timestamp()
+    contractImage.save()
+    if view == "PME" : mission.signedByCompany = True
+    else: mission.signedBySubContractor = True
+    mission.save()
+    return {"signContract":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
+
+
 
   @classmethod
   def uploadSupervision(cls, detailedPostId, comment, currentUser):

@@ -1,5 +1,5 @@
 {
-   "currentUser": 2,
+   "currentUser": 1,
    "UserProfileFields": [
       "userName",
       "Company",
@@ -19,16 +19,16 @@
       10
    ],
    "UserProfileValues": {
-      "2": [
-         "walter.jeanluc@gmail.com",
-         2,
-         "Augustin",
-         "Alleaume",
+      "1": [
+         "jlw",
+         1,
+         "Eric",
+         "Walter",
          null,
-         "06 29 35 04 18",
+         "06 34 09 06 95",
          null,
-         "walter.jeanluc@gmail.com",
-         null,
+         "Inconnu",
+         "Inconnu",
          [],
          []
       ]
@@ -89,8 +89,13 @@
          ],
          [],
          [],
-         [],
-         [],
+         [
+            2,
+            3
+         ],
+         [
+            1
+         ],
          []
       ],
       "2": [
@@ -120,11 +125,18 @@
             2
          ],
          [
-            1
+            1,
+            2,
+            4,
+            7
          ],
          [],
          [],
-         []
+         [
+            1,
+            2,
+            3
+         ]
       ]
    },
    "JobForCompanyFields": [
@@ -183,7 +195,47 @@
          "Fantasiapp_1",
          "png",
          "",
-         1646385477.734104,
+         1646658014.099185,
+         ""
+      ],
+      "2": [
+         "labels",
+         "NF",
+         "png",
+         "2022-02-12",
+         1646658014.099185,
+         ""
+      ],
+      "4": [
+         "admin",
+         "URSSAF",
+         "HEIC",
+         "2022-02-12",
+         1646658014.099185,
+         ""
+      ],
+      "5": [
+         "post",
+         "Document technique",
+         "svg",
+         "",
+         1646658014.099185,
+         ""
+      ],
+      "6": [
+         "post",
+         "Plan",
+         "pdf",
+         "",
+         1646658014.099185,
+         ""
+      ],
+      "7": [
+         "contract",
+         "contract",
+         "png",
+         "",
+         1646658014.099185,
          ""
       ]
    },
@@ -220,7 +272,67 @@
       21,
       22
    ],
-   "PostValues": {},
+   "PostValues": {
+      "2": [
+         1,
+         5,
+         1,
+         "106 rue du Cherche-Midi 75006 Paris",
+         48.841625,
+         2.324877,
+         "Eric Walter",
+         false,
+         false,
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         23456.1,
+         "\u20ac",
+         "Prix Journalier",
+         false,
+         "Deuxi\u00e8me description d'un chantier",
+         [
+            3,
+            4
+         ],
+         [
+            5,
+            6
+         ],
+         [],
+         []
+      ],
+      "3": [
+         1,
+         9,
+         1,
+         "36 rue Dauphine 75006 Paris",
+         48.841625,
+         2.324877,
+         "Eric Walter",
+         true,
+         true,
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         12345.1,
+         "\u20ac",
+         "Prix Journalier",
+         false,
+         "troisi\u00e8me description d'un chantier",
+         [
+            5,
+            6
+         ],
+         [],
+         [],
+         []
+      ]
+   },
    "CandidateFields": [
       "Company",
       "isChoosen",
@@ -231,7 +343,15 @@
    "CandidateIndices": [
       0
    ],
-   "CandidateValues": {},
+   "CandidateValues": {
+      "1": [
+         2,
+         true,
+         "2022-03-07",
+         1000.0,
+         "Par Jour"
+      ]
+   },
    "DetailedPostFields": [
       "content",
       "Supervision"
@@ -239,8 +359,39 @@
    "DetailedPostIndices": [
       1
    ],
-   "DetailedPostValues": {},
-   "DatePostValues": {},
+   "DetailedPostValues": {
+      "3": [
+         "radiateur",
+         []
+      ],
+      "4": [
+         "Chaudi\u00e8re",
+         []
+      ],
+      "5": [
+         "doublage",
+         []
+      ],
+      "6": [
+         "cloison",
+         []
+      ],
+      "7": [
+         "salle de bain",
+         [
+            1
+         ]
+      ],
+      "8": [
+         "douche",
+         []
+      ]
+   },
+   "DatePostValues": {
+      "3": "2022-02-18",
+      "1": "2022-03-16",
+      "2": "2022-03-17"
+   },
    "MissionFields": [
       "Company",
       "Job",
@@ -261,6 +412,9 @@
       "unitOfTime",
       "counterOffer",
       "description",
+      "signedByCompany",
+      "signedBySubContractor",
+      "contract",
       "DetailedPost",
       "File",
       "DatePost",
@@ -269,17 +423,69 @@
    "MissionIndices": [
       0,
       1,
-      19,
-      20,
       21,
-      22
+      22,
+      23,
+      24,
+      25
    ],
-   "MissionValues": {},
+   "MissionValues": {
+      "1": [
+         1,
+         5,
+         2,
+         "126 rue de Paris 92100 Boulogne",
+         48.848776,
+         2.237779,
+         "Eric Walter",
+         true,
+         false,
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         24456.1,
+         "\u20ac",
+         "Prix Journalier",
+         false,
+         "Deuxi\u00e8me description d'un chantier",
+         false,
+         false,
+         7,
+         [
+            7,
+            8
+         ],
+         [
+            7
+         ],
+         [
+            "2022-02-18",
+            "2022-03-16",
+            "2022-03-17"
+         ],
+         2
+      ]
+   },
    "DisponibilityFields": [
       "date",
       "nature"
    ],
-   "DisponibilityValues": {},
+   "DisponibilityValues": {
+      "1": [
+         "2022-02-13",
+         "Disponible"
+      ],
+      "2": [
+         "2022-02-14",
+         "Disponible Sous Conditions"
+      ],
+      "3": [
+         "2022-02-15",
+         "Non Disponible"
+      ]
+   },
    "SupervisionFields": [
       "UserProfile",
       "date",
@@ -290,5 +496,12 @@
       0,
       3
    ],
-   "SupervisionValues": {}
+   "SupervisionValues": {
+      "1": [
+         2,
+         "2022-03-07",
+         "Le travail est fini, Youpi.",
+         []
+      ]
+   }
 }

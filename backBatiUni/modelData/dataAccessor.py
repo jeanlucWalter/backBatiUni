@@ -311,7 +311,7 @@ class DataAccessor():
   @classmethod
   def createContract(cls, mission, user):
     contractImage = File.createFile("contract", "contract", "png", user, post=mission)
-    source = "./files/documents/contratUnsigned.png"
+    source = "./files/documents/contractUnsigned.png"
     dest = contractImage.path
     print("signContract", source, dest)
     shutil.copy2(source, dest)
@@ -321,7 +321,10 @@ class DataAccessor():
   def signContract(cls, missionId, view, currentUser):
     mission = Mission.objects.get(id=missionId)
     contractImage = File.objects.get(id=mission.contract)
-    source = "./files/documents/ContratSignedPME.png" if view == "PME" else "./files/documents/ContratSignéST.png"
+    if view == "PME":
+      source = "./files/documents/ContractSignedST_PME.png" if mission.signedBySubContractor else "./files/documents/ContractSignedPME.png"
+    else:
+      source = "./files/documents/ContractSignedST_PME.png" if mission.signedByCompany else "./files/documents/ContractSignedST.png"
     dest = contractImage.path
     print("signContract", source, dest)
     shutil.copy2(source, dest)

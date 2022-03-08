@@ -1,5 +1,5 @@
 {
-   "currentUser": 1,
+   "currentUser": 2,
    "UserProfileFields": [
       "userName",
       "Company",
@@ -19,17 +19,20 @@
       10
    ],
    "UserProfileValues": {
-      "1": [
-         "jlw",
-         1,
-         "Eric",
-         "Walter",
+      "2": [
+         "walter.jeanluc@gmail.com",
+         2,
+         "Augustin",
+         "Alleaume",
          null,
-         "06 34 09 06 95",
+         "06 29 35 04 18",
          null,
-         "Inconnu",
-         "Inconnu",
-         [],
+         "walter.jeanluc@gmail.com",
+         null,
+         [
+            1,
+            2
+         ],
          []
       ]
    },
@@ -90,8 +93,7 @@
          [],
          [],
          [
-            2,
-            3
+            2
          ],
          [
             1
@@ -195,7 +197,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1646663541.21773,
+         1646735112.202723,
          ""
       ],
       "2": [
@@ -203,7 +205,7 @@
          "NF",
          "png",
          "2022-02-12",
-         1646663541.21773,
+         1646735112.202723,
          ""
       ],
       "4": [
@@ -211,7 +213,7 @@
          "URSSAF",
          "HEIC",
          "2022-02-12",
-         1646663541.21773,
+         1646735112.202723,
          ""
       ],
       "5": [
@@ -219,7 +221,7 @@
          "Document technique",
          "svg",
          "",
-         1646663541.21773,
+         1646735112.202723,
          ""
       ],
       "6": [
@@ -227,7 +229,7 @@
          "Plan",
          "pdf",
          "",
-         1646663541.21773,
+         1646735112.202723,
          ""
       ],
       "7": [
@@ -235,7 +237,7 @@
          "contract",
          "png",
          "",
-         1646663592.079162,
+         1646735195.306034,
          ""
       ]
    },
@@ -303,34 +305,6 @@
          ],
          [],
          []
-      ],
-      "3": [
-         1,
-         9,
-         1,
-         "36 rue Dauphine 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         true,
-         true,
-         "2022-03-15",
-         "2022-03-16",
-         "2022-04-28",
-         "7:00",
-         "17:00",
-         12345.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "troisi\u00e8me description d'un chantier",
-         [
-            5,
-            6
-         ],
-         [],
-         [],
-         []
       ]
    },
    "CandidateFields": [
@@ -347,43 +321,50 @@
       "1": [
          2,
          true,
-         "2022-03-07",
+         "2022-03-08",
          1000.0,
          "Par Jour"
       ]
    },
    "DetailedPostFields": [
       "content",
+      "date",
       "Supervision"
    ],
    "DetailedPostIndices": [
-      1
+      2
    ],
    "DetailedPostValues": {
       "3": [
          "radiateur",
+         "",
          []
       ],
       "4": [
          "Chaudi\u00e8re",
+         "",
          []
       ],
       "5": [
          "doublage",
+         "",
          []
       ],
       "6": [
          "cloison",
+         "",
          []
       ],
       "7": [
          "salle de bain",
+         "",
          [
             1
          ]
       ],
       "8": [
          "douche",
+         "",
          []
       ]
    },
@@ -499,7 +480,7 @@
    "SupervisionValues": {
       "1": [
          2,
-         "2022-03-07",
+         "2022-03-08",
          "Le travail est fini, Youpi.",
          []
       ]

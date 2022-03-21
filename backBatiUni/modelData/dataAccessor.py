@@ -10,7 +10,7 @@ from operator import attrgetter
 import sys
 import os
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 import base64
 from django.core.files.base import ContentFile
 from ..smtpConnector import SmtpConnector
@@ -119,15 +119,21 @@ class DataAccessor():
   def dataPost(cls, jsonString, currentUser):
     data = json.loads(jsonString)
     if "action" in data:
-      print("dataPost", data["action"], list(data.keys()))
       if data["action"] == "modifyPwd": return cls.__modifyPwd(data, currentUser)
       elif data["action"] == "modifyUser": return cls.__updateUserInfo(data, currentUser)
       elif data["action"] == "changeUserImage": return cls.__changeUserImage(data, currentUser)
       elif data["action"] == "uploadPost": return cls.__uploadPost(data, currentUser)
       elif data["action"] == "modifyPost": return cls.__modifyPost(data, currentUser)
+      elif data["action"] == "createDetailedPost": return cls.__createDetailedPost(data, currentUser)
+      elif data["action"] == "modifyDetailedPost": return cls.__modifyDetailedPost(data, currentUser)
+      elif data["action"] == "deleteDetailedPost": return cls.__deleteDetailedPost(data, currentUser)
+      elif data["action"] == "createSupervision": return cls.__createSupervision(data, currentUser)
+      elif data["action"] == "modifySupervision": return cls.__modifySupervision(data, currentUser)
+      elif data["action"] == "deleteSupervision": return cls.__deleteSupervision(data, currentUser)
       elif data["action"] == "uploadFile": return cls.__uploadFile(data, currentUser)
       elif data["action"] == "modifyDisponibility": return cls.__modifyDisponibility(data["disponibility"], currentUser)
       elif data["action"] == "uploadSupervision": return cls.uploadSupervision(data["detailedPost"], data["comment"], currentUser)
+      elif data["action"] == "uploadImageSupervision": return cls.__uploadImageSupervision(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 
@@ -144,7 +150,6 @@ class DataAccessor():
 
   @classmethod
   def __uploadPost(cls, dictData, currentUser):
-    print("__uploadPost start", dictData)
     kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
     if "uploadPost" in kwargs and kwargs["uploadPost"] == "Error":
       return kwargs
@@ -154,8 +159,6 @@ class DataAccessor():
       for subObject in listObject:
         subObject.Post = objectPost
         subObject.save()
-    print("__uploadPost start", objectPost.id, objectPost.computeValues(objectPost.listFields(), currentUser, True))
-    print()
     return {"uploadPost":"OK", objectPost.id:objectPost.computeValues(objectPost.listFields(), currentUser, True)}
 
   @classmethod
@@ -171,7 +174,8 @@ class DataAccessor():
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
-    kwargs, listFields, listObject = {"Company":userProfile.Company}, Post.listFields(), []
+    kwargs, listFields, listObject = {"Company":userProfile.Company, "startDate":None, "endDate":None, "subContractorName":None}, Post.listFields(), []
+    kwargs["subContractorName"] = userProfile.firstName + " " + userProfile.lastName
     for fieldName, value in dictData.items():
       fieldObject = None
       try:
@@ -195,28 +199,47 @@ class DataAccessor():
           kwargs[fieldName]=float(dictData[fieldName]) if dictData[fieldName] else 0.0
         if fieldObject and isinstance(fieldObject, models.BooleanField) or isinstance(fieldObject, models.CharField) :
           kwargs[fieldName]= dictData[fieldName]
-        if fieldName in Post.manyToManyObject and subObject:
+        if fieldName in Post.manyToManyObject:
           modelObject = apps.get_model(app_label='backBatiUni', model_name=fieldName)
           for content in value:
             if fieldName == "DatePost":
-              listObject.append(modelObject.objects.create(date=content))
+              cls.__computeStartEndDate(kwargs, content)
+              if isinstance(subObject, list) and not content in subObject:
+                listObject.append(modelObject.objects.create(date=content))
             else:
               listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
+    print("kwargs", kwargs)
     return kwargs, listObject
+
+
+  @classmethod
+  def __computeStartEndDate(cls, limitDate, strDate):
+    date = datetime.strptime(strDate, "%Y-%m-%d")
+    if not limitDate["startDate"] or limitDate["startDate"] > date:
+      limitDate["startDate"] = date
+    if not limitDate["endDate"] or limitDate["endDate"] < date:
+      limitDate["endDate"] = date
+    
+
 
   @classmethod
   def __modifyPost(cls, dictData, currentUser):
     post = Post.objects.filter(id=dictData["id"])
     if post:
       post = post[0]
-      kwargs, _ = cls.__createPostKwargs(dictData, currentUser, subObject=False)
+      subObject = [datePost.date.strftime("%Y-%m-%d") for datePost in DatePost.objects.filter(Post=post)]
+      kwargs, listObject = cls.__createPostKwargs(dictData, currentUser, subObject=subObject)
       for key, value in kwargs.items():
         if getattr(post, key, "empty field") != "empty field" and getattr(post, key, "empty field") != value:
           setattr(post, key, value)
           if key == "address":
             cls.__getGeoCoordinates(post)
       post.save()
+      if listObject:
+        for subObject in listObject:
+          subObject.Post = post
+          subObject.save()
       if dictData["DetailedPost"]:
         DetailedPost.objects.filter(Post=post).delete()
         for content in dictData["DetailedPost"]:
@@ -242,6 +265,109 @@ class DataAccessor():
       return {"applyPost":"Warning", "messages":f"Le sous-traitant {subContractor.name} a déjà postulé."}
     candidate = Candidate.objects.create(Post=post, Company=subContractor, amount=amount, unitOfTime=unitOfTime)
     return {"applyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
+
+  @classmethod
+  def __createDetailedPost(cls, data, currentUser):
+    kwargs, post, mission = {"Post":None, "Mission":None, "content":None, "date":None, "validated":False}, None, None
+    if "postId" in data:
+      post = Post.objects.get(id=data["postId"])
+      kwargs["Post"] = post
+    if "missionId" in data:
+      mission = Mission.objects.get(id=data["missionId"])
+      kwargs["Mission"] = mission
+    if "content" in data:
+      kwargs["content"] = data["content"]
+    if "date" in data:
+      kwargs["date"] = datetime.strptime(data["date"], "%Y-%m-%d")
+    if "validated" in data:
+      kwargs["validated"] = data["validated"]
+    detailedPost = DetailedPost.objects.create(**kwargs)
+    if detailedPost:
+      if post:
+        return {"createDetailedPost":"OK", post.id:post.computeValues(post.listFields(), currentUser, True)}
+      if mission:
+        return {"createDetailedPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, True)}
+    return {"createDetailedPost":"Warning", "messages":"La tâche n'a pas été créée"}
+
+  @classmethod
+  def __modifyDetailedPost(cls, data, currentUser):
+    data = data["detailedPost"]
+    # return {"modifyDetailedPost":"OK", "d":["a", "b", "c"]}
+    detailedPost = DetailedPost.objects.filter(id=data["id"])
+    if detailedPost:
+      detailedPost = detailedPost[0]
+      if "date" in data and data["date"]:
+        print("is date", data["date"], type(data["date"]), detailedPost.date, type(detailedPost.date))
+        date = datetime.strptime(data["date"], "%Y-%m-%d")
+        dateNowString = detailedPost.date.strftime("%Y-%m-%d") if detailedPost.date else None
+        if dateNowString != data["date"] and dateNowString:
+          print("date to be modified", data["date"], dateNowString, date , detailedPost.date)
+          detailedPost = DetailedPost.objects.create(Post=detailedPost.Post, Mission=detailedPost.Mission, content=detailedPost.content, date=date, validated=detailedPost.validated)
+          if detailedPost:
+            PorM = detailedPost.Post if detailedPost.Post else detailedPost.Mission
+            return {"modifyDetailedPost":"OK", PorM.id:PorM.computeValues(PorM.listFields(), currentUser, True)}
+        else:
+          detailedPost.date = date
+          print("date", detailedPost.date)
+      for field in ["content", "validated", "refused"]:
+        if field in data:
+          setattr(detailedPost, field, data[field])
+      detailedPost.save()
+      PorM = detailedPost.Post if detailedPost.Post else detailedPost.Mission
+      dumpPorM = PorM.computeValues(PorM.listFields(), currentUser, True)
+      return {"modifyDetailedPost":"OK", PorM.id:dumpPorM}
+    return {"modifyDetailedPost":"Error", "messages":f"No Detailed Post with id {data['detailedPostId']}"}
+
+  @classmethod
+  def __deleteDetailedPost(cls, data, currentUser):
+    detailedPost = DetailedPost.objects.filter(id=data["detailedPostId"])
+    if detailedPost:
+      detailedPost = detailedPost[0]
+      post, mission = detailedPost.Post, detailedPost.Mission
+      Supervision.objects.filter(DetailedPost=detailedPost).delete()
+      detailedPost.delete()
+      if post:
+        return {"deleteDetailedPost":"OK", post.id:post.computeValues(post.listFields(), currentUser, True)}
+      if mission:
+        return {"deleteDetailedPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, True)}
+    return {"deleteDetailedPost":"Error", "messages":f"No Detailed Post with id {data['detailedPostId']}"}
+
+  @classmethod
+  def __createSupervision(cls, data, currentUser):
+    print("createSupervision", data, currentUser.id)
+    userProfile = UserProfile.objects.get(userNameInternal=currentUser)
+    author = f'{userProfile.firstName} {userProfile.lastName}'
+    kwargs, mission = {"DetailedPost":None, "author":author, "comment":""}, None
+    if "missionId" in data and data["missionId"]:
+      mission = Mission.objects.get(id=data["missionId"])
+      kwargs["Mission"] = mission
+    if "detailedPostId" in data and data["detailedPostId"]:
+      detailedPost = DetailedPost.objects.get(id=data["detailedPostId"])
+      mission = detailedPost.Mission
+      kwargs["DetailedPost"] = detailedPost
+    if "parentId" in data and data["parentId"]:
+      parentSupervision = Supervision.objects.get(id=data["parentId"]) 
+      kwargs["parentId"] = parentSupervision
+    if "comment" in data:
+      kwargs["comment"] = data["comment"]
+    if "date" in data and data["date"]:
+      kwargs["date"] = datetime.strptime(data["date"], "%Y-%m-%d")
+    print('createSupervision kwargs', kwargs)
+    supervision = Supervision.objects.create(**kwargs)
+    if supervision:
+      return {"createSupervision":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, True)}
+      # return {"createSupervision":"OK", supervision.id:supervision.computeValues(supervision.listFields(), currentUser, True)}
+    return {"createSupervision":"Warning", "messages":"La supervision n'a pas été créée"}
+
+  @classmethod
+
+  @classmethod
+  def __modifySupervision(cls, data, currentUser):
+    pass
+
+  @classmethod
+  def __deleteSupervision(cls, data, currentUser):
+    pass
 
   @classmethod
   def setFavorite(cls, postId, value, currentUser):
@@ -436,6 +562,33 @@ class DataAccessor():
       return {"uploadFile":"Warning", "messages":"Le fichier ne peut être sauvegardé"}
 
   @classmethod
+  def __uploadImageSupervision(cls, data, currentUser):
+    print("__uploadSupervision", data.keys(), currentUser)
+    if not data['ext'] in File.authorizedExtention:
+      return {"uploadFile":"Warning", "messages":f"L'extention {data['ext']} n'est pas traitée"}
+    fileStr, message = data["imageBase64"], {}
+    if not fileStr:
+      return {"uploadFile":"Error", "messages":"field fileBase64 is empty"}
+    name = f"document_{{data['missionId']}}_{{data['taskId']}}" if data['taskId'] else f"document_{{data['missionId']}}"
+    if data["taskId"]:
+      detailedPost = Supervision.objects.get(id=data["taskId"])
+      mission = None
+    else:
+      detailedPost = None
+      mission = Mission.objects.get(id=data["missionId"])
+      
+    # objectFile = File.createFile("supervision", name, data['ext'], currentUser, Mission=mission, DetailedPost=detailedPost)
+    # file = None
+    # try:
+    #   file = ContentFile(base64.urlsafe_b64decode(fileStr), name=objectFile.path + data['ext']) if data['ext'] != "txt" else fileStr
+    #   with open(objectFile.path, "wb") as outfile:
+    #       outfile.write(file.file.getbuffer())
+    #   return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)[:-1]}
+    # except:
+    #   if file: file.delete()
+    #   return {"uploadFile":"Warning", "messages":"Le fichier ne peut être sauvegardé"}
+
+  @classmethod
   def getEnterpriseDataFrom(cls, request):
     subName = request.GET["subName"]
     siret = request.GET["siret"] if "siret" in request.GET else None
@@ -462,7 +615,6 @@ class DataAccessor():
 
   @classmethod
   def __updateUserInfo(cls, data, user):
-    print("update", data)
     if "UserProfile" in data:
       message, valueModified, userProfile = {}, {"UserProfile":{}}, UserProfile.objects.get(id=data["UserProfile"]["id"])
       flagModified = cls.__setValues(data["UserProfile"], user, message, valueModified["UserProfile"], userProfile, False)

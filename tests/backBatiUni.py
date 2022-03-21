@@ -82,7 +82,7 @@ def executeQuery():
         response = requests.post(url, headers=headers, json=post)
     elif query == "modifyPost":
       print("modifyPost")
-      post = {'action':"modifyPost", "id":1, "address":"126 rue de Paris 92100 Boulogne", "Job":5, "numberOfPeople":2, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":24456.10, "DetailedPost":["salle de bain", "douche"]}
+      post = {'action':"modifyPost", "id":1, "address":"126 rue de Paris 92100 Boulogne", "Job":5, "numberOfPeople":2, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":24456.10, "DetailedPost":["salle de bain", "douche", "lavabo"], "DatePost":["2022-03-15", "2022-03-16", "2022-03-17"]}
       response = requests.post(url, headers=headers, json=post)
     elif query == "setFavorite":
       print("setFavorite")
@@ -146,6 +146,22 @@ def executeQuery():
     elif query == "emptyDB":
       url = f'{address}/createBase/'
       response = requests.get(url, headers=headers, params={"action":"emptyDB"})
+    elif query == "createDetailedPost":
+      print("createDetailedPost")
+      post = {"action":"createDetailedPost", "missionId":1, "content":"Réparer le lavabo une nouvelle fois", "date":"2022-03-17"}
+      response = requests.post(url, headers=headers, json=post)
+    elif query == "modifyDetailedPost":
+      print("modifyDetailedPost")
+      post1 = {"action":"modifyDetailedPost", "detailedPostId":9, "content":"Finir de réparer le lavabo"}
+      post2 = {"action":"modifyDetailedPost", "detailedPostId":9, "date":"2022-03-17"}
+      response = requests.post(url, headers=headers, json=post1)
+      data = json.loads(response.text)
+      print("data", data)
+      response = requests.post(url, headers=headers, json=post2)
+    elif query == "deleteDetailedPost":
+      print("deleteDetailedPost")
+      post = {"action":"deleteDetailedPost", "detailedPostId":9}
+      response = requests.post(url, headers=headers, json=post)
   if response and query != "downloadFile":
     data = json.loads(response.text)
     print("data", data)
@@ -154,7 +170,7 @@ def executeQuery():
   else:
     print("no answer")
 if query == "all":
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "setFavorite", "isviewed", "applyPost", "handleCandidateForPost", "createContract", "uploadSupervision"]:
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "setFavorite", "isviewed", "applyPost", "handleCandidateForPost"]: #, "uploadSupervision", "createDetailedPost", "modifyDetailedPost" , "deleteDetailedPost"
       query = key
       executeQuery()
 else:

@@ -43,7 +43,9 @@ class Data(DefaultView):
       currentUser = request.user
       jsonBin = request.body
       jsonString = jsonBin.decode("utf8")
-      return Response(DataAccessor().dataPost(jsonString, currentUser))
+      response = DataAccessor().dataPost(jsonString, currentUser)
+      print("post response", response)
+      return Response(response)
     return Response ({"data POST":"Warning", "messages":"La confirmation par mail n'est pas réalisée."})
 
 class Initialize(APIView):

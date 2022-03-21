@@ -33,7 +33,6 @@ class CommonModel(models.Model):
         dictAnswer[tableName + "Fields"] = listF
       elif cls == Mission:
         dictAnswer[tableName + "Fields"] = cls.listFields() + ["subContractor"]
-        print("Mission Fields", tableName,  dictAnswer["MissionFields"])
       else:
         dictAnswer[tableName + "Fields"] = cls.listFields()
       if len(cls.listIndices()) >= 1:
@@ -93,11 +92,13 @@ class CommonModel(models.Model):
       elif field in self.manyToManyObject:
         model = apps.get_model(app_label='backBatiUni', model_name=field)
         listFieldsModel = model.listFields()
-        if dictFormat:
+        if field == "DatePost":
+          listModel = [objectModel.date.strftime("%Y-%m-%d") for objectModel in DatePost.objects.filter(Post=self)]
+          if not listModel:
+            listModel = [objectModel.date.strftime("%Y-%m-%d") for objectModel in DatePost.objects.filter(Mission=self)]
+        elif dictFormat:
           listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self}
           listModel = {key:valueList if len(valueList) != 1 else valueList[0] for key, valueList in listModel.items()}
-        elif field == "DatePost":
-          listModel = [objectModel.date.strftime("%Y-%m-%d") for objectModel in DatePost.objects.filter(Post=self)]
         else:
           listModel = [objectModel.id for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self]
         values.append(listModel)
@@ -348,8 +349,10 @@ class Post(CommonModel):
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
   signedByCompany = models.BooleanField("Signature de la PME", null=False, default=False)
   signedBySubContractor = models.BooleanField("Signature du ST", null=False, default=False)
+  subContractorName = models.CharField("Contact chez le sous traitant", max_length=128, null=True, default=None)
+
   contract = models.IntegerField("Image du contrat", blank=False, null=True, default=None)
-  manyToManyObject = ["DetailedPost", "File", "Candidate", "DatePost"]
+  manyToManyObject = ["DetailedPost", "File", "Candidate", "DatePost", "Supervision"]
 
   class Meta:
     verbose_name = "Post"
@@ -357,7 +360,7 @@ class Post(CommonModel):
   @classmethod
   def listFields(cls):
       superList = super().listFields()
-      for fieldName in ["signedByCompany", "signedBySubContractor", "contract"]:
+      for fieldName in ["signedByCompany", "signedBySubContractor", "contract", "Supervision", "subContractorName"]:
         index = superList.index(fieldName)
         del superList[index]
       return superList
@@ -397,7 +400,6 @@ class Mission(Post):
 
   def computeValues(self, listFields, user, dictFormat=False):
     listV = super().computeValues(listFields, user, dictFormat)
-    print("Mission", listV)
     cd = [candidate for candidate in Candidate.objects.filter(Mission=self) if candidate.isChoosen][0]
     return listV + [cd.Company.id]
 
@@ -455,6 +457,8 @@ class DetailedPost(CommonModel):
   Mission = models.ForeignKey(Mission, related_name='Mission', verbose_name='Mission associée', on_delete=models.PROTECT, null=True, default=None)
   content = models.CharField("Détail de la prescription", max_length=256, null=True, default=None)
   date = models.DateField(verbose_name="Date de la tâche", null=True, default=None)
+  validated = models.BooleanField("Validation de la tache", null=False, default=False)
+  refused = models.BooleanField("Refus de validation de la tache", null=False, default=False)
   manyToManyObject = ["Supervision"]
 
   class Meta:
@@ -470,11 +474,14 @@ class DetailedPost(CommonModel):
       return superList
 
 class Supervision(CommonModel):
-  DetailedPost = models.ForeignKey(DetailedPost, verbose_name='Détail associé', on_delete=models.PROTECT, null=True, default=None)
-  UserProfile = models.ForeignKey(UserProfile, related_name='UserProfile', on_delete=models.PROTECT, null=True, default=None)
+  Mission = models.ForeignKey(Mission, verbose_name='Mission associée', on_delete=models.PROTECT, null=True, default=None)
+  DetailedPost = models.ForeignKey(DetailedPost, verbose_name='Tâche associée', on_delete=models.PROTECT, null=True, default=None)
+  SupervisionAssociated = models.ForeignKey('self', verbose_name='Supervision associée', related_name='associatedSupervision', on_delete=models.PROTECT, null=True, default=None)
+  # superVisionId = models.IntegerField("id de la supervision dans le cas d'une réponse", blank=False, null=False, default=-1)
+  author = models.CharField("Nom de l'auteur du message", max_length=256, null=True, default=None)
   date = models.DateField(verbose_name="Date du suivi", null=False, default=timezone.now)
   comment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
-  manyToManyObject = ["File"]
+  manyToManyObject = ["File", "Supervision"]
 
   class Meta:
     verbose_name = "Supervision"
@@ -482,7 +489,7 @@ class Supervision(CommonModel):
   @classmethod
   def listFields(cls):
       superList = super().listFields()
-      for fieldName in ["DetailedPost"]:
+      for fieldName in ["DetailedPost", "SupervisionAssociated"]:
         index = superList.index(fieldName)
         del superList[index]
       return superList
@@ -498,6 +505,7 @@ class File(CommonModel):
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
   Post = models.ForeignKey(Post, verbose_name="Annonce associée", related_name='selectPost', on_delete=models.PROTECT, null=True, default=None)
   Mission = models.ForeignKey(Mission, verbose_name="Mission associée", related_name='selectMission', on_delete=models.PROTECT, null=True, default=None)
+  DetailedPost = models.ForeignKey(DetailedPost, verbose_name="Tâche associée", related_name='AssociatedDetailedPost', on_delete=models.PROTECT, null=True, default=None)
   Supervision = models.ForeignKey(Supervision, verbose_name="Suivi associé", on_delete=models.PROTECT, null=True, default=None)
   dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/", "supervision":"./files/supervisions/", "contract":"./files/contracts/"}
   authorizedExtention = ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "svg", "SVG", "pdf", "HEIC", "heic"]

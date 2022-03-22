@@ -1,5 +1,5 @@
 {
-   "currentUser": 1,
+   "currentUser": 2,
    "UserProfileFields": [
       "userName",
       "Company",
@@ -19,17 +19,20 @@
       10
    ],
    "UserProfileValues": {
-      "1": [
-         "jlw",
-         1,
-         "Eric",
-         "Walter",
+      "2": [
+         "walter.jeanluc@gmail.com",
+         2,
+         "Augustin",
+         "Alleaume",
          null,
-         "06 34 09 06 95",
+         "06 29 35 04 18",
          null,
-         "Inconnu",
-         "Inconnu",
-         [],
+         "walter.jeanluc@gmail.com",
+         null,
+         [
+            1,
+            2
+         ],
          []
       ]
    },
@@ -88,12 +91,9 @@
             1
          ],
          [],
+         [],
          [
-            9
-         ],
-         [
-            2,
-            3
+            2
          ],
          [
             1
@@ -135,9 +135,9 @@
          [],
          [],
          [
-            1,
-            2,
-            3
+            4,
+            5,
+            6
          ]
       ]
    },
@@ -189,11 +189,7 @@
       "ext",
       "expirationDate",
       "timestamp",
-      "DetailedPost",
       "content"
-   ],
-   "FileIndices": [
-      5
    ],
    "FileValues": {
       "1": [
@@ -201,8 +197,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1647853785.022619,
-         "",
+         1647936389.676402,
          ""
       ],
       "2": [
@@ -210,8 +205,7 @@
          "NF",
          "png",
          "2022-02-12",
-         1647853785.022619,
-         "",
+         1647936389.676402,
          ""
       ],
       "4": [
@@ -219,8 +213,7 @@
          "URSSAF",
          "HEIC",
          "2022-02-12",
-         1647853785.022619,
-         "",
+         1647936389.676402,
          ""
       ],
       "5": [
@@ -228,8 +221,7 @@
          "Document technique",
          "svg",
          "",
-         1647853785.022619,
-         "",
+         1647936389.676402,
          ""
       ],
       "6": [
@@ -237,8 +229,7 @@
          "Plan",
          "pdf",
          "",
-         1647853785.022619,
-         "",
+         1647936389.676402,
          ""
       ],
       "7": [
@@ -246,26 +237,15 @@
          "contract",
          "png",
          "",
-         1647853785.022619,
-         "",
+         1647936389.676402,
          ""
       ],
       "8": [
-         "post",
-         "Un essai",
-         "HEIC",
+         "supervision",
+         "supervision_N_N_1",
+         "png",
          "",
-         1647853785.022619,
-         "",
-         ""
-      ],
-      "9": [
-         "userImage",
-         "image",
-         "jpeg",
-         "",
-         1647853785.022619,
-         "",
+         1647936449.619045,
          ""
       ]
    },
@@ -333,36 +313,6 @@
          ],
          [],
          []
-      ],
-      "3": [
-         1,
-         9,
-         1,
-         "36 rue Dauphine 75006 Paris",
-         48.841625,
-         2.324877,
-         "Eric Walter",
-         false,
-         true,
-         "2022-03-15",
-         "",
-         "",
-         "7:00",
-         "17:00",
-         12345.1,
-         "\u20ac",
-         "Prix Journalier",
-         false,
-         "troisi\u00e8me description d'un chantier",
-         [
-            16,
-            17
-         ],
-         [
-            8
-         ],
-         [],
-         []
       ]
    },
    "CandidateFields": [
@@ -379,7 +329,7 @@
       "1": [
          2,
          true,
-         "2022-03-21",
+         "2022-03-22",
          1000.0,
          "Par Jour"
       ]
@@ -409,47 +359,36 @@
          false,
          []
       ],
-      "10": [
-         "salle de bain",
-         "2022-03-15",
-         false,
-         true,
-         [
-            3,
-            5,
-            6
-         ]
-      ],
-      "11": [
-         "douche",
-         "2022-03-15",
-         true,
-         false,
-         []
-      ],
-      "12": [
-         "lavabo",
-         "2022-03-16",
-         true,
-         false,
-         []
-      ],
-      "13": [
-         "Finir la pose du lavabo",
-         "2022-03-17",
-         false,
-         false,
-         []
-      ],
-      "16": [
+      "5": [
          "doublage",
          "",
          false,
          false,
          []
       ],
-      "17": [
+      "6": [
          "cloison",
+         "",
+         false,
+         false,
+         []
+      ],
+      "10": [
+         "salle de bain",
+         "",
+         false,
+         false,
+         []
+      ],
+      "11": [
+         "douche",
+         "",
+         false,
+         false,
+         []
+      ],
+      "12": [
+         "lavabo",
          "",
          false,
          false,
@@ -529,8 +468,7 @@
          [
             10,
             11,
-            12,
-            13
+            12
          ],
          [
             7
@@ -541,13 +479,7 @@
             "2022-03-17"
          ],
          [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7
+            1
          ],
          2
       ]
@@ -557,21 +489,20 @@
       "nature"
    ],
    "DisponibilityValues": {
-      "1": [
+      "4": [
          "2022-02-13",
          "Disponible"
       ],
-      "2": [
+      "5": [
          "2022-02-14",
          "Disponible Sous Conditions"
       ],
-      "3": [
+      "6": [
          "2022-02-15",
          "Non Disponible"
       ]
    },
    "SupervisionFields": [
-      "Mission",
       "author",
       "date",
       "comment",
@@ -579,65 +510,17 @@
       "Supervision"
    ],
    "SupervisionIndices": [
-      0,
-      4,
-      5
+      3,
+      4
    ],
    "SupervisionValues": {
       "1": [
-         1,
          "Eric Walter",
          "2022-03-15",
-         "Oui le travail est bien fait",
-         [],
-         []
-      ],
-      "2": [
-         1,
-         "Eric Walter",
-         "2022-03-16",
-         "Oui le travail est bien fait",
-         [],
-         []
-      ],
-      "3": [
-         1,
-         "Augustin Alleaume",
-         "2022-03-15",
-         "Je n'ai pas fini la salle de bain",
-         [],
-         []
-      ],
-      "4": [
-         1,
-         "Augustin Alleaume",
-         "2022-03-15",
-         "Merci du compliment",
-         [],
-         []
-      ],
-      "5": [
-         1,
-         "Eric Walter",
-         "2022-03-15",
-         "",
-         [],
-         []
-      ],
-      "6": [
-         1,
-         "Eric Walter",
-         "2022-03-15",
-         "",
-         [],
-         []
-      ],
-      "7": [
-         1,
-         "Eric Walter",
-         "2022-03-15",
-         "test",
-         [],
+         "Comment",
+         [
+            8
+         ],
          []
       ]
    }

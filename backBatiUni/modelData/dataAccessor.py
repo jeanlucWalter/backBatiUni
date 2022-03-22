@@ -563,30 +563,37 @@ class DataAccessor():
 
   @classmethod
   def __uploadImageSupervision(cls, data, currentUser):
-    print("__uploadSupervision", data.keys(), currentUser)
+    print("__uploadSupervision", data.keys(), currentUser, data["taskId"], data["missionId"])
     if not data['ext'] in File.authorizedExtention:
       return {"uploadFile":"Warning", "messages":f"L'extention {data['ext']} n'est pas traitée"}
-    fileStr, message = data["imageBase64"], {}
+    fileStr = data["imageBase64"]
     if not fileStr:
       return {"uploadFile":"Error", "messages":"field fileBase64 is empty"}
-    name = f"document_{{data['missionId']}}_{{data['taskId']}}" if data['taskId'] else f"document_{{data['missionId']}}"
+    name = "supervision"
     if data["taskId"]:
-      detailedPost = Supervision.objects.get(id=data["taskId"])
+      detailedPost = DetailedPost.objects.get(id=data["taskId"])
+      supervisions = Supervision.objects.filter(Mission=None, DetailedPost=detailedPost)
       mission = None
     else:
       detailedPost = None
       mission = Mission.objects.get(id=data["missionId"])
-      
-    # objectFile = File.createFile("supervision", name, data['ext'], currentUser, Mission=mission, DetailedPost=detailedPost)
-    # file = None
-    # try:
-    #   file = ContentFile(base64.urlsafe_b64decode(fileStr), name=objectFile.path + data['ext']) if data['ext'] != "txt" else fileStr
-    #   with open(objectFile.path, "wb") as outfile:
-    #       outfile.write(file.file.getbuffer())
-    #   return {"uploadFile":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)[:-1]}
-    # except:
-    #   if file: file.delete()
-    #   return {"uploadFile":"Warning", "messages":"Le fichier ne peut être sauvegardé"}
+      supervisions = Supervision.objects.filter(Mission=mission)
+      print("supervisions", supervisions)
+      if supervisions:
+        supervision = supervisions[len(supervisions) - 1]
+      else:
+        return {"uploadFile":"Error", "messages":f"No supervision associated to mission id {mission.id}"}
+
+    objectFile = File.createFile("supervision", name, data['ext'], currentUser, post=None, mission=mission, detailedPost=detailedPost, supervision=supervision)
+    file = None
+    try:
+      file = ContentFile(base64.urlsafe_b64decode(fileStr), name=objectFile.path + data['ext']) if data['ext'] != "txt" else fileStr
+      with open(objectFile.path, "wb") as outfile:
+          outfile.write(file.file.getbuffer())
+      return {"uploadSupervision":"OK", objectFile.id:objectFile.computeValues(objectFile.listFields(), currentUser, True)[:-1]}
+    except:
+      if file: file.delete()
+      return {"uploadSupervision":"Warning", "messages":"Le fichier ne peut être sauvegardé"}
 
   @classmethod
   def getEnterpriseDataFrom(cls, request):

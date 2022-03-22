@@ -489,7 +489,7 @@ class Supervision(CommonModel):
   @classmethod
   def listFields(cls):
       superList = super().listFields()
-      for fieldName in ["DetailedPost", "SupervisionAssociated"]:
+      for fieldName in ["Mission", "DetailedPost", "SupervisionAssociated"]:
         index = superList.index(fieldName)
         del superList[index]
       return superList
@@ -505,7 +505,6 @@ class File(CommonModel):
   timestamp = models.FloatField(verbose_name="Timestamp de mise à jour", null=False, default=datetime.datetime.now().timestamp())
   Post = models.ForeignKey(Post, verbose_name="Annonce associée", related_name='selectPost', on_delete=models.PROTECT, null=True, default=None)
   Mission = models.ForeignKey(Mission, verbose_name="Mission associée", related_name='selectMission', on_delete=models.PROTECT, null=True, default=None)
-  DetailedPost = models.ForeignKey(DetailedPost, verbose_name="Tâche associée", related_name='AssociatedDetailedPost', on_delete=models.PROTECT, null=True, default=None)
   Supervision = models.ForeignKey(Supervision, verbose_name="Suivi associé", on_delete=models.PROTECT, null=True, default=None)
   dictPath = {"userImage":"./files/avatars/", "labels":"./files/labels/", "admin":"./files/admin/", "post":"./files/posts/", "supervision":"./files/supervisions/", "contract":"./files/contracts/"}
   authorizedExtention = ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "svg", "SVG", "pdf", "HEIC", "heic"]
@@ -583,7 +582,8 @@ class File(CommonModel):
     return {}
 
   @classmethod
-  def createFile(cls, nature, name, ext, user, expirationDate = None, post=None, supervision=None):
+  def createFile(cls, nature, name, ext, user, expirationDate = None, post=None, mission=None, detailedPost=None, supervision=None):
+    print("createFile name", name)
     userProfile = UserProfile.objects.get(userNameInternal=user)
     objectFile, mission = None, None
     if nature == "userImage":
@@ -593,7 +593,12 @@ class File(CommonModel):
     if nature == "post":
       path = cls.dictPath[nature] + name + '_' + str(post.id) + '.' + ext
     if nature == "supervision":
-      path = cls.dictPath[nature] + name + '_' + str(supervision.id) + '.' + ext
+      endName = '_' + str(mission.id) if mission else '_N'
+      endName += '_' + str(detailedPost.id) if detailedPost else '_N'
+      endName += '_' + str(supervision.id) if supervision else '_N'
+      name +=  endName
+      print("endName", endName, name)
+      path = cls.dictPath[nature] + name + '.' + ext
     if nature == "contract":
       mission = post
       post = None

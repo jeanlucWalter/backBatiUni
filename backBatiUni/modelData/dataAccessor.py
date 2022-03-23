@@ -622,6 +622,7 @@ class DataAccessor():
 
   @classmethod
   def __updateUserInfo(cls, data, user):
+    print("__updateUserInfo", data)
     if "UserProfile" in data:
       message, valueModified, userProfile = {}, {"UserProfile":{}}, UserProfile.objects.get(id=data["UserProfile"]["id"])
       flagModified = cls.__setValues(data["UserProfile"], user, message, valueModified["UserProfile"], userProfile, False)
@@ -631,12 +632,12 @@ class DataAccessor():
         return {"modifyUser":"Warning", "messages":message, "valueModified": valueModified}
       company = userProfile.Company
       return {"modifyUser":"OK","UserProfile":{userProfile.id:userProfile.computeValues(userProfile.listFields(), user, True)}, "Company":{company.id:company.computeValues(company.listFields(), user, True)}}
-    return {"modifyUser":"Warning", "messages":"no data to update"}
+    return {"modifyUser":"Warning", "messages":"Pas de valeur à mettre à jour"}
     
   @classmethod
   def __setValues(cls, dictValue, user, message, valueModified, objectInstance, flagModified):
     for fieldName, value in dictValue.items():
-      if fieldName != "id":
+      if fieldName != "id" and fieldName != 'userName':
         fieldObject = None
         try:
           fieldObject = objectInstance._meta.get_field(fieldName)
@@ -651,6 +652,7 @@ class DataAccessor():
           flagModifiedNew = cls.__setValuesLabelJob(fieldName, value, valueModified[fieldName], user)
           flagModified = flagModifiedNew if not flagModified else flagModified
         elif getattr(objectInstance, fieldName, "does not exist") != "does not exist":
+          print("setValue", fieldObject, fieldName, value)
           valueToSave = value
           if fieldObject and isinstance(fieldObject, models.DateField):
             valueToSave = value.strftime("%Y-%m-%d") if value else None
@@ -658,13 +660,15 @@ class DataAccessor():
             valueToSave = int(value) if value else None
           elif fieldObject and isinstance(fieldObject, models.FloatField):
             valueToSave = float(value) if value else None
+          elif fieldObject and isinstance(fieldObject, models.BooleanField):
+            print("bool", fieldName, value, objectInstance.getAttr(fieldName))
           if valueToSave != objectInstance.getAttr(fieldName):
             objectInstance.setAttr(fieldName, valueToSave)
             objectInstance.save()
             valueModified[fieldName] = value
             flagModified = True
         else:
-          message[fieldName] = "is not an field"
+          message[fieldName] = "is not a field"
     return flagModified
 
   @classmethod

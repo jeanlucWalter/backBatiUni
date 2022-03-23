@@ -166,6 +166,8 @@ class Company(CommonModel):
   unity = models.CharField("Unité du montant", max_length=64, null=True, default=None)
   latitude = models.FloatField("Latitude", null=True, default=None)
   longitude = models.FloatField("Longitude", null=True, default=None)
+  saturdayDisponibility = models.BooleanField("Disponibilité le Samedi", null=False, default=False)
+  allQualifications = models.BooleanField("Tous corps d'état", null=False, default=False)
   manyToManyObject = ["JobForCompany", "LabelForCompany", "File", "Post", "Mission", "Disponibility"]
 
   class Meta:
@@ -246,6 +248,7 @@ class UserProfile(CommonModel):
   token = models.CharField("Token de validation", max_length=512, blank=True, null=True, default="empty token")
   email = models.CharField("Email", max_length=128, blank=True, null=True, default="Inconnu")
   password = models.CharField("Mot de passe", max_length=128, blank=True, null=True, default="Inconnu")
+  function = models.CharField("Fonction dans l'entreprise", max_length=128, blank=True, null=True, default="")
   manyToManyObject = ["FavoritePost", "ViewPost"]
 
   class Meta:

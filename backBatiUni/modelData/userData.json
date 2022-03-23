@@ -1,5 +1,5 @@
 {
-   "currentUser": 2,
+   "currentUser": 1,
    "UserProfileFields": [
       "userName",
       "Company",
@@ -10,29 +10,28 @@
       "token",
       "email",
       "password",
+      "function",
       "favoritePosts",
       "viewedPosts"
    ],
    "UserProfileIndices": [
       1,
-      9,
-      10
+      10,
+      11
    ],
    "UserProfileValues": {
-      "2": [
-         "walter.jeanluc@gmail.com",
-         2,
-         "Augustin",
-         "Alleaume",
+      "1": [
+         "jlw",
+         1,
+         "Eric",
+         "Walter",
          null,
-         "06 29 35 04 18",
+         "06 34 09 06 95",
          null,
-         "walter.jeanluc@gmail.com",
-         null,
-         [
-            1,
-            2
-         ],
+         "Inconnu",
+         "Inconnu",
+         "",
+         [],
          []
       ]
    },
@@ -53,6 +52,8 @@
       "unity",
       "latitude",
       "longitude",
+      "saturdayDisponibility",
+      "allQualifications",
       "JobForCompany",
       "LabelForCompany",
       "File",
@@ -62,12 +63,12 @@
    ],
    "CompanyIndices": [
       1,
-      16,
-      17,
       18,
       19,
       20,
-      21
+      21,
+      22,
+      23
    ],
    "CompanyValues": {
       "1": [
@@ -87,13 +88,16 @@
          null,
          null,
          null,
+         false,
+         false,
          [
             1
          ],
          [],
          [],
          [
-            2
+            2,
+            3
          ],
          [
             1
@@ -117,6 +121,8 @@
          null,
          null,
          null,
+         false,
+         false,
          [
             5,
             6,
@@ -135,9 +141,9 @@
          [],
          [],
          [
-            4,
-            5,
-            6
+            1,
+            2,
+            3
          ]
       ]
    },
@@ -197,7 +203,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1647936389.676402,
+         1647977928.327359,
          ""
       ],
       "2": [
@@ -205,7 +211,7 @@
          "NF",
          "png",
          "2022-02-12",
-         1647936389.676402,
+         1647977928.327359,
          ""
       ],
       "4": [
@@ -213,7 +219,7 @@
          "URSSAF",
          "HEIC",
          "2022-02-12",
-         1647936389.676402,
+         1647977928.327359,
          ""
       ],
       "5": [
@@ -221,7 +227,7 @@
          "Document technique",
          "svg",
          "",
-         1647936389.676402,
+         1647977928.327359,
          ""
       ],
       "6": [
@@ -229,7 +235,7 @@
          "Plan",
          "pdf",
          "",
-         1647936389.676402,
+         1647977928.327359,
          ""
       ],
       "7": [
@@ -237,15 +243,7 @@
          "contract",
          "png",
          "",
-         1647936389.676402,
-         ""
-      ],
-      "8": [
-         "supervision",
-         "supervision_N_N_1",
-         "png",
-         "",
-         1647936449.619045,
+         1647977928.327359,
          ""
       ]
    },
@@ -313,6 +311,34 @@
          ],
          [],
          []
+      ],
+      "3": [
+         1,
+         9,
+         1,
+         "36 rue Dauphine 75006 Paris",
+         48.841625,
+         2.324877,
+         "Eric Walter",
+         true,
+         true,
+         "2022-03-15",
+         "2022-03-16",
+         "2022-04-28",
+         "7:00",
+         "17:00",
+         12345.1,
+         "\u20ac",
+         "Prix Journalier",
+         false,
+         "troisi\u00e8me description d'un chantier",
+         [
+            5,
+            6
+         ],
+         [],
+         [],
+         []
       ]
    },
    "CandidateFields": [
@@ -329,7 +355,7 @@
       "1": [
          2,
          true,
-         "2022-03-22",
+         "2022-03-23",
          1000.0,
          "Par Jour"
       ]
@@ -478,9 +504,7 @@
             "2022-03-16",
             "2022-03-17"
          ],
-         [
-            1
-         ],
+         [],
          2
       ]
    },
@@ -489,15 +513,15 @@
       "nature"
    ],
    "DisponibilityValues": {
-      "4": [
+      "1": [
          "2022-02-13",
          "Disponible"
       ],
-      "5": [
+      "2": [
          "2022-02-14",
          "Disponible Sous Conditions"
       ],
-      "6": [
+      "3": [
          "2022-02-15",
          "Non Disponible"
       ]
@@ -513,15 +537,5 @@
       3,
       4
    ],
-   "SupervisionValues": {
-      "1": [
-         "Eric Walter",
-         "2022-03-15",
-         "Comment",
-         [
-            8
-         ],
-         []
-      ]
-   }
+   "SupervisionValues": {}
 }

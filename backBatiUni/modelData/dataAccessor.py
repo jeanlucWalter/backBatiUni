@@ -170,6 +170,9 @@ class DataAccessor():
         objectPost.latitude = dictCoord["latitude"]
         objectPost.longitude = dictCoord["longitude"]
         objectPost.save()
+        return
+    objectPost.latitude = 0.0
+    objectPost.longitude = 0.0
 
   @classmethod
   def __createPostKwargs(cls, dictData, currentUser, subObject=True):
@@ -204,12 +207,11 @@ class DataAccessor():
           for content in value:
             if fieldName == "DatePost":
               cls.__computeStartEndDate(kwargs, content)
-              if isinstance(subObject, list) and not content in subObject:
+              if (isinstance(subObject, list) and not content in subObject) or isinstance(subObject, bool):
                 listObject.append(modelObject.objects.create(date=content))
             else:
               listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
-    print("kwargs", kwargs)
     return kwargs, listObject
 
 

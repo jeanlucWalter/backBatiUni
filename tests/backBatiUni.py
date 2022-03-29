@@ -6,7 +6,7 @@ import os
 import base64
 from io import BytesIO
 
-userName, password = "walter.jeanluc@gmail.com", "pwd"
+userName, password = "st", "pwd"
 # userName, password = "jlw", "pwd"
 # userName, password = "jeanluc.walter@fantasiapp.com", "123456Aa"
 address = 'http://localhost:8000'
@@ -93,11 +93,11 @@ def executeQuery():
       response = requests.post(url, headers=headers, json=post)
     elif query == "setFavorite":
       print("setFavorite")
-      requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":1})
-      response = requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":2})
+      requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":2})
+      response = requests.get(url, headers=headers, params={'action':"setFavorite", "value":"true", "Post":3})
     elif query == "removeFavorite":
       print("removeFavorite")
-      response = requests.get(url, headers=headers, params={'action':"setFavorite", "value":"false", "Post":1})
+      response = requests.get(url, headers=headers, params={'action':"removeFavorite", "value":"false", "Post":3})
     elif query == "isViewed":
       print("isViewed")
       response = requests.get(url, headers=headers, params={'action':"isViewed", "Post":1})
@@ -177,7 +177,8 @@ def executeQuery():
   else:
     print("no answer")
 if query == "all":
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "setFavorite", "isviewed", "applyPost", "handleCandidateForPost"]: #, "uploadSupervision", "createDetailedPost", "modifyDetailedPost" , "deleteDetailedPost"
+    # for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "setFavorite", "isviewed", "applyPost", "handleCandidateForPost"]: #, "uploadSupervision", "createDetailedPost", "modifyDetailedPost" , "deleteDetailedPost"
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility"]:
       query = key
       executeQuery()
 else:

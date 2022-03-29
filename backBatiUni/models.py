@@ -90,18 +90,26 @@ class CommonModel(models.Model):
       elif isinstance(fieldObject, models.BooleanField):
         values.append(getattr(self, field))
       elif field in self.manyToManyObject:
+        print("field", field, self, dictFormat)
         model = apps.get_model(app_label='backBatiUni', model_name=field)
         listFieldsModel = model.listFields()
         if field == "DatePost":
           listModel = [objectModel.date.strftime("%Y-%m-%d") for objectModel in DatePost.objects.filter(Post=self)]
           if not listModel:
             listModel = [objectModel.date.strftime("%Y-%m-%d") for objectModel in DatePost.objects.filter(Mission=self)]
+        elif field == "ViewPost":
+          listModel = [view.postId for view in ViewPost.objects.filter(UserProfile=self)]
+        elif field == "FavoritePost":
+          listModel = [favorite.postId for favorite in FavoritePost.objects.filter(UserProfile=self)]
         elif dictFormat:
           listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self}
           listModel = {key:valueList if len(valueList) != 1 else valueList[0] for key, valueList in listModel.items()}
         else:
+          if field == "File":
+            print("File", model.filter(user), self.__class__.__name__)
           listModel = [objectModel.id for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self]
         values.append(listModel)
+        print("listModel", listModel)
       else:
         value = getattr(self, field, "")
         values.append(value)
@@ -154,7 +162,7 @@ class Company(CommonModel):
   Role = models.ForeignKey(Role, on_delete=models.PROTECT, blank=False, null=False, default=3)
   siret = models.CharField('Numéro de Siret', unique=True, max_length=32, null=True, default=None)
   address = models.CharField("Adresse de l'entreprise", unique=True, max_length=256, null=True, default=None)
-  activity = models.CharField("Activite principale de l'entreprise", unique=False, max_length=256, null=True, default=None)
+  activity = models.CharField("Activite principale de l'entreprise", unique=False, max_length=256, null=False, default="")
   ntva = models.CharField("Numéro de TVA intra communautaire", unique=True, max_length=32, null=True, default=None)
   capital = models.IntegerField("Capital de l'entreprise", null=True, default=None)
   revenue = models.FloatField("Capital de l'entreprise", null=True, default=None)
@@ -253,6 +261,13 @@ class UserProfile(CommonModel):
 
   class Meta:
     verbose_name = "UserProfile"
+
+  @classmethod
+  def listFields(cls):
+    superList = super().listFields()
+    superList.remove("token")
+    superList.remove("password")
+    return superList
 
   @property
   def userName(self):
@@ -374,10 +389,11 @@ class Post(CommonModel):
     jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
     listMission = {candidate.Mission.id for candidate in Candidate.objects.all() if candidate.Mission != None}
     tce = Job.objects.get(name = "TCE (Tout Corps d'Etat)")
-    if tce in jobList:
+    if userProfile.Company.allQualifications:
       return [post for post in Post.objects.all() if not post.id in listMission]
     else:
-      return [post for post in Post.objects.all() if not post.id in listMission if post.Company == userProfile.Company or post.Job in jobList]
+      return [post for post in Post.objects.all() if not post.id in listMission]
+      # return [post for post in Post.objects.all() if not post.id in listMission if post.Company == userProfile.Company or post.Job in jobList]
 
 class Mission(Post):
   class Meta:

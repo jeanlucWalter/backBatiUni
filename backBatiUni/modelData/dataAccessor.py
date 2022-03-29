@@ -175,7 +175,7 @@ class DataAccessor():
     objectPost.longitude = 0.0
 
   @classmethod
-  def __createPostKwargs(cls, dictData, currentUser, subObject=True):
+  def __createPostKwargs(cls, dictData, currentUser):
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     kwargs, listFields, listObject = {"Company":userProfile.Company, "startDate":None, "endDate":None, "subContractorName":None}, Post.listFields(), []
     kwargs["subContractorName"] = userProfile.firstName + " " + userProfile.lastName
@@ -207,8 +207,7 @@ class DataAccessor():
           for content in value:
             if fieldName == "DatePost":
               cls.__computeStartEndDate(kwargs, content)
-              if (isinstance(subObject, list) and not content in subObject) or isinstance(subObject, bool):
-                listObject.append(modelObject.objects.create(date=content))
+              listObject.append(modelObject.objects.create(date=content))
             else:
               listObject.append(modelObject.objects.create(content=content))
     kwargs["contactName"] = f"{userProfile.firstName} {userProfile.lastName}"
@@ -230,8 +229,8 @@ class DataAccessor():
     post = Post.objects.filter(id=dictData["id"])
     if post:
       post = post[0]
-      subObject = [datePost.date.strftime("%Y-%m-%d") for datePost in DatePost.objects.filter(Post=post)]
-      kwargs, listObject = cls.__createPostKwargs(dictData, currentUser, subObject=subObject)
+      DatePost.objects.filter(Post=post).delete()
+      kwargs, listObject = cls.__createPostKwargs(dictData, currentUser)
       for key, value in kwargs.items():
         if getattr(post, key, "empty field") != "empty field" and getattr(post, key, "empty field") != value:
           setattr(post, key, value)

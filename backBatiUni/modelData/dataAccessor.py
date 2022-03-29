@@ -259,7 +259,8 @@ class DataAccessor():
     if subContractor.Role.id == 1:
       return {"applyPost":"Warning", "messages":f"La société {subContractor.name} n'est pas sous-traitante."}
     tce = Job.objects.get(name= "TCE (Tout Corps d'Etat)")
-    if not(post.Job in subContractor.jobs or tce in subContractor.jobs):
+    if not(post.Job in subContractor.jobs or subContractor.allQualifications):
+      print()
       return {"applyPost":"Warning", "messages":f"Le métier {post.Job.name} n'est pas une compétence du sous-traitant {subContractor.name}."}
     exists = Candidate.objects.filter(Post=post, Company=subContractor)
     if exists:
@@ -408,6 +409,7 @@ class DataAccessor():
   @classmethod
   def handleCandidateForPost(cls, candidateId, status, currentUser):
     candidate = Candidate.objects.get(id=candidateId)
+    print("handleCandidateForPost", candidateId, status)
     if candidate.Mission:
       return {"handleCandidateForPost":"Error", "messages":f"The post of id {candidate.Mission.id} is allready a mission"}
     postId = candidate.Post.id

@@ -90,7 +90,6 @@ class CommonModel(models.Model):
       elif isinstance(fieldObject, models.BooleanField):
         values.append(getattr(self, field))
       elif field in self.manyToManyObject:
-        print("field", field, self, dictFormat)
         model = apps.get_model(app_label='backBatiUni', model_name=field)
         listFieldsModel = model.listFields()
         if field == "DatePost":
@@ -98,18 +97,15 @@ class CommonModel(models.Model):
           if not listModel:
             listModel = [objectModel.date.strftime("%Y-%m-%d") for objectModel in DatePost.objects.filter(Mission=self)]
         elif field == "ViewPost":
-          listModel = [view.postId for view in ViewPost.objects.filter(UserProfile=self)]
+          listModel = [view.id for view in ViewPost.objects.filter(UserProfile=self)]
         elif field == "FavoritePost":
-          listModel = [favorite.postId for favorite in FavoritePost.objects.filter(UserProfile=self)]
+          listModel = [favorite.id for favorite in FavoritePost.objects.filter(UserProfile=self)]
         elif dictFormat:
           listModel = {objectModel.id:objectModel.computeValues(listFieldsModel, user, dictFormat=True) for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self}
           listModel = {key:valueList if len(valueList) != 1 else valueList[0] for key, valueList in listModel.items()}
         else:
-          if field == "File":
-            print("File", model.filter(user), self.__class__.__name__)
           listModel = [objectModel.id for objectModel in model.filter(user) if getattr(objectModel, self.__class__.__name__, False) == self]
         values.append(listModel)
-        print("listModel", listModel)
       else:
         value = getattr(self, field, "")
         values.append(value)

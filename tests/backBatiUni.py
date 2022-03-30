@@ -36,7 +36,7 @@ def queryForToken(userName, password):
   return dictResponse['token']
 
 def getDocStr(index = 0):
-  file = ["./files/documents/logoFantasiapp.png", "./files/documents/test_1.pdf", "./files/documents/test_2.pdf", "./files/documents/IMG_2465.HEIC", "./files/documents/etex.svg", "./files/documents/batiUni.png"]
+  file = ["./files/documents/logoFantasiapp.png", "./files/documents/test_1.pdf", "./files/documents/test_2.pdf", "./files/documents/IMG_2465.HEIC", "./files/documents/etex.svg", "./files/documents/batiUni.png", "./files/documents/Fantasiapp.png"]
   with open(file[index], "rb") as fileData:
     encoded_string = base64.b64encode(fileData.read())
   return encoded_string.decode("utf-8")
@@ -62,7 +62,12 @@ def executeQuery():
   elif query == "forgetPassword":
       response = requests.get(url, headers=headers, params={"action":"forgetPassword", "email":"walter.jeanluc@gmail.com"})
   else:
-    token = queryForToken("jlw", "pwd") if query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"] else queryForToken(userName, password)
+    if query in ["emptyDB", "buildDB","uploadPost", "modifyPost", "switchDraft"]:
+      token = queryForToken("jlw", "pwd")
+    elif query in ["uploadPost", "modifyPost", "getPost"]:
+      token = queryForToken("pme", "pwd")
+    else:
+      token = queryForToken("st", "pwd")
     if query == "token":
       print("token", token)
     url = f'{address}/data/'
@@ -79,10 +84,15 @@ def executeQuery():
       post = {'action': 'modifyUser', 'UserProfile': {'id': 2, 'cellPhone': '06 29 35 04 18', 'Company': {'capital': '307130', 'companyPhone': '08 92 97 64 15', 'JobForCompany':[[4,2], [5,3], [77,4]], 'LabelForCompany':[[1,now], [2,now]]}}}
       response = requests.post(url, headers=headers, json=post)
     elif query == "changeUserImage":
-      post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr(5)}
+      tokenPme = queryForToken("pme", "pwd")
+      headersPme = {'Authorization': f'Token {tokenPme}'}
+      post = {'action':"changeUserImage", "ext":"png", "name":"BatiUni_1", "imageBase64":getDocStr(5)}
+      requests.post(url, headers=headersPme, json=post)
+      post = {'action':"changeUserImage", "ext":"png", "name":"Fantasiapp_1", "imageBase64":getDocStr(6)}
       response = requests.post(url, headers=headers, json=post)
     elif query == "uploadPost":
-      post1 = {'action':"uploadPost", "longitude":2.237779 , "latitude":48.848776, "address":"128 rue de Paris 92100 Boulogne", "Job":6, "numberOfPeople":3, "dueDate":"2022-02-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "DatePost":["2022-03-16", "2022-03-17", "2022-02-18"], "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
+      print(userName, )
+      post1 = {'action':"uploadPost", "longitude":2.237779 , "latitude":48.848776, "address":"128 rue de Paris 92100 Boulogne", "Job":6, "numberOfPeople":3, "dueDate":"2022-04-15", "startDate":"2022-02-16", "endDate":"2022-02-28", "DatePost":["2022-03-16", "2022-03-17", "2022-02-18"], "manPower":True, "counterOffer":True, "hourlyStart":"7:30", "hourlyEnd":"17:30", "currency":"€", "description":"Première description d'un chantier", "amount":65243.10, "DetailedPost":["lavabo", "baignoire"]}
       post2 = {'action':"uploadPost", "longitude":2.324877 , "latitude":48.841625, "address":"106 rue du Cherche-Midi 75006 Paris", "Job":5, "numberOfPeople":1, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":False, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"Deuxième description d'un chantier", "amount":23456.10, "DetailedPost":["radiateur", "Chaudière"]}
       post3 = {'action':"uploadPost", "longitude":2.324877 , "latitude":48.841625, "address":"36 rue Dauphine 75006 Paris", "Job":9, "numberOfPeople":1, "dueDate":"2022-03-15", "startDate":"2022-03-16", "endDate":"2022-04-28", "manPower":True, "counterOffer":False, "hourlyStart":"7:00", "hourlyEnd":"17:00", "currency":"€", "description":"troisième description d'un chantier", "amount":12345.10, "DetailedPost":["doublage", "cloison"]}
       for post in [post1, post2, post3]:

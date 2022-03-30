@@ -381,15 +381,8 @@ class Post(CommonModel):
 
   @classmethod
   def filter(cls, user):
-    userProfile = UserProfile.objects.get(userNameInternal=user)
-    jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
     listMission = {candidate.Mission.id for candidate in Candidate.objects.all() if candidate.Mission != None}
-    tce = Job.objects.get(name = "TCE (Tout Corps d'Etat)")
-    if userProfile.Company.allQualifications:
-      return [post for post in Post.objects.all() if not post.id in listMission]
-    else:
-      return [post for post in Post.objects.all() if not post.id in listMission]
-      # return [post for post in Post.objects.all() if not post.id in listMission if post.Company == userProfile.Company or post.Job in jobList]
+    return [post for post in Post.objects.all() if not post.id in listMission]
 
 class Mission(Post):
   class Meta:
@@ -421,12 +414,17 @@ class Mission(Post):
   @classmethod
   def filter(cls, user):
     userProfile = UserProfile.objects.get(userNameInternal=user)
-    jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
-    tce = Job.objects.get(name = "TCE (Tout Corps d'Etat)")
-    if tce in jobList:
-      return [candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None]
-    else:
-      return [candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None and (candidate.Company == userProfile.Company or candidate.Mission.Job in jobList)]
+    return [candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None]
+
+
+  # @classmethod
+  # def filter(cls, user):
+  #   userProfile = UserProfile.objects.get(userNameInternal=user)
+  #   jobList = [jobForCompany.Job for jobForCompany in JobForCompany.objects.filter(Company = userProfile.Company)]
+  #   if userProfile.Company.allQualifications:
+  #     return [candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None]
+  #   else:
+  #     return [candidate.Mission for candidate in Candidate.objects.all() if candidate.Mission != None and (candidate.Company == userProfile.Company or candidate.Mission.Job in jobList)]
 
 class DatePost(CommonModel):
   Post = models.ForeignKey(Post, verbose_name='Annonce associée', related_name='PostDate', on_delete=models.CASCADE, null=True, default=None)

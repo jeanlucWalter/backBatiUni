@@ -408,6 +408,7 @@ class DataAccessor():
 
   @classmethod
   def handleCandidateForPost(cls, candidateId, status, currentUser):
+    print("candidate ids", [candidate.id for candidate in Candidate.objects.all()])
     candidate = Candidate.objects.get(id=candidateId)
     print("handleCandidateForPost", candidateId, status)
     if candidate.Mission:
@@ -640,6 +641,8 @@ class DataAccessor():
   @classmethod
   def __setValues(cls, dictValue, user, message, valueModified, objectInstance, flagModified):
     for fieldName, value in dictValue.items():
+      print("setValue", fieldName)
+      valueToSave = value
       if fieldName != "id" and fieldName != 'userName':
         fieldObject = None
         try:
@@ -656,7 +659,7 @@ class DataAccessor():
           flagModified = flagModifiedNew if not flagModified else flagModified
         elif getattr(objectInstance, fieldName, "does not exist") != "does not exist":
           print("setValue", fieldObject, fieldName, value)
-          valueToSave = value
+          # valueToSave = value == "true"
           if fieldObject and isinstance(fieldObject, models.DateField):
             valueToSave = value.strftime("%Y-%m-%d") if value else None
           elif fieldObject and isinstance(fieldObject, models.IntegerField):

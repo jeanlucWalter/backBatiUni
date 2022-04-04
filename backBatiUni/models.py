@@ -348,7 +348,7 @@ class Post(CommonModel):
   address = models.CharField("Adresse du chantier", max_length=1024, null=True, default=None)
   latitude = models.FloatField("Latitude", null=True, default=None)
   longitude = models.FloatField("Longitude", null=True, default=None)
-  contactName = models.CharField("Nom du contact responsable de l’app", max_length=256, null=True, default=None)
+  contactName = models.CharField("Nom du contact responsable de la mission", max_length=256, null=True, default=None)
   draft = models.BooleanField("Brouillon ou validé", null=False, default=True)
   manPower = models.BooleanField("Main d'oeuvre ou fourniture et pose", null=False, default=True)
   dueDate = models.DateField(verbose_name="Date de d'échéance de l'annonce", null=True, default=None)
@@ -363,7 +363,14 @@ class Post(CommonModel):
   description = models.CharField("Description du chantier", max_length=4096, null=True, default=None)
   signedByCompany = models.BooleanField("Signature de la PME", null=False, default=False)
   signedBySubContractor = models.BooleanField("Signature du ST", null=False, default=False)
-  subContractorName = models.CharField("Contact chez le sous traitant", max_length=128, null=True, default=None)
+  subContractorContact = models.CharField("Contact chez le sous traitant", max_length=128, null=True, default=None)
+  subContractorName = models.CharField("Nom le sous traitant", max_length=128, null=True, default=None)
+  quality = models.IntegerField("Qualité du travail fourni", blank=False, null=False, default=1)
+  qualityComment = models.TextField("Qualité du travail fourni Commentaire", blank=False, null=False, default="")
+  security = models.IntegerField("Respect de la sécurité et de la propreté du chantier", blank=False, null=False, default=1)
+  securityComment = models.TextField("Respect de la sécurité et de la propreté du chantier Commentaire", blank=False, null=False, default="")
+  organisation = models.IntegerField("Organisation fourni", blank=False, null=False, default=1)
+  organisationComment = models.TextField("Organisation Commentaire", blank=False, null=False, default="")
 
   contract = models.IntegerField("Image du contrat", blank=False, null=True, default=None)
   manyToManyObject = ["DetailedPost", "File", "Candidate", "DatePost", "Supervision"]
@@ -374,7 +381,7 @@ class Post(CommonModel):
   @classmethod
   def listFields(cls):
       superList = super().listFields()
-      for fieldName in ["signedByCompany", "signedBySubContractor", "contract", "Supervision", "subContractorName"]:
+      for fieldName in ["signedByCompany", "signedBySubContractor", "contract", "Supervision", "subContractorContact", "subContractorName", "quality", "qualityComment", "security", "securityComment", "organisation", "organisationComment"]:
         index = superList.index(fieldName)
         del superList[index]
       return superList
@@ -448,6 +455,7 @@ class Candidate(CommonModel):
   Post = models.ForeignKey(Post, verbose_name='Annonce associée', on_delete=models.CASCADE, null=True, default=None)
   Mission = models.ForeignKey(Mission, verbose_name='Mission associée', related_name='selectedMission', on_delete=models.CASCADE, null=True, default=None)
   Company = models.ForeignKey(Company, verbose_name='Sous-Traitant', related_name='selecteCompany', on_delete=models.PROTECT, null=True, default=None)
+  contact = models.CharField("Le nom du contact", max_length=128, null=False, default="")
   isChoosen = models.BooleanField("Sous traitant selectionné", null=True, default=None)
   date = models.DateField(verbose_name="Date de candidature ou date d'acceptation", null=False, default=timezone.now)
   amount = models.FloatField("Prix unitaire", null=False, default=0.0)

@@ -178,7 +178,6 @@ class DataAccessor():
   def __createPostKwargs(cls, dictData, currentUser):
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     kwargs, listFields, listObject = {"Company":userProfile.Company, "startDate":None, "endDate":None, "subContractorName":None}, Post.listFields(), []
-    kwargs["subContractorName"] = userProfile.firstName + " " + userProfile.lastName
     for fieldName, value in dictData.items():
       fieldObject = None
       try:
@@ -252,6 +251,7 @@ class DataAccessor():
   def applyPost(cls, postId, amount, unitOfTime, currentUser):
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     subContractor = userProfile.Company
+    contact = userProfile.firstName + " " + userProfile.lastName
     post = Post.objects.get(id=postId)
     company = post.Company
     if subContractor == company:
@@ -260,12 +260,11 @@ class DataAccessor():
       return {"applyPost":"Warning", "messages":f"La société {subContractor.name} n'est pas sous-traitante."}
     tce = Job.objects.get(name= "TCE (Tout Corps d'Etat)")
     if not(post.Job in subContractor.jobs or subContractor.allQualifications):
-      print()
       return {"applyPost":"Warning", "messages":f"Le métier {post.Job.name} n'est pas une compétence du sous-traitant {subContractor.name}."}
     exists = Candidate.objects.filter(Post=post, Company=subContractor)
     if exists:
       return {"applyPost":"Warning", "messages":f"Le sous-traitant {subContractor.name} a déjà postulé."}
-    candidate = Candidate.objects.create(Post=post, Company=subContractor, amount=amount, unitOfTime=unitOfTime)
+    candidate = Candidate.objects.create(Post=post, Company=subContractor, amount=amount, contact=contact, unitOfTime=unitOfTime)
     return {"applyPost":"OK", candidate.id:candidate.computeValues(candidate.listFields(), currentUser, True)}
 
   @classmethod
@@ -299,18 +298,15 @@ class DataAccessor():
     if detailedPost:
       detailedPost = detailedPost[0]
       if "date" in data and data["date"]:
-        print("is date", data["date"], type(data["date"]), detailedPost.date, type(detailedPost.date))
         date = datetime.strptime(data["date"], "%Y-%m-%d")
         dateNowString = detailedPost.date.strftime("%Y-%m-%d") if detailedPost.date else None
         if dateNowString != data["date"] and dateNowString:
-          print("date to be modified", data["date"], dateNowString, date , detailedPost.date)
           detailedPost = DetailedPost.objects.create(Post=detailedPost.Post, Mission=detailedPost.Mission, content=detailedPost.content, date=date, validated=detailedPost.validated)
           if detailedPost:
             PorM = detailedPost.Post if detailedPost.Post else detailedPost.Mission
             return {"modifyDetailedPost":"OK", PorM.id:PorM.computeValues(PorM.listFields(), currentUser, True)}
         else:
           detailedPost.date = date
-          print("date", detailedPost.date)
       for field in ["content", "validated", "refused"]:
         if field in data:
           setattr(detailedPost, field, data[field])
@@ -408,9 +404,7 @@ class DataAccessor():
 
   @classmethod
   def handleCandidateForPost(cls, candidateId, status, currentUser):
-    print("candidate ids", [candidate.id for candidate in Candidate.objects.all()])
     candidate = Candidate.objects.get(id=candidateId)
-    print("handleCandidateForPost", candidateId, status)
     if candidate.Mission:
       return {"handleCandidateForPost":"Error", "messages":f"The post of id {candidate.Mission.id} is allready a mission"}
     postId = candidate.Post.id
@@ -430,8 +424,11 @@ class DataAccessor():
             modelObject.Mission = mission
             modelObject.save()
       contractImage = cls.createContract(candidate.Mission, currentUser)
+      userProfile = UserProfile.objects.get(userNameInternal=currentUser)
+      # candidate.Mission.subContractorContact = userProfile.firstName + " " + userProfile.lastName
+      candidate.Mission.subContractorName = candidate.Company.name
+      candidate.Mission.subContractorContactn = candidate.contact
       candidate.Mission.contract = contractImage.id
-      print("handleCandidateForPost", contractImage.id)
       candidate.Mission.save()
       return {"handleCandidateForPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
     post = candidate.Post
@@ -443,7 +440,6 @@ class DataAccessor():
     contractImage = File.createFile("contract", "contract", "png", user, post=mission)
     source = "./files/documents/contractUnsigned.png"
     dest = contractImage.path
-    print("signContract", source, dest)
     shutil.copy2(source, dest)
     return contractImage
 
@@ -456,7 +452,6 @@ class DataAccessor():
     else:
       source = "./files/documents/ContractSignedST_PME.png" if mission.signedByCompany else "./files/documents/ContractSignedST.png"
     dest = contractImage.path
-    print("signContract", source, dest)
     shutil.copy2(source, dest)
     contractImage.timestamp = datetime.now().timestamp()
     contractImage.save()

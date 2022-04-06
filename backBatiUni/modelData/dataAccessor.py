@@ -134,6 +134,7 @@ class DataAccessor():
       elif data["action"] == "modifyDisponibility": return cls.__modifyDisponibility(data["disponibility"], currentUser)
       elif data["action"] == "uploadSupervision": return cls.uploadSupervision(data["detailedPost"], data["comment"], currentUser)
       elif data["action"] == "uploadImageSupervision": return cls.__uploadImageSupervision(data, currentUser)
+      elif data["action"] == "closeMission": return cls.__closeMission(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
     return {"dataPost":"Error", "messages":"no action in post"}
 
@@ -483,6 +484,20 @@ class DataAccessor():
         return {"switchDraft":"OK", post.id:post.computeValues(post.listFields(), currentUser, dictFormat=True)}
       return {"switchDraft":"Error", "messages":f"{currentUser.username} does not belongs to {company.name}"}
     return {"switchDraft":"Error", "messages":f"{id} does not exist"}
+
+  @classmethod
+  def __closeMission(cls, data, currentUser):
+    print("closeMission", {mission.id:mission.signedByCompany for mission in Mission.objects.all()})
+    mission = Mission.objects.get(id=data["missionId"])
+    mission.quality = data["qualityStars"]
+    mission.qualityComment = data["qualityComment"]
+    mission.security = data["securityStars"]
+    mission.securityComment = data["securityComment"]
+    mission.organisation = data["organisationStars"]
+    mission.organisationComment = data["organisationComment"]
+    mission.isClosed = True
+    mission.save()
+    return {"closeMission":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
 
   @classmethod
   def duplicatePost(cls, id, currentUser):

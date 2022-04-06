@@ -178,6 +178,9 @@ def executeQuery():
     elif query == "deleteDetailedPost":
       post = {"action":"deleteDetailedPost", "detailedPostId":9}
       response = requests.post(url, headers=headers, json=post)
+    elif query == "closeMission":
+      post = {"action":"closeMission", "missionId": 4, "qualityStars":4, "qualityComment":"très bon travail", "securityStars":4, "securityComment":"Un vrai sous-traitant qualibat", "organisationStars":5, "organisationComment":"Une organisation parfaite"}
+      response = requests.post(url, headers=headers, json=post)
   if response and query != "downloadFile":
     data = json.loads(response.text)
     print("data", data)
@@ -186,8 +189,8 @@ def executeQuery():
   else:
     print("no answer")
 if query == "all":
-    # for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "setFavorite", "isviewed", "applyPost", "handleCandidateForPost"]: #, "uploadSupervision", "createDetailedPost", "modifyDetailedPost" , "deleteDetailedPost"
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "uploadFile", "downloadFile", "switchDraft", "applyPost", "handleCandidateForPost", "signContract"]: #, "modifyPost"
+    # for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "setFavorite", "isviewed", "applyPost", "handleCandidateForPost", "closeMission"]: #, "uploadSupervision", "createDetailedPost", "modifyDetailedPost" , "deleteDetailedPost"
+    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "uploadFile", "downloadFile", "switchDraft", "applyPost", "handleCandidateForPost", "signContract", "closeMission"]: #, "modifyPost"
       query = key
       executeQuery()
 else:

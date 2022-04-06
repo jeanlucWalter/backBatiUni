@@ -371,6 +371,7 @@ class Post(CommonModel):
   securityComment = models.TextField("Respect de la sécurité et de la propreté du chantier Commentaire", blank=False, null=False, default="")
   organisation = models.IntegerField("Organisation", blank=False, null=False, default=0)
   organisationComment = models.TextField("Organisation Commentaire", blank=False, null=False, default="")
+  isClosed = models.BooleanField("Fin de la mission", null=False, default=False)
 
   contract = models.IntegerField("Image du contrat", blank=False, null=True, default=None)
   manyToManyObject = ["DetailedPost", "File", "Candidate", "DatePost", "Supervision"]
@@ -381,7 +382,7 @@ class Post(CommonModel):
   @classmethod
   def listFields(cls):
       superList = super().listFields()
-      for fieldName in ["signedByCompany", "signedBySubContractor", "contract", "Supervision", "subContractorContact", "subContractorName", "quality", "qualityComment", "security", "securityComment", "organisation", "organisationComment"]:
+      for fieldName in ["signedByCompany", "signedBySubContractor", "contract", "Supervision", "subContractorContact", "subContractorName", "quality", "qualityComment", "security", "securityComment", "organisation", "organisationComment", "isClosed"]:
         index = superList.index(fieldName)
         del superList[index]
       return superList

@@ -487,7 +487,8 @@ class DataAccessor():
 
   @classmethod
   def __closeMission(cls, data, currentUser):
-    print("closeMission", {mission.id:mission.signedByCompany for mission in Mission.objects.all()})
+    print("closeMission start data", data)
+    print("closeMission start", {mission.id:mission.signedByCompany for mission in Mission.objects.all()})
     mission = Mission.objects.get(id=data["missionId"])
     mission.quality = data["qualityStars"]
     mission.qualityComment = data["qualityComment"]

@@ -132,7 +132,7 @@ class DataAccessor():
       elif data["action"] == "deleteSupervision": return cls.__deleteSupervision(data, currentUser)
       elif data["action"] == "uploadFile": return cls.__uploadFile(data, currentUser)
       elif data["action"] == "modifyDisponibility": return cls.__modifyDisponibility(data["disponibility"], currentUser)
-      elif data["action"] == "uploadSupervision": return cls.uploadSupervision(data["detailedPost"], data["comment"], currentUser)
+      # elif data["action"] == "uploadSupervision": return cls.uploadSupervision(data["detailedPost"], data["comment"], currentUser)
       elif data["action"] == "uploadImageSupervision": return cls.__uploadImageSupervision(data, currentUser)
       elif data["action"] == "closeMission": return cls.__closeMission(data, currentUser)
       return {"dataPost":"Error", "messages":f"unknown action in post {data['action']}"}
@@ -337,7 +337,7 @@ class DataAccessor():
     print("createSupervision", data, currentUser.id)
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     author = f'{userProfile.firstName} {userProfile.lastName}'
-    kwargs, mission = {"DetailedPost":None, "author":author, "comment":""}, None
+    kwargs, mission = {"DetailedPost":None, "author":author, "companyId":userProfile.Company.id,"comment":""}, None
     if "missionId" in data and data["missionId"]:
       mission = Mission.objects.get(id=data["missionId"])
       kwargs["Mission"] = mission

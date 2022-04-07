@@ -325,7 +325,7 @@
          "BatiUni_1",
          "png",
          "",
-         1649328243.730359,
+         1649344572.127973,
          ""
       ],
       "2": [
@@ -333,7 +333,7 @@
          "Fantasiapp_1",
          "png",
          "",
-         1649328243.730359,
+         1649344572.127973,
          ""
       ],
       "3": [
@@ -341,7 +341,7 @@
          "Qualibat",
          "png",
          "2022-02-12",
-         1649328243.730359,
+         1649344572.127973,
          ""
       ],
       "4": [
@@ -349,7 +349,7 @@
          "Kbis",
          "png",
          "2022-02-12",
-         1649328243.730359,
+         1649344572.127973,
          ""
       ],
       "5": [
@@ -357,7 +357,7 @@
          "Document technique",
          "svg",
          "",
-         1649328243.730359,
+         1649344572.127973,
          ""
       ],
       "6": [
@@ -365,7 +365,7 @@
          "Plan",
          "pdf",
          "",
-         1649328243.730359,
+         1649344572.127973,
          ""
       ],
       "7": [
@@ -373,7 +373,7 @@
          "contract",
          "png",
          "",
-         1649328243.730359,
+         1649344572.127973,
          ""
       ],
       "8": [
@@ -381,7 +381,7 @@
          "contract",
          "png",
          "",
-         1649335331.258041,
+         1649344587.340891,
          ""
       ]
    },
@@ -709,7 +709,7 @@
          12345.1,
          "\u20ac",
          "Prix Journalier",
-         false,
+         true,
          "troisi\u00e8me description d'un chantier",
          false,
          false,
@@ -795,18 +795,20 @@
    "DisponibilityValues": {},
    "SupervisionFields": [
       "author",
+      "companyId",
       "date",
       "comment",
       "File",
       "Supervision"
    ],
    "SupervisionIndices": [
-      3,
-      4
+      4,
+      5
    ],
    "SupervisionValues": {
       "1": [
          "Th\u00e9ophile Traitant",
+         3,
          "2022-04-07",
          "J'ai fini.",
          [],
@@ -814,6 +816,7 @@
       ],
       "2": [
          "Th\u00e9ophile Traitant",
+         3,
          "2022-04-07",
          "OK pour les t\u00e2ches du jour.",
          [],
@@ -821,6 +824,7 @@
       ],
       "3": [
          "Th\u00e9ophile Traitant",
+         3,
          "2022-04-07",
          "Pas de souci aujourd'hui.",
          [],
@@ -828,6 +832,7 @@
       ],
       "4": [
          "Th\u00e9ophile Traitant",
+         3,
          "2022-04-07",
          "Le chantier est termin\u00e9.",
          [],
@@ -835,6 +840,7 @@
       ],
       "5": [
          "Eric Entreprise",
+         4,
          "2022-04-07",
          "Les t\u00e2ches du jour sont bien faites.",
          [],
@@ -842,6 +848,7 @@
       ],
       "6": [
          "Eric Entreprise",
+         4,
          "2022-04-07",
          "Tout est parfait, merci.",
          [],
@@ -849,6 +856,7 @@
       ],
       "7": [
          "Eric Entreprise",
+         4,
          "2022-04-07",
          "Attention aux finitions.",
          [],
@@ -856,6 +864,7 @@
       ],
       "8": [
          "Eric Entreprise",
+         4,
          "2022-04-07",
          "Le travail est fini, Youpi.",
          [],

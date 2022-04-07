@@ -501,6 +501,7 @@ class Supervision(CommonModel):
   SupervisionAssociated = models.ForeignKey('self', verbose_name='Supervision associée', related_name='associatedSupervision', on_delete=models.PROTECT, null=True, default=None)
   # superVisionId = models.IntegerField("id de la supervision dans le cas d'une réponse", blank=False, null=False, default=-1)
   author = models.CharField("Nom de l'auteur du message", max_length=256, null=True, default=None)
+  companyId = models.IntegerField("Id de la companie emettrice", blank=True, null=False, default=None)
   date = models.DateField(verbose_name="Date du suivi", null=False, default=timezone.now)
   comment = models.CharField("Commentaire sur le suivi", max_length=4906, null=True, default=None)
   manyToManyObject = ["File", "Supervision"]

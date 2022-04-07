@@ -40,7 +40,7 @@ def getDocStr(index = 0):
 
 def executeQuery():
   print()
-  print(query)
+  print("query", query)
   now, data, response, url , headers = "2022/01/12", None, None, f'{address}/initialize/', {"content-type":"Application/Json"}
   if query == "register":
     headers = {}
@@ -169,11 +169,13 @@ def executeQuery():
       post = {"action":"createDetailedPost", "missionId":1, "content":"Réparer le lavabo une nouvelle fois", "date":"2022-03-17"}
       response = requests.post(url, headers=headers, json=post)
     elif query == "modifyDetailedPost":
-      post1 = {"action":"modifyDetailedPost", "detailedPostId":9, "content":"Finir de réparer le lavabo"}
-      post2 = {"action":"modifyDetailedPost", "detailedPostId":9, "date":"2022-03-17"}
-      response = requests.post(url, headers=headers, json=post1)
+      post1 = {"action":"modifyDetailedPost", "detailedPost":{"id":9, "date":"2022-03-18", "content":"Nettoyer le chantier"}}
+      post2 = {"action":"modifyDetailedPost", "detailedPost":{"id":7, "date":"2022-03-17"}}
+      post3 = {"action":"modifyDetailedPost", "detailedPost":{"id":8, "date":"2022-03-17"}}
+      post4 = {"action":"modifyDetailedPost", "detailedPost":{"id":10, "date":"2022-03-16"}}
+      for post in [post4, post2, post3, post1]:
+        response = requests.post(url, headers=headers, json=post)
       data = json.loads(response.text)
-      print("data", data)
       response = requests.post(url, headers=headers, json=post2)
     elif query == "deleteDetailedPost":
       post = {"action":"deleteDetailedPost", "detailedPostId":9}
@@ -189,10 +191,11 @@ def executeQuery():
   else:
     print("no answer")
 if query == "all":
-    # for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "setFavorite", "isviewed", "applyPost", "handleCandidateForPost", "closeMission"]: #, "uploadSupervision", "createDetailedPost", "modifyDetailedPost" , "deleteDetailedPost"
-    for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "uploadFile", "downloadFile", "switchDraft", "applyPost", "handleCandidateForPost", "signContract", "closeMission"]: #, "modifyPost"
-      query = key
-      executeQuery()
+  keys = ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "uploadFile", "downloadFile", "switchDraft", "applyPost", "handleCandidateForPost", "signContract", "modifyDetailedPost"]
+  # for key in ["buildDB", "register", "registerConfirm", "modifyUser", "changeUserImage", "getUserData", "uploadPost", "modifyPost", "getPost", "switchDraft", "uploadFile", "downloadFile", "deleteFile", "modifyDisponibility", "setFavorite", "isviewed", "applyPost", "handleCandidateForPost", "closeMission"]: #, "uploadSupervision", "createDetailedPost", "modifyDetailedPost" , "deleteDetailedPost", "closeMission"
+  for key in keys: #, "modifyPost"
+    query = key
+    executeQuery()
 else:
   executeQuery()
 

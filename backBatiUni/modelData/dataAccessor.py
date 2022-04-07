@@ -293,6 +293,7 @@ class DataAccessor():
 
   @classmethod
   def __modifyDetailedPost(cls, data, currentUser):
+    print("modifyDetailedPost", data)
     data = data["detailedPost"]
     # return {"modifyDetailedPost":"OK", "d":["a", "b", "c"]}
     detailedPost = DetailedPost.objects.filter(id=data["id"])
@@ -487,8 +488,6 @@ class DataAccessor():
 
   @classmethod
   def __closeMission(cls, data, currentUser):
-    print("closeMission start data", data)
-    print("closeMission start", {mission.id:mission.signedByCompany for mission in Mission.objects.all()})
     mission = Mission.objects.get(id=data["missionId"])
     mission.quality = data["qualityStars"]
     mission.qualityComment = data["qualityComment"]
@@ -498,7 +497,7 @@ class DataAccessor():
     mission.organisationComment = data["organisationComment"]
     mission.isClosed = True
     mission.save()
-    return {"closeMission":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
+    return {"switchDraft":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
 
   @classmethod
   def duplicatePost(cls, id, currentUser):

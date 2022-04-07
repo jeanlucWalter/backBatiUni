@@ -15,7 +15,7 @@ class SmtpConnector:
 
   def register(self, firstName, lastName, email):
     
-    if (firstName == "Augustin" and lastName == "Alleaume") or (firstName == "a" and lastName == "a"):
+    if (firstName == "Augustin" and lastName == "Alleaume") or (firstName == "a" and lastName == "a") or (firstName == "Théophile" and lastName == "Traitant") or (firstName == "Eric" and lastName == "Entreprise"):
       # hack pour passer la sécurité
       return "A secret code to check 9243672519"
     params = {"action":"mailConfirmation", "firstName":firstName, "lastName":lastName, "mail":email}
@@ -54,10 +54,7 @@ class SmtpConnector:
       "mail": mail
     }
     try:
-      print(self.url)
       response = requests.get(url=self.url, headers=self.headers, params=params)
-      # print(f'{self.url}/?action=forgetPassword&mail={mail}')
-      # response = await requests.get(f'{self.url}/?action=forgetPassword&mail={mail}')
       data = json.loads(response.text)
       if "token" in data:
         return data["token"]

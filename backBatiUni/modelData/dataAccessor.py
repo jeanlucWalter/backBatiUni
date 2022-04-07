@@ -466,6 +466,7 @@ class DataAccessor():
 
   @classmethod
   def uploadSupervision(cls, detailedPostId, comment, currentUser):
+    print("uploadSupervision", detailedPostId, comment, currentUser)
     detailed = DetailedPost.objects.get(id=detailedPostId)
     userProfile = UserProfile.objects.get(userNameInternal=currentUser)
     if detailed.Post:
@@ -577,7 +578,7 @@ class DataAccessor():
 
   @classmethod
   def __uploadImageSupervision(cls, data, currentUser):
-    print("__uploadSupervision", data.keys(), currentUser, data["taskId"], data["missionId"])
+    print("__uploadImageSupervision", data.keys(), currentUser, data["taskId"], data["missionId"])
     if not data['ext'] in File.authorizedExtention:
       return {"uploadFile":"Warning", "messages":f"L'extention {data['ext']} n'est pas traitée"}
     fileStr = data["imageBase64"]

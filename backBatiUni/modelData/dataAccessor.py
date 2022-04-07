@@ -410,10 +410,9 @@ class DataAccessor():
     if candidate.Mission:
       return {"handleCandidateForPost":"Error", "messages":f"The post of id {candidate.Mission.id} is allready a mission"}
     postId = candidate.Post.id
-    status = True if status == "true" else status
-    status = False if status == "false" else status
-    candidate.isChoosen = status
-    if status:
+    if status == "true": candidate.isChoosen = True
+    if status == "false": candidate.isRefused = True
+    if candidate.isChoosen:
       candidate.Post = None
       candidate.Mission = Mission.objects.get(id=postId)
       candidate.date = timezone.now()
@@ -426,13 +425,12 @@ class DataAccessor():
             modelObject.Mission = mission
             modelObject.save()
       contractImage = cls.createContract(candidate.Mission, currentUser)
-      userProfile = UserProfile.objects.get(userNameInternal=currentUser)
-      # candidate.Mission.subContractorContact = userProfile.firstName + " " + userProfile.lastName
       candidate.Mission.subContractorName = candidate.Company.name
-      candidate.Mission.subContractorContactn = candidate.contact
+      candidate.Mission.subContractorContact = candidate.contact
       candidate.Mission.contract = contractImage.id
       candidate.Mission.save()
       return {"handleCandidateForPost":"OK", mission.id:mission.computeValues(mission.listFields(), currentUser, dictFormat=True)}
+    candidate.save()
     post = candidate.Post
     return {"handleCandidateForPost":"OK", post.id:post.computeValues(post.listFields(), currentUser, dictFormat=True)}
 

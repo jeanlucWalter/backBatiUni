@@ -25,6 +25,7 @@ if len(arguments) > 2:
   query = arguments[2]
 
 def queryForToken(userName, password):
+  print("queryForToken", userName, password)
   tokenUrl = f'{address}/api-token-auth/'
   headers = {'Content-Type': 'application/json'}
   data = json.dumps({"username": userName, "password": password})
@@ -48,10 +49,12 @@ def executeQuery():
     post2 = {"firstname":"Théophile","lastname":"Traitant","email":"st","password":"pwd","company":{'id': 3, 'name': 'Sous-traitant', 'address': '74 ave des Sous-traitants Paris 75008', 'activity': 'Activité inconnue', 'siret': '40422352100021', 'ntva': 'FR49404223522'},"Role":2,"proposer":"","jobs":[1,2,80]}
     post3 = {"firstname":"Eric","lastname":"Entreprise","email":"pme","password":"pwd","company":{'id': 4, 'name': 'PME', 'address': '74 ave des PME Paris 75008', 'activity': 'Activité inconnue', 'siret': '40422352100019', 'ntva': 'FR49404223523'},"Role":1,"proposer":"","jobs":[1,2,9]}
     post4 = {"firstname":"a","lastname":"a","email":"both","password":"pwd","company":{'id': 5, 'name': 'both', 'address': '74 ave des deux Paris 75008', 'activity': 'Activité inconnue', 'siret': '40422352100020', 'ntva': 'FR4940422352'},"Role":3,"proposer":"","jobs":[1,2,80]}
-    for post in [post1, post2, post3, post4]:
+    post5 = {"firstname":"Tanguy","lastname":"Traitant","email":"st2","password":"pwd","company":{'id': 6, 'name': 'Sous-traitant 2', 'address': '78 rue des Sous-traitants Paris 75008', 'activity': 'Activité inconnue', 'siret': '40422352100048', 'ntva': 'FR49404223553'},"Role":2,"proposer":"","jobs":[1,2,80]}
+    for post in [post1, post2, post3, post4, post5]:
       response = requests.post(url, headers=headers, json=post)
   elif query == "registerConfirm":
       print("registerConfirm", url)
+      requests.get(f'{address}/initialize/', headers=headers, params={"action":"registerConfirm", "token":"A secret code to check 9243672519"})
       requests.get(f'{address}/initialize/', headers=headers, params={"action":"registerConfirm", "token":"A secret code to check 9243672519"})
       requests.get(f'{address}/initialize/', headers=headers, params={"action":"registerConfirm", "token":"A secret code to check 9243672519"})
       requests.get(f'{address}/initialize/', headers=headers, params={"action":"registerConfirm", "token":"A secret code to check 9243672519"})
@@ -81,8 +84,10 @@ def executeQuery():
       response = requests.post(url, headers=headers, json=post)
     elif query == "modifyUser":
       now = "2022-01-12"
-      post = {'action': 'modifyUser', 'UserProfile': {'id': 3, 'cellPhone': '06 29 35 04 18', 'Company': {'capital': '307130', 'companyPhone': '08 92 97 64 15', "allQualifications":True, 'JobForCompany':[[4,2], [5,3], [77,4]], 'LabelForCompany':[[1,now], [2,now]]}}}
-      response = requests.post(url, headers=headers, json=post)
+      post1 = {'action': 'modifyUser', 'UserProfile': {'id': 3, 'cellPhone': '06 29 35 04 18', 'Company': {'capital': '307130', 'companyPhone': '08 92 97 64 15', "allQualifications":True, 'JobForCompany':[[4,2], [5,3], [77,4]], 'LabelForCompany':[[1,now], [2,now]]}}}
+      post2 = {'action': 'modifyUser', 'UserProfile': {'id': 5, 'cellPhone': '06 28 34 03 17', 'Company': {'capital': '207130', 'companyPhone': '08 91 96 63 14', "allQualifications":True, 'JobForCompany':[[4,2], [5,3], [77,4]], 'LabelForCompany':[[1,now], [2,now]]}}}
+      requests.post(url, headers=headers, json=post1)
+      response = requests.post(url, headers=headers, json=post2)
     elif query == "changeUserImage":
       tokenPme = queryForToken("pme", "pwd")
       headersPme = {'Authorization': f'Token {tokenPme}'}
@@ -138,9 +143,12 @@ def executeQuery():
       requests.get(url, headers=headers, params={'action':"applyPost", "Post":2, "amount":800, "devis":"Par Jour"})
       requests.get(url, headers=headers, params={'action':"applyPost", "Post":3, "amount":1000, "devis":"Par Jour"})
       response = requests.get(url, headers=headers, params={'action':"applyPost", "Post":4, "amount":1200, "devis":"Par Jour"})
+      tokenSt2 = queryForToken("st2", "pwd")
+      headers = {'Authorization': f'Token {tokenSt2}'}
+      requests.get(url, headers=headers, params={'action':"applyPost", "Post":2, "amount":1500, "devis":"Par Jour"})
     elif query == "handleCandidateForPost":
-      requests.get(url, headers=headers, params={'action':"handleCandidateForPost", "Candidate":2, "response":True})
-      response = requests.get(url, headers=headers, params={'action':"handleCandidateForPost", "Candidate":3, "response":True})
+      requests.get(url, headers=headers, params={'action':"handleCandidateForPost", "Candidate":2, "response":"true"})
+      response = requests.get(url, headers=headers, params={'action':"handleCandidateForPost", "Candidate":3, "response":"true"})
     elif query == "signContract":
       requests.get(url, headers=headers, params={"action":"signContract", "missionId":4, "view":"ST"})
       print("user pme")
